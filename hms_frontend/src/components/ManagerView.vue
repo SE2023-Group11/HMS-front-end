@@ -3,7 +3,7 @@
     <input type="radio" id="room" value="科室" v-model="notifyType">科室
     <input type="radio" id="doctor" value="医生" v-model="notifyType">医生
     <input type="text" v-model="name">&nbsp;
-    <button on-click="getInfo(notifyType, name)">查询</button>
+    <button @click="getInfo">查询</button>
     <h1>选择是 {{ notifyType }}</h1>
     <h1>输入信息为 {{ name }}</h1>
 </template>
@@ -15,7 +15,7 @@ import axios from 'axios'
 const notifyType = ref('');
 const name = ref('')
 
-function getRoomInfo(name)
+function getRoomInfo()
 {
     axios.post(
         'http://localhost:8080/getRoomInfo', 
@@ -25,7 +25,7 @@ function getRoomInfo(name)
         })
 }
 
-function getDoctorInfo(name)
+function getDoctorInfo()
 {
     axios.post(
         'http://localhost:8080/getDoctorInfo', 
@@ -36,17 +36,17 @@ function getDoctorInfo(name)
 
 }
 
-function getInfo(notifyType, name)
+function getInfo()
 {
-    if(notifyType=="科室")
+    if(notifyType.value=="科室")
     {
         console.log("科室")
-        getRoomInfo(name)
+        getRoomInfo()
     }
     else
     {
         console.log("医生")
-        getDoctorInfo(name)
+        getDoctorInfo()
     }
 }
 
