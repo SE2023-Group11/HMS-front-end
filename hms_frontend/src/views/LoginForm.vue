@@ -4,15 +4,20 @@
         <form @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="uid">用户id</label>
-                <input type="text" id="uid" v-model="uid" />
+                <InputText type="text" id="uid" v-model="uid" />
             </div>
 
             <div class="form-group">
                 <label for="password">密码</label>
-                <input type="password" id="password" v-model="password" />
+                <Password id="password" v-model="password" toggleMask />
             </div>
 
-            <button type="submit" @click="loginbt">登录</button>
+            <Button label="用户注册" link />
+            <Button label="忘记密码" link />
+
+            <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
+
+            <Button label="登录" @click="loginbt" />
         </form>
     </div>
 </template>
@@ -20,9 +25,17 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios'
+//primevue
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Password from 'primevue/password';
+import SelectButton from 'primevue/selectbutton';
 
 const uid = ref('');
 const password = ref('');
+const options = ref(['患者身份进入', '非患者身份进入']);
+const is_patient = ref('off');
+
 function loginbt() {
     axios.post('/api/login', {
         uid,

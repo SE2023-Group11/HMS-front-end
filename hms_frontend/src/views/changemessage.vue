@@ -1,8 +1,5 @@
 
 <template>
-    <Button label="Button 1" />
-    <Divider />
-    <Button label="Button 2" />
     <div class="card">
         <DataTable :value="persons" @row-clicked="showDialog">
             <Column field="name" header="Name"></Column>
@@ -18,8 +15,6 @@
 // import { ProductService } from '@/service/ProductService';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Divider from 'primevue/divider';
-import Button from 'primevue/button';
 
 // onMounted(() => {
 //     ProductService.getProductsMini().then((data) => (products.value = data));

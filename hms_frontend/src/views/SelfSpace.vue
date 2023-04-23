@@ -1,83 +1,101 @@
 <template>
     <div class="bg-image">
-        <div class="avatar">
-            <img src="../../public/jay.jpg" />
+        <div class="leftpart">
+            <div class="avatar">
+                <img src="../../public/jay.jpg" />
+            </div>
+            <Button class="bt_changePic" label="更换头像" @click="save" />
         </div>
+
         <div class="message">
-            <div class="name_and_id">
+            <!-- <div class="name_and_id">
                 <label class="nameid">name: {{ pname }}</label>
                 &nbsp;&nbsp;
                 <label class="nameid">pid: {{ pid }}</label>
-            </div>
+            </div> -->
 
-            <div class="edit">
-                <!-- // 年龄 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">年龄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!ageediting" @click="agestartEditing">{{ agecontent }}</div>
-                        <input v-if="ageediting" type="text" v-model="agetempContent" @blur="agestopEditing"
-                            @keyup.enter="agestopEditing">
+            <Card class="mycard">
+                <template #title>用户{{ pid }}的个人信息</template>
+                <template #content>
+                    <div class="edit">
+                        <!-- 姓名 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">姓名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!nameediting" @click="namestartEditing">{{ namecontent }}</div>
+                                <InputText v-if="nameediting" type="text" v-model="nametempContent" @blur="namestopEditing"
+                                    @keyup.enter="namestopEditing" />
+                            </div>
+                        </div>
+                        <!-- 年龄 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">年龄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!ageediting" @click="agestartEditing">{{ agecontent }}</div>
+                                <InputText v-if="ageediting" type="text" v-model="agetempContent" @blur="agestopEditing"
+                                    @keyup.enter="agestopEditing" />
+                            </div>
+                        </div>
+                        <!-- // 性别 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">性别&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!sexediting" @click="sexstartEditing">{{ sexcontent }}</div>
+                                <InputText v-if="sexediting" type="text" v-model="sextempContent" @blur="sexstopEditing"
+                                    @keyup.enter="sexstopEditing" />
+                            </div>
+                        </div>
+                        <!-- // 出生日期 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">出生日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!birediting" @click="birstartEditing">{{ bircontent }}</div>
+                                <InputText v-if="birediting" type="text" v-model="birtempContent" @blur="birstopEditing"
+                                    @keyup.enter="birstopEditing" />
+                            </div>
+                        </div>
+                        <!-- //地区 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">地区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!regediting" @click="regstartEditing">{{ regcontent }}</div>
+                                <InputText v-if="regediting" type="text" v-model="regtempContent" @blur="regstopEditing"
+                                    @keyup.enter="regstopEditing" />
+                            </div>
+                        </div>
+                        <!-- // 邮箱 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!emailediting" @click="emailstartEditing">{{ emailcontent }}</div>
+                                <InputText v-if="emailediting" type="text" v-model="emailtempContent"
+                                    @blur="emailstopEditing" @keyup.enter="emailstopEditing" />
+                            </div>
+                        </div>
+                        <!-- // 身份证号 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">身份证号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!idCardediting" @click="idCardstartEditing">{{ idCardcontent }}</div>
+                                <InputText v-if="idCardediting" type="text" v-model="idCardtempContent"
+                                    @blur="idCardstopEditing" @keyup.enter="idCardstopEditing" />
+                            </div>
+                        </div>
+                        <!-- // 病史 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">病史&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!historyediting" @click="historystartEditing">{{ historycontent }}</div>
+                                <InputText v-if="historyediting" type="text" v-model="historytempContent"
+                                    @blur="historystopEditing" @keyup.enter="historystopEditing" />
+                            </div>
+                        </div>
+                        <div class="save_button">
+                            <Button label="保存" @click="save" />
+                        </div>
                     </div>
-                </div>
-                <!-- // 性别 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">性别&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!sexediting" @click="sexstartEditing">{{ sexcontent }}</div>
-                        <input v-if="sexediting" type="text" v-model="sextempContent" @blur="sexstopEditing"
-                            @keyup.enter="sexstopEditing">
-                    </div>
-                </div>
-                <!-- // 出生日期 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">出生日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!birediting" @click="birstartEditing">{{ bircontent }}</div>
-                        <input v-if="birediting" type="text" v-model="birtempContent" @blur="birstopEditing"
-                            @keyup.enter="birstopEditing">
-                    </div>
-                </div>
-                <!-- //地区 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">地区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!regediting" @click="regstartEditing">{{ regcontent }}</div>
-                        <input v-if="regediting" type="text" v-model="regtempContent" @blur="regstopEditing"
-                            @keyup.enter="regstopEditing">
-                    </div>
-                </div>
-                <!-- // 邮箱 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!emailediting" @click="emailstartEditing">{{ emailcontent }}</div>
-                        <input v-if="emailediting" type="text" v-model="emailtempContent" @blur="emailstopEditing"
-                            @keyup.enter="emailstopEditing">
-                    </div>
-                </div>
-                <!-- // 身份证号 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">身份证号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!idCardediting" @click="idCardstartEditing">{{ idCardcontent }}</div>
-                        <input v-if="idCardediting" type="text" v-model="idCardtempContent" @blur="idCardstopEditing"
-                            @keyup.enter="idCardstopEditing">
-                    </div>
-                </div>
-                <!-- // 病史 -->
-                <div class="edit-item" style="word-break: break-all;">
-                    <div style="float:left">病史&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:left">
-                        <div v-if="!historyediting" @click="historystartEditing">{{ historycontent }}</div>
-                        <input v-if="historyediting" type="text" v-model="historytempContent" @blur="historystopEditing"
-                            @keyup.enter="historystopEditing">
-                    </div>
-                </div>
-                <div class="save_button">
-                    <el-button class="send" type="primary" size="medium" @click="save">保存</el-button>
-                </div>
-            </div>
+                </template>
+            </Card>
         </div>
     </div>
 </template>
@@ -85,7 +103,15 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios'
+import axios from 'axios';
+//primevue
+import SelectButton from 'primevue/selectbutton';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Divider from 'primevue/divider';
+import Card from 'primevue/card';
+import Panel from 'primevue/panel';
+
 const id = ref('123');
 const name = ref('');
 const age = ref('');
@@ -124,7 +150,18 @@ axios.get('/api/data', {
 // 对于个人的信息框的设置
 const pname = ref('张三');
 const pid = ref('21371101');
-
+// 姓名
+const nameediting = ref(false)
+const namecontent = ref('Hello, world!')
+const nametempContent = ref('')
+function namestartEditing() {
+    nameediting.value = true
+    nametempContent.value = namecontent.value
+}
+function namestopEditing() {
+    ageediting.value = false
+    namecontent.value = nametempContent.value
+}
 // 年龄
 const ageediting = ref(false)
 const agecontent = ref('Hello, world!')
@@ -151,7 +188,7 @@ function sexstopEditing() {
 }
 // 出生日期
 const birediting = ref(false)
-const bircontent = ref('Hello, world!')
+const bircontent = ref('Hello, worldasdasd!')
 const birtempContent = ref('')
 function birstartEditing() {
     birediting.value = true
@@ -240,20 +277,34 @@ function save() {
     width: 1000px;
     height: 900px;
     top: 0px;
-    background-image: url('../Pic/selfbgp.jpg');
 }
 
 .message {
+    position: absolute;
+    top: 200px;
+}
+
+.bt_changePic {
     position: relative;
-    top: 80px;
+    left: 50px;
+    top: 20px;
+}
+
+.leftpart {
+    position: relative;
+    left: 100px;
+    width: 250px;
+    height: 600px;
+    top: 100px;
+    border-right: 2px solid rgb(11, 11, 18);
 }
 
 .avatar {
     position: relative;
-    left: 150px;
+    /* left: 150px;*/
     width: 200px;
     height: 200px;
-    top: 100px;
+    top: 10px;
     border-radius: 50%;
     overflow: hidden;
 }
@@ -285,13 +336,11 @@ function save() {
     text-decoration: none;
 }
 
-.edit {
+.mycard {
     position: relative;
-    bottom: 100px;
     left: 450px;
+    bottom: 100px;
     width: 400px;
-    border: 2px solid blue;
-    background-image: url('../Pic/mess.png');
 }
 
 .edit-item {

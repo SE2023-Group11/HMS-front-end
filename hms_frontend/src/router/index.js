@@ -4,7 +4,8 @@ import Register from "../views/RegisterForm.vue";
 import Temp from "../views/TempAll.vue";
 import Space from "../views/SelfSpace.vue";
 import Message from "../views/SendMessage.vue";
-
+import Selfmessage from "@/views/selfmessage.vue";
+import Changemessage from "@/views/changemessage.vue";
 const routes = [
     {
         path: "/login",
@@ -20,6 +21,16 @@ const routes = [
         path: "/temp",
         name: "Temp",
         component: Temp
+    },
+    {
+        path: "/selfmessage",
+        name: "Selfmessage",
+        component: Selfmessage
+    },
+    {
+        path: "/changemessage",
+        name: "Changemessage",
+        component: Changemessage
     },
     {
         path: "/space",

@@ -4,57 +4,62 @@
         <form @submit.prevent="submitForm">
             <div>
                 <div>
-                    <input type="radio" id="patient" value="patient" v-model="role">
-                    <label for="patient">我是患者</label>
-                    <input type="radio" id="doctor" value="doctor" v-model="role">
-                    <label for="doctor">我是医生</label>
+                    <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
                 </div>
-                <div class="form-group" v-if="role === 'doctor'">
+                <div class="form-group" v-if="is_patient === '我是医生'">
+
                     <label for="department">所在科室</label>
-                    <input type="text" id="department" v-model="department">
+                    <InputText type="text" id="department" v-model="department" />
                 </div>
             </div>
 
 
             <div class="form-group">
                 <label for="email">邮箱</label>
-                <input type="email" id="email" v-model="email" @blur="checkEmail" />
-                <div class="error-message" v-if="emailError">{{ emailError }}</div>
+                <InputText type="email" id="email" v-model="email" />
             </div>
 
             <div class="form-group">
                 <label for="name">姓名</label>
-                <input type="text" id="name" v-model="name" />
+                <InputText type="text" id="name" v-model="name" />
             </div>
             <div class="form-group">
                 <label for="idCard">身份证号</label>
-                <input type="text" id="idCard" v-model="idCard" />
+                <InputText type="idCard" id="idCard" v-model="idCard" />
             </div>
             <div class="form-group">
                 <label for="password">密码</label>
-                <input type="password" id="password" v-model="password" />
+                <Password type="password" id="password" v-model="password" />
             </div>
             <div class="form-group">
                 <label for="confirmPassword">确认密码</label>
-                <input type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword" />
+                <Password type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword" />
                 <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
             </div>
             <div class="form-group">
                 <label for="verifyCode">验证码</label>
                 <div class="verify-code">
-                    <input type="text" id="verifyCode" v-model="verifyCode" />
+                    <Input type="text" id="verifyCode" v-model="verifyCode" />
                     <button type="button" @click="sendVerifyCode" :disabled="sendingVerifyCode">{{ sendingVerifyCode ?
                         `${countdown}s` : '发送验证码' }}</button>
                 </div>
             </div>
-            <button type="submit">注册</button>
+            <!-- <button type="submit">注册</button> -->
+            <Button label="注册" @click="registerbt" />
         </form>
     </div>
 </template>
   
 <script setup>
 import { ref } from 'vue';
+//primevue
+import SelectButton from 'primevue/selectbutton';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Password from 'primevue/password';
 
+const options = ref(['我是患者', '我是医生']);
+const is_patient = ref('off');
 const email = ref('');
 const name = ref('');
 const idCard = ref('');
@@ -67,10 +72,19 @@ const passwordError = ref('');
 const sendingVerifyCode = ref(false);
 const countdown = ref(60);
 let timer = null;
-const role = ref('patient');
 const department = ref('');
 
-
+function sendtoback() {
+    axios.post('/api/send-to-back', {
+        email,
+    })
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
 const sendVerifyCode = () => {
     // 发送验证码的逻辑
     sendingVerifyCode.value = true;
@@ -78,22 +92,13 @@ const sendVerifyCode = () => {
         if (countdown.value > 1) {
             countdown.value--;
         } else {
+            sendtoback();
             clearInterval(timer);
             timer = null;
             countdown.value = 60;
             sendingVerifyCode.value = false;
         }
     }, 1000);
-};
-
-//对于邮箱的合法性进行检查
-const checkEmail = () => {
-    const emailRegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegExp.test(email)) {
-        emailError.value = '请输入一个有效的邮箱地址';
-    } else {
-        emailError.value = '对';
-    }
 };
 
 const checkPassword = () => {
@@ -103,6 +108,49 @@ const checkPassword = () => {
         passwordError.value = '';
     }
 };
+
+function registerbt() {
+    //首先验证验证码
+    axios.post('/api/verify-code', {
+        email,
+        verifyCode,
+    })
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    if (is_patient == '我是医生') {
+        axios.post('/docter/register', {
+            password,
+            emial,
+            department,
+            name,
+            idcard,
+        })
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+    else {
+        axios.post('/patient/register', {
+            password,
+            emial,
+            name,
+            idcard,
+        })
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+}
 
 </script>
   

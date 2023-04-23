@@ -14,6 +14,12 @@
         <router-link to="/space">Space</router-link>
       </p>
       <p>
+        <router-link to="/selfmessage">Selfmessage</router-link>
+      </p>
+      <p>
+        <router-link to="/changemessage">Changemessage</router-link>
+      </p>
+      <p>
         <router-link to="/message">Message</router-link>
       </p>
     </header>
