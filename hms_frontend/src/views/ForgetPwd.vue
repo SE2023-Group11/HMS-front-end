@@ -1,34 +1,28 @@
 <template>
     <div class="register">
-        <h1>用户注册</h1>
+        <h1>忘记密码</h1>
         <form @submit.prevent="submitForm">
+
             <div>
                 <div>
                     <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
                 </div>
-                <div class="form-group" v-if="is_patient === '我是医生'">
+            </div>
 
-                    <label for="department">所在科室</label>
-                    <!-- <InputText type="text" id="department" v-model="department" /> -->
-                    <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
-                        class="w-full md:w-14rem" />
+            <div class="form-group">
+                <label for="uid">用户id</label>
+                <InputText type="text" id="uid" v-model="uid" />
+            </div>
+
+            <div class="form-group">
+                <label for="verifyCode">验证码</label>
+                <div class="verify-code">
+                    <Input type="text" id="verifyCode" v-model="verifyCode" />
+                    <button type="button" @click="sendVerifyCode" :disabled="sendingVerifyCode">{{ sendingVerifyCode ?
+                        `${countdown}s` : '发送验证码' }}</button>
                 </div>
             </div>
 
-
-            <div class="form-group">
-                <label for="email">邮箱</label>
-                <InputText type="email" id="email" v-model="email" />
-            </div>
-
-            <div class="form-group">
-                <label for="name">姓名</label>
-                <InputText type="text" id="name" v-model="name" />
-            </div>
-            <div class="form-group">
-                <label for="idCard">身份证号</label>
-                <InputText type="idCard" id="idCard" v-model="idCard" />
-            </div>
             <div class="form-group">
                 <label for="password">密码</label>
                 <Password type="password" id="password" v-model="password" />
@@ -38,23 +32,15 @@
                 <Password type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword" />
                 <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
             </div>
-            <div class="form-group">
-                <label for="verifyCode">验证码</label>
-                <div class="verify-code">
-                    <Input type="text" id="verifyCode" v-model="verifyCode" />
-                    <button type="button" @click="sendVerifyCode" :disabled="sendingVerifyCode">{{ sendingVerifyCode ?
-                        `${countdown}s` : '发送验证码' }}</button>
-                </div>
-            </div>
-            <!-- <button type="submit">注册</button> -->
-            <Button label="注册" @click="registerbt" />
+
+            <Button label="修改密码" @click="registerbt" />
         </form>
     </div>
     <!-- 用于错误的消息的通知 -->
     <div class="tongzhi">
         <!-- 用户注册 -->
-        <Message v-if="judreg == 1" severity="success">注册成功！</Message>
-        <Message v-if="judreg == -1" severity="error">注册失败</Message>
+        <Message v-if="judchange == 1" severity="success">注册成功！</Message>
+        <Message v-if="judchange == -1" severity="error">注册失败</Message>
     </div>
 </template>
   
@@ -69,12 +55,7 @@ import Password from 'primevue/password';
 import Dropdown from 'primevue/dropdown';
 import Message from 'primevue/message';
 
-const alldepartment = ref([
-    { name: '心脏科', code: 'NY' },
-    { name: '外科', code: 'RM' },
-    { name: '泌尿科', code: 'LDN' },
-    { name: '心脑血管科', code: 'IST' },
-]);
+const id = ref('');
 const options = ref(['我是患者', '我是医生']);
 const is_patient = ref('off');
 const email = ref('');
@@ -105,7 +86,7 @@ function sendtoback() {
 }
 const sendVerifyCode = () => {
     //首先改一下消息的通知
-    judreg.value = 0;
+    judchange.value = 0;
     // 发送验证码的逻辑
     sendingVerifyCode.value = true;
     timer = setInterval(() => {
@@ -130,7 +111,7 @@ const checkPassword = () => {
 };
 
 //判断传输是否成功的变量
-const judreg = ref(0);
+const judchange = ref(0);
 function registerbt() {
     //首先验证验证码
     axios.post('http://localhost:8080/verify-code', {
@@ -139,43 +120,38 @@ function registerbt() {
     })
         .then(response => {
             console.log(response.data)
-            judreg.value = 1;
+            judchange.value = 1;
         })
         .catch(error => {
             console.error(error)
-            judreg.value = -1;
+            judchange.value = -1;
         })
     if (is_patient == '我是医生') {
-        axios.post('http://localhost:8080//docter_register', {
-            doctor_password: password.value,
-            doctor_email: email.value,
-            doctor_department: department.value,
-            doctor_name: name.value,
-            doctor_idcard: idCard.value,
+        axios.post('http://localhost:8080//docter_changepwd', {
+            doctor_id: id.value,
+            doctor_pwd: password.value,
         })
             .then(response => {
                 console.log(response.data)
-                judreg.value = 1;
+                judchange.value = 1;
             })
             .catch(error => {
                 console.error(error)
-                judreg.value = -1;
+                judchange.value = -1;
             })
     }
     else {
-        axios.post('http://localhost:8080//patient_register', {
-            patient_passsword: password.value,
-            patient_email: email.value,
-            patient_name: name.value,
-            patient_idcard: idCard.value,
+        axios.post('http://localhost:8080//patient_changepwd', {
+            patient_id: id.value,
+            patient_pwd: password.value,
         })
             .then(response => {
                 console.log(response.data)
-                judreg.value = 1;
+                judchange.value = 1;
             })
             .catch(error => {
                 console.error(error)
-                judreg.value = -1;
+                judchange.value = -1;
             })
     }
 }

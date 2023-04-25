@@ -1,19 +1,22 @@
 <template>
+    <div class="Hello">
+        <p>欢迎来到{{ pid }}的个人空间！</p>
+    </div>
     <div class="bg-image">
         <div class="leftpart">
             <div class="avatar">
-                <img src="../../public/jay.jpg" />
+                <img src="../../public/jay.jpg" v-if="!imageUrl" />
+                <img :src="imageUrl" v-if="imageUrl">
             </div>
-            <Button class="bt_changePic" label="更换头像" @click="save" />
+            <div class="bt_changePic">
+                <label for="file-input" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> 点击更换头像
+                </label>
+                <input id="file-input" type="file" @click="changePic" style="display:none;">
+            </div>
         </div>
 
         <div class="message">
-            <!-- <div class="name_and_id">
-                <label class="nameid">name: {{ pname }}</label>
-                &nbsp;&nbsp;
-                <label class="nameid">pid: {{ pid }}</label>
-            </div> -->
-
             <Card class="mycard">
                 <template #title>用户{{ pid }}的个人信息</template>
                 <template #content>
@@ -72,6 +75,15 @@
                                     @blur="emailstopEditing" @keyup.enter="emailstopEditing" />
                             </div>
                         </div>
+                        <!-- 手机号 -->
+                        <div class="edit-item" style="word-break: break-all;">
+                            <div style="float:left">手机号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">
+                                <div v-if="!phoneediting" @click="phonestartEditing">{{ phonecontent }}</div>
+                                <InputText v-if="phoneediting" type="text" v-model="phonetempContent"
+                                    @blur="phonestopEditing" @keyup.enter="phonestopEditing" />
+                            </div>
+                        </div>
                         <!-- // 身份证号 -->
                         <div class="edit-item" style="word-break: break-all;">
                             <div style="float:left">身份证号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -81,22 +93,37 @@
                                     @blur="idCardstopEditing" @keyup.enter="idCardstopEditing" />
                             </div>
                         </div>
-                        <!-- // 病史 -->
-                        <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">病史&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                            <div style="float:left">
-                                <div v-if="!historyediting" @click="historystartEditing">{{ historycontent }}</div>
-                                <InputText v-if="historyediting" type="text" v-model="historytempContent"
-                                    @blur="historystopEditing" @keyup.enter="historystopEditing" />
-                            </div>
-                        </div>
                         <div class="save_button">
                             <Button label="保存" @click="save" />
                         </div>
                     </div>
+
                 </template>
             </Card>
+            <div class="history">
+                <Panel v-if="!historyediting" header="病史" class="panel">
+                    {{ historycontent }}
+                </Panel>
+                <div>
+                    <Textarea v-if="historyediting" v-model="historytempContent" rows="5" cols="30" />
+                </div>
+                <Button :label='bthis' @click="edithistory" class="edithistory" />
+            </div>
         </div>
+    </div>
+    <!-- 消息通知的部分 -->
+    <div class="tongzhi">
+        <!-- 上传头像 -->
+        <Message v-if="judpic == 1" severity="success">上传头像成功</Message>
+        <Message v-if="judpic == -1" severity="error">上传头像失败</Message>
+
+        <!-- 保存信息卡 -->
+        <Message v-if="judmess == 1" severity="success">保存信息卡成功</Message>
+        <Message v-if="judmess == -1" severity="error">保存信息卡失败</Message>
+
+        <!-- 编辑病史 -->
+        <Message v-if="judhis == 1" severity="success">编辑病史成功</Message>
+        <Message v-if="judhis == -1" severity="error">编辑病史失败</Message>
     </div>
 </template>
 
@@ -105,13 +132,13 @@
 import { ref } from 'vue';
 import axios from 'axios';
 //primevue
-import SelectButton from 'primevue/selectbutton';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import Divider from 'primevue/divider';
 import Card from 'primevue/card';
 import Panel from 'primevue/panel';
-
+import Textarea from 'primevue/textarea';
+import Message from 'primevue/message';
+//进行数据传输的时候用的变量
 const id = ref('123');
 const name = ref('');
 const age = ref('');
@@ -122,34 +149,45 @@ const email = ref('');
 const idCard = ref('');
 const history = ref('');
 
-axios.get('/api/data', {
-    params: {
-        id: id.value // 传递 ID 参数
-    }
-})
-    .then(response => {
-        // 成功获取数据后的处理逻辑
-        console.log(response.data)
-        const data = response.data;
+// onMounted(() => {
+//     getinfo();
+// })
 
-        name.value = data.name;
-        age.value = data.age;
-        sex.value = data.sex;
-        birthday.value = data.birthday;
-        region.value = data.region;
-        email.value = data.email;
-        idCard.value = data.idCard;
-        history.value = data.history;
+// 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
+function getinfo() {
+    axios.get('http://localhost:8080/getinformation', {
+        params: {
+            pid: id.value // 传递 ID 参数
+        }
     })
-    .catch(error => {
-        // 处理错误的逻辑
-        console.error(error)
-    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data)
+            const data = response.data;
+
+            namecontent.value = data.name;
+            agecontent.value = data.age;
+            sexcontent.value = data.sex;
+            bircontent.value = data.birthday;
+            regcontent.value = data.region;
+            emailcontent.value = data.email;
+            idCardcontent.value = data.idCard;
+            phonecontent.value = data.phone;
+            historycontent.value = data.history;
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+}
+
+
 
 
 // 对于个人的信息框的设置
-const pname = ref('张三');
 const pid = ref('21371101');
+
+//下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
 // 姓名
 const nameediting = ref(false)
 const namecontent = ref('Hello, world!')
@@ -157,9 +195,10 @@ const nametempContent = ref('')
 function namestartEditing() {
     nameediting.value = true
     nametempContent.value = namecontent.value
+    judmess.value = 0
 }
 function namestopEditing() {
-    ageediting.value = false
+    nameediting.value = false
     namecontent.value = nametempContent.value
 }
 // 年龄
@@ -169,6 +208,7 @@ const agetempContent = ref('')
 function agestartEditing() {
     ageediting.value = true
     agetempContent.value = agecontent.value
+    judmess.value = 0
 }
 function agestopEditing() {
     ageediting.value = false
@@ -181,6 +221,7 @@ const sextempContent = ref('')
 function sexstartEditing() {
     sexediting.value = true
     sextempContent.value = sexcontent.value
+    judmess.value = 0
 }
 function sexstopEditing() {
     sexediting.value = false
@@ -193,6 +234,7 @@ const birtempContent = ref('')
 function birstartEditing() {
     birediting.value = true
     birtempContent.value = bircontent.value
+    judmess.value = 0
 }
 function birstopEditing() {
     birediting.value = false
@@ -205,6 +247,7 @@ const regtempContent = ref('')
 function regstartEditing() {
     regediting.value = true
     regtempContent.value = regcontent.value
+    judmess.value = 0
 }
 function regstopEditing() {
     regediting.value = false
@@ -217,10 +260,24 @@ const emailtempContent = ref('')
 function emailstartEditing() {
     emailediting.value = true
     emailtempContent.value = emailcontent.value
+    judmess.value = 0
 }
 function emailstopEditing() {
     emailediting.value = false
     emailcontent.value = emailtempContent.value
+}
+//手机号
+const phoneediting = ref(false)
+const phonecontent = ref('Hello, world!')
+const phonetempContent = ref('')
+function phonestartEditing() {
+    phoneediting.value = true
+    phonetempContent.value = phonecontent.value
+    judmess.value = 0
+}
+function phonestopEditing() {
+    phoneediting.value = false
+    phonecontent.value = phonetempContent.value
 }
 // 身份证号
 const idCardediting = ref(false)
@@ -229,48 +286,123 @@ const idCardtempContent = ref('')
 function idCardstartEditing() {
     idCardediting.value = true
     idCardtempContent.value = idCardcontent.value
+    judmess.value = 0
 }
 function idCardstopEditing() {
     idCardediting.value = false
     idCardcontent.value = idCardtempContent.value
 }
-// 病史
+
+//这些是对于病史的框的代码，点击按钮可以进行修改内容
 const historyediting = ref(false)
 const historycontent = ref('Hello, world!')
 const historytempContent = ref('')
-function historystartEditing() {
-    historyediting.value = true
-    historytempContent.value = historycontent.value
-}
-function historystopEditing() {
-    historyediting.value = false
-    historycontent.value = historytempContent.value
+const bthis = ref('编辑病史')
+//判断传输的结果
+const judhis = ref(0);
+function edithistory() {
+    if (bthis.value == '编辑病史') {
+        historyediting.value = true;
+        historytempContent.value = historycontent.value;
+        bthis.value = '保存病史';
+
+    }
+    else {
+        //这里首先要实现一个数据库对于病史的更新，向后端传输数据
+        axios.post("http://localhost:8080/savehistory", {
+            pid: pid.value,
+            phistory: historytempContent.value,
+        }).then(res => {
+            console.log(res);
+            judhis.value = 1;
+        }).catch(error => {
+            console.error(error)
+            judhis.value = -1;
+        })
+
+        historyediting.value = false;
+        historycontent.value = historytempContent.value;
+        bthis.value = '编辑病史';
+    }
+
 }
 
 
-//仅仅进行保存按钮的方法的编写
+//进行保存按钮的方法的编写,同时返回结果
+const judmess = ref(0);
 function save() {
-    axios.post('/api/user', {
-        agecontent,
-        sexcontent,
-        bircontent,
-        regcontent,
-        emailcontent,
-        idCardcontent,
-        historycontent
+    axios.post('http://localhost:8080/changePatient', {
+        params: {
+            patient_id: pid.value,
+            patient_name: namecontent.value,
+            patient_idcard: idCardcontent.value,
+            patient_mail: emailcontent.value,
+            patient_phone: phonecontent.value,
+            patient_sex: sexcontent.value,
+            patient_birthday: bircontent.value,
+            patient_region: regcontent.value
+
+        }
     })
         .then(response => {
             console.log(response.data)
+            judmess.value = 1;
         })
         .catch(error => {
             console.error(error)
+            judmess.value = -1;
         })
 }
 
+//实现对于图片的更换和保存
+const imageUrl = ref('');
+//将文件转换为formdata形式
+const formData = new FormData();
+//判断传输的结果是否成功
+const judpic = ref(0);
+function changePic(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            imageUrl.value = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    //将上传的文件存到数据库
+    if (file?.file) {
+        const blob = new Blob([file], { type: file.type });
+        formData.append('file', blob, { filename: 'image.jpg' });
+        axios.post('http://localhost:8080/savePic', formData, {
+            params: {
+                pid: pid.value,
+                image: formData.values,
+            }
+        }).then(response => {
+            console.log('Upload successful!');
+            judpic.value = 1;
+        }).catch(error => {
+            console.error('Upload failed: ', error);
+            judpic.value = -1;
+        });
+    }
+    else {
+        console.error('文件不存在')
+    }
+}
 </script>
 
 
 <style>
+.Hello {
+    position: absolute;
+    left: 250px;
+    top: 10px;
+    width: 800px;
+    font-size: 30px;
+}
+
 .bg-image {
     position: absolute;
     left: 250px;
@@ -288,6 +420,7 @@ function save() {
     position: relative;
     left: 50px;
     top: 20px;
+    z-index: 9999;
 }
 
 .leftpart {
@@ -299,6 +432,7 @@ function save() {
     border-right: 2px solid rgb(11, 11, 18);
 }
 
+
 .avatar {
     position: relative;
     /* left: 150px;*/
@@ -309,38 +443,39 @@ function save() {
     overflow: hidden;
 }
 
+.choosePic {
+    color: blue;
+}
+
 .avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.name_and_id {
+.edithistory {
     position: relative;
-    bottom: 150px;
-    left: 500px;
-    width: 300px;
-    height: 50px;
-    border-radius: 3%;
-    border: 2px solid rgb(11, 11, 18);
-    color: black;
-    background-color: rgb(108, 112, 112);
-}
-
-.nameid {
-    position: relative;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    font-style: italic;
-    text-decoration: none;
+    left: 150px;
 }
 
 .mycard {
     position: relative;
     left: 450px;
-    bottom: 100px;
+    bottom: 120px;
     width: 400px;
+    height: 460px;
+}
+
+.history {
+    position: relative;
+    left: 450px;
+    bottom: 50px;
+    width: 400px;
+    height: 300px;
+}
+
+.panel .p-panel-content {
+    word-wrap: break-word;
 }
 
 .edit-item {
@@ -357,6 +492,13 @@ function save() {
     height: 50px;
     bottom: 10px;
     left: 160px;
+}
+
+.tongzhi {
+    position: absolute;
+    left: 600px;
+    width: 400px;
+    top: 20px;
 }
 </style>
 
