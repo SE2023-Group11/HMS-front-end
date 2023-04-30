@@ -80,6 +80,7 @@ const is_patient = ref('off');
 const email = ref('');
 const name = ref('');
 const idCard = ref('');
+const phone = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const verifyCode = ref('');
@@ -93,7 +94,7 @@ const department = ref('');
 
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
-    axios.post('http://localhost:8080/send-to-back', {
+    axios.post('http://localhost:8080/sendToEmail', {
         email: email.value,
     })
         .then(response => {
@@ -129,11 +130,45 @@ const checkPassword = () => {
     }
 };
 
+//首先通过身份证号获取一些知识
+const birthday = ref()//生日
+const isMale = ref(true)//性别
+function getinfo() {
+    let idnum = idCard.values
+    let year = idnum.substring(6, 10);
+    let month = idnum.substring(10, 12);
+    let day = idnum.substring(12, 14);
+    let genderCode = idnum.substring(16, 17);
+    isMale.value = genderCode % 2 === 1;
+    birthday.value = LocalDateTime.of(parseInt(year), parseInt(month), parseInt(day));
+}
+//对于患者和医生的类进行封装
+const doctor = {};
+const patient = {};
+function setDoctor() {
+    doctor.doctor_password = password.value;
+    doctor.doctor_email = email.value;
+    doctor.doctor_phone = phone.value;
+    doctor.doctor_name = name.value;
+    doctor.doctor_idcard = idCard.value;
+    doctor.doctor_birthday = birthday.value;
+    doctor.doctor_isMale = isMale.value;
+    doctor.doctor_department = department.value;
+}
+function setPatient() {
+    patient.doctor_password = password.value;
+    patient.doctor_email = email.value;
+    patient.doctor_phone = phone.value;
+    patient.doctor_name = name.value;
+    patient.doctor_idcard = idCard.value;
+    patient.doctor_birthday = birthday.value;
+    patient.doctor_isMale = isMale.value;
+}
 //判断传输是否成功的变量
 const judreg = ref(0);
 function registerbt() {
     //首先验证验证码
-    axios.post('http://localhost:8080/verify-code', {
+    axios.post('http://localhost:8080/verifyCode', {
         email: email.value,
         verifyCode: verifyCode.value,
     })
@@ -146,12 +181,9 @@ function registerbt() {
             judreg.value = -1;
         })
     if (is_patient == '我是医生') {
+        setDoctor();
         axios.post('http://localhost:8080//docter_register', {
-            doctor_password: password.value,
-            doctor_email: email.value,
-            doctor_department: department.value,
-            doctor_name: name.value,
-            doctor_idcard: idCard.value,
+            patient
         })
             .then(response => {
                 console.log(response.data)
@@ -163,11 +195,9 @@ function registerbt() {
             })
     }
     else {
-        axios.post('http://localhost:8080//patient_register', {
-            patient_passsword: password.value,
-            patient_email: email.value,
-            patient_name: name.value,
-            patient_idcard: idCard.value,
+        setPatient();
+        axios.post('http://localhost:8080//patientRegister', {
+            doctor
         })
             .then(response => {
                 console.log(response.data)

@@ -3,26 +3,39 @@
     <div class="all">
         <button @click="add">增加消息</button>
         <div class="header">
-            <h1>消息通知{{ ss }}</h1>
+            <h1>消息通知</h1>
             <div class="badge" v-if="unreadCount > 0">{{ unreadCount }}</div>
         </div>
-        <h2>&nbsp&nbsp未读消息</h2>
-        <div class="notifications">
-            <div class="notification" v-for="(notification, index) in notifications" :key="index">
-                <div class="title">{{ notification.title }}</div>
-                <div class="description">{{ notification.description }}</div>
-                <!-- <button @click="deleteNotification(index)">删除</button>
-                &nbsp;&nbsp; -->
-                <button @click="alreadyread(index)">标为已读</button>
+        <div class="topp">
+            <h2>&nbsp&nbsp未读消息</h2>
+            <Button label="标为已读" class="btt" @click="alreadyread()" />
+
+            <div class="notifications">
+                <Accordion :activeIndex="0" class="notification" v-for="(notification, index) in notifications"
+                    :key="index">
+                    <!-- <div class="title">{{ notification.title }}</div>
+                <div class="description">{{ notification.description }}</div> -->
+                    <AccordionTab :header="notification.title">
+                        <p>
+                            {{ notification.description }}
+                        </p>
+                    </AccordionTab>
+                </Accordion>
             </div>
         </div>
         <h2>&nbsp&nbsp已读消息</h2>
         <div class="notifications">
-            <div class="notification" v-for="(notification1, index) in notificationalready" :key="index">
-                <div class="title">{{ notification1.title }}</div>
-                <div class="description">{{ notification1.description }}</div>
-                <button @click="deleteNotification(index)">删除</button>
-            </div>
+            <Accordion :activeIndex="0" class="notification" v-for="(notification1, index) in notificationalready"
+                :key="index">
+                <!-- <div class="title">{{ notification1.title }}</div>
+                <div class="description">{{ notification1.description }}</div> -->
+                <AccordionTab :header="notification1.title">
+                    <p>
+                        {{ notification1.description }}
+                    </p>
+                </AccordionTab>
+                <Button @click="deleteNotification(index)">删除</Button>
+            </Accordion>
         </div>
     </div>
 </template>
@@ -71,15 +84,15 @@ const unreadCount = ref(0);
 
 function add() {
     notifications.value.push({
-        id: notifications.length + 1,
-        title: '新消息' + (notifications.length + 1),
+        id: notifications.value.length + 1,
+        title: '新消息' + (notifications.value.length + 1),
         description: '这是一条新的通知消息。',
         read: false
     })
     unreadCount.value += 1
 }
 function deleteNotification(index) {
-    const notification = notificationalready[index]
+    const notification = notificationalready.value[index]
     //axios.delete(`/api/notifications/${notification.id}`)
     //    .then(() => {
     notificationalready.value.splice(index, 1)
@@ -91,20 +104,22 @@ function deleteNotification(index) {
     //     console.log(error)
     // })
 }
-const ss = ref('d');
-function alreadyread(index) {
-    ss.value = 'dasss'
-    const notification = notifications[index]
-
-    //axios.delete(`/api/notifications/${notification.id}`)
-    //    .then(() => {
-    notifications.value.splice(index, 1)
-    unreadCount.value -= 1
-    //    })
-    //    .catch(error => {
-    //        console.log(error)
-    //    })
-    notificationalready.value.push(notification);
+const index = ref(0);
+function alreadyread() {
+    index.value = notifications.value.length;
+    while (index.value > 0) {
+        index.value--;
+        const notification = notifications.value[index.value]
+        //axios.delete(`/api/notifications/${notification.id}`)
+        //    .then(() => {
+        notifications.value.splice(index, 1)
+        unreadCount.value -= 1
+        //    })
+        //    .catch(error => {
+        //        console.log(error)
+        //    })
+        notificationalready.value.push(notification);
+    }
 }
 
 
@@ -162,18 +177,35 @@ function alreadyread(index) {
     left: 20px;
 }
 
+.topp {
+    border: 1px solid rgb(204, 204, 204);
+    position: relative;
+    left: 10px;
+    width: 630px
+}
+
 .notifications {
     margin-top: 20px;
     position: relative;
-    left: 20px;
+    left: 10px;
+    width: 520px;
+    border: 1px solid rgb(204, 204, 204);
 }
 
 .notification {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 600px;
-
+    /* border: 1px solid #ccc; */
+    position: relative;
+    left: 10px;
+    width: 500px;
+    border-radius: 1%;
     margin-bottom: 10px;
+}
+
+.btt {
+    position: relative;
+    right: 10px;
+    button: 80px;
+    z-index: 9999;
 }
 
 .title {

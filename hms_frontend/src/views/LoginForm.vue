@@ -45,22 +45,42 @@ const uid = ref('');
 const password = ref('');
 const options = ref(['患者身份进入', '非患者身份进入']);
 const is_patient = ref('off');
-
+const role = ref('y')//判断是不是患者
 //用于判断登录是否成功的变量
 const juglog = ref(0);
 function loginbt() {
-    axios.post('http://localhost:8080/login', {
-        uid: uid.value,
-        password: password.value,
-    })
-        .then(response => {
-            console.log(response.data)
-            juglog.value = 1;
+    //首先判断是不是患者
+    if (options == '患者身份进入') role.value = 'y';
+    else role.value = 'n';
+    if (role.value == 'y') {
+        axios.post('http://localhost:8080/loginPatient', {
+            uid: uid.value,
+            password: password.value,
         })
-        .catch(error => {
-            console.error(error)
-            judlog.value = -1;
+            .then(response => {
+                console.log(response.data)
+                juglog.value = 1;
+            })
+            .catch(error => {
+                console.error(error)
+                judlog.value = -1;
+            })
+    }
+    if (role.value == 'n') {
+        axios.post('http://localhost:8080/loginDoctor', {
+            uid: uid.value,
+            password: password.value,
         })
+            .then(response => {
+                console.log(response.data)
+                juglog.value = 1;
+            })
+            .catch(error => {
+                console.error(error)
+                judlog.value = -1;
+            })
+    }
+
 }
 
 </script>

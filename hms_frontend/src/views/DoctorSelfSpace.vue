@@ -155,9 +155,9 @@ const history = ref('');
 
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
 function getinfo() {
-    axios.get('http://localhost:8080/getinformation', {
+    axios.get('http://localhost:8080/getPatientInformation', {
         params: {
-            pid: id.value // 传递 ID 参数
+            patient_id: id.value // 传递 ID 参数
         }
     })
         .then(response => {
@@ -169,7 +169,7 @@ function getinfo() {
             agecontent.value = data.age;
             sexcontent.value = data.sex;
             bircontent.value = data.birthday;
-            regcontent.value = data.region;
+            //regcontent.value = data.region;//这个暂时定为不返回
             emailcontent.value = data.email;
             idCardcontent.value = data.idCard;
             phonecontent.value = data.phone;

@@ -11,7 +11,10 @@
         <router-link to="/register">Register</router-link>
       </p>
       <p>
-        <router-link to="/space">Space</router-link>
+        <router-link to="/patientspace">PatientSpace</router-link>
+      </p>
+      <p>
+        <router-link to="/doctorspace">DoctorSpace</router-link>
       </p>
       <p>
         <router-link to="/message">Message</router-link>

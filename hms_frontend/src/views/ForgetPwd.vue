@@ -39,8 +39,8 @@
     <!-- 用于错误的消息的通知 -->
     <div class="tongzhi">
         <!-- 用户注册 -->
-        <Message v-if="judchange == 1" severity="success">注册成功！</Message>
-        <Message v-if="judchange == -1" severity="error">注册失败</Message>
+        <Message v-if="judchange == 1" severity="success">修改密码成功！</Message>
+        <Message v-if="judchange == -1" severity="error">修改密码失败</Message>
     </div>
 </template>
   
@@ -74,7 +74,7 @@ const department = ref('');
 
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
-    axios.post('http://localhost:8080/send-to-back', {
+    axios.post('http://localhost:8080/sendToEmail', {
         email: email.value,
     })
         .then(response => {
@@ -114,7 +114,7 @@ const checkPassword = () => {
 const judchange = ref(0);
 function registerbt() {
     //首先验证验证码
-    axios.post('http://localhost:8080/verify-code', {
+    axios.post('http://localhost:8080/verifyCode', {
         email: email.value,
         verifyCode: verifyCode.value,
     })
@@ -127,7 +127,7 @@ function registerbt() {
             judchange.value = -1;
         })
     if (is_patient == '我是医生') {
-        axios.post('http://localhost:8080//docter_changepwd', {
+        axios.post('http://localhost:8080//docterChangepwd', {
             doctor_id: id.value,
             doctor_pwd: password.value,
         })
@@ -141,7 +141,7 @@ function registerbt() {
             })
     }
     else {
-        axios.post('http://localhost:8080//patient_changepwd', {
+        axios.post('http://localhost:8080//patientChangepwd', {
             patient_id: id.value,
             patient_pwd: password.value,
         })
