@@ -5,7 +5,7 @@
     <div class="bg-image">
         <div class="leftpart">
             <div class="avatar">
-                <img src="../../public/jay.jpg" v-if="!imageUrl" />
+                <img src="../../public/person.png" v-if="!imageUrl" />
                 <img :src="imageUrl" v-if="imageUrl">
             </div>
             <div class="bt_changePic">
@@ -58,14 +58,14 @@
                             </div>
                         </div>
                         <!-- //地区 -->
-                        <div class="edit-item" style="word-break: break-all;">
+                        <!-- <div class="edit-item" style="word-break: break-all;">
                             <div style="float:left">地区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                             <div style="float:left">
                                 <div v-if="!regediting" @click="regstartEditing">{{ regcontent }}</div>
                                 <InputText v-if="regediting" type="text" v-model="regtempContent" @blur="regstopEditing"
                                     @keyup.enter="regstopEditing" />
                             </div>
-                        </div>
+                        </div> -->
                         <!-- // 邮箱 -->
                         <div class="edit-item" style="word-break: break-all;">
                             <div style="float:left">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -100,7 +100,8 @@
 
                 </template>
             </Card>
-            <div class="history">
+            <!-- 病史是拓展内容 -->
+            <!-- <div class="history">
                 <Panel v-if="!historyediting" header="病史" class="panel">
                     {{ historycontent }}
                 </Panel>
@@ -108,7 +109,7 @@
                     <Textarea v-if="historyediting" v-model="historytempContent" rows="5" cols="30" />
                 </div>
                 <Button :label='bthis' @click="edithistory" class="edithistory" />
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- 消息通知的部分 -->
@@ -140,19 +141,25 @@ import Textarea from 'primevue/textarea';
 import Message from 'primevue/message';
 //进行数据传输的时候用的变量
 const id = ref('123');
-const name = ref('');
-const age = ref('');
-const sex = ref('');
-const birthday = ref('');
-const region = ref('');
-const email = ref('');
-const idCard = ref('');
-const history = ref('');
 
 // onMounted(() => {
 //     getinfo();
 // })
 
+//通过患者的生日获得患者的年龄
+function calculateAge(birthday) {
+    const now = new Date();
+    const birthDate = new Date(birthday);
+
+    let age = now.getFullYear() - birthDate.getFullYear();
+    const monthDiff = now.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
 function getinfo() {
     axios.get('http://localhost:8080/getPatientInformation', {
@@ -165,14 +172,14 @@ function getinfo() {
             console.log(response.data)
             const data = response.data;
 
-            namecontent.value = data.name;
-            agecontent.value = data.age;
-            sexcontent.value = data.sex;
-            bircontent.value = data.birthday;
+            namecontent.value = data.patientName;
+            sexcontent.value = data.patientSex;
+            bircontent.value = data.patientBirthday;
+            agecontent.value = calculateAge(data.patientBirthday);
             //regcontent.value = data.region;//这个暂时定为不返回
-            emailcontent.value = data.email;
-            idCardcontent.value = data.idCard;
-            phonecontent.value = data.phone;
+            emailcontent.value = data.patientMail;
+            idCardcontent.value = data.patientNumber;
+            phonecontent.value = data.patientPhone;
             historycontent.value = data.history;
         })
         .catch(error => {
@@ -190,7 +197,7 @@ const pid = ref('21371101');
 //下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
 // 姓名
 const nameediting = ref(false)
-const namecontent = ref('Hello, world!')
+const namecontent = ref('张三')
 const nametempContent = ref('')
 function namestartEditing() {
     nameediting.value = true
@@ -203,7 +210,7 @@ function namestopEditing() {
 }
 // 年龄
 const ageediting = ref(false)
-const agecontent = ref('Hello, world!')
+const agecontent = ref('20')
 const agetempContent = ref('')
 function agestartEditing() {
     ageediting.value = true
@@ -216,7 +223,7 @@ function agestopEditing() {
 }
 // 性别
 const sexediting = ref(false)
-const sexcontent = ref('Hello, world!')
+const sexcontent = ref('男')
 const sextempContent = ref('')
 function sexstartEditing() {
     sexediting.value = true
@@ -229,7 +236,7 @@ function sexstopEditing() {
 }
 // 出生日期
 const birediting = ref(false)
-const bircontent = ref('Hello, worldasdasd!')
+const bircontent = ref('2002-10-24')
 const birtempContent = ref('')
 function birstartEditing() {
     birediting.value = true
@@ -240,22 +247,10 @@ function birstopEditing() {
     birediting.value = false
     bircontent.value = birtempContent.value
 }
-// 地区
-const regediting = ref(false)
-const regcontent = ref('Hello, world!')
-const regtempContent = ref('')
-function regstartEditing() {
-    regediting.value = true
-    regtempContent.value = regcontent.value
-    judmess.value = 0
-}
-function regstopEditing() {
-    regediting.value = false
-    regcontent.value = regtempContent.value
-}
+
 // 邮箱
 const emailediting = ref(false)
-const emailcontent = ref('Hello, world!')
+const emailcontent = ref('13303453453@qq.com')
 const emailtempContent = ref('')
 function emailstartEditing() {
     emailediting.value = true
@@ -268,7 +263,7 @@ function emailstopEditing() {
 }
 //手机号
 const phoneediting = ref(false)
-const phonecontent = ref('Hello, world!')
+const phonecontent = ref('18345664564')
 const phonetempContent = ref('')
 function phonestartEditing() {
     phoneediting.value = true
@@ -281,7 +276,7 @@ function phonestopEditing() {
 }
 // 身份证号
 const idCardediting = ref(false)
-const idCardcontent = ref('Hello, world!')
+const idCardcontent = ref('34243242354534')
 const idCardtempContent = ref('')
 function idCardstartEditing() {
     idCardediting.value = true
@@ -295,7 +290,7 @@ function idCardstopEditing() {
 
 //这些是对于病史的框的代码，点击按钮可以进行修改内容
 const historyediting = ref(false)
-const historycontent = ref('Hello, world!')
+const historycontent = ref('这是我的病史')
 const historytempContent = ref('')
 const bthis = ref('编辑病史')
 //判断传输的结果
@@ -340,7 +335,6 @@ function save() {
             patient_phone: phonecontent.value,
             patient_sex: sexcontent.value,
             patient_birthday: bircontent.value,
-            patient_region: regcontent.value
 
         }
     })
@@ -405,10 +399,14 @@ function changePic(event) {
 
 .bg-image {
     position: absolute;
-    left: 250px;
+    left: 30%;
     width: 1000px;
     height: 900px;
-    top: 0px;
+    top: 200px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .message {

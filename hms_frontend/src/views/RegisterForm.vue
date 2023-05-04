@@ -9,7 +9,6 @@
                 <div class="form-group" v-if="is_patient === '我是医生'">
 
                     <label for="department">所在科室</label>
-                    <!-- <InputText type="text" id="department" v-model="department" /> -->
                     <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
                         class="w-full md:w-14rem" />
                 </div>
@@ -18,36 +17,36 @@
 
             <div class="form-group">
                 <label for="email">邮箱</label>
-                <InputText type="email" id="email" v-model="email" />
+                <InputText type="email" id="email" v-model="email" :placeholder="'请输入您的邮箱'" />
             </div>
 
             <div class="form-group">
                 <label for="name">姓名</label>
-                <InputText type="text" id="name" v-model="name" />
+                <InputText type="text" id="name" v-model="name" :placeholder="'请输入您的姓名'" />
             </div>
             <div class="form-group">
                 <label for="idCard">身份证号</label>
-                <InputText type="idCard" id="idCard" v-model="idCard" />
+                <InputText type="idCard" id="idCard" v-model="idCard" :placeholder="'请输入您的身份证号'" />
             </div>
             <div class="form-group">
                 <label for="password">密码</label>
-                <Password type="password" id="password" v-model="password" />
+                <Password type="password" id="password" v-model="password" :placeholder="'请输入您的密码'" />
             </div>
             <div class="form-group">
                 <label for="confirmPassword">确认密码</label>
-                <Password type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword" />
+                <Password type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword"
+                    :placeholder="'请输入您的密码'" />
                 <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
             </div>
             <div class="form-group">
                 <label for="verifyCode">验证码</label>
                 <div class="verify-code">
-                    <Input type="text" id="verifyCode" v-model="verifyCode" />
+                    <InputText type="text" id="verifyCode" v-model="verifyCode" :placeholder="'请输入验证码'" />
                     <button type="button" @click="sendVerifyCode" :disabled="sendingVerifyCode">{{ sendingVerifyCode ?
                         `${countdown}s` : '发送验证码' }}</button>
                 </div>
             </div>
-            <!-- <button type="submit">注册</button> -->
-            <Button label="注册" @click="registerbt" />
+            <Button label="注册" @click="registerbt" class="zhuce" />
         </form>
     </div>
     <!-- 用于错误的消息的通知 -->
@@ -146,45 +145,47 @@ function getinfo() {
 const doctor = {};
 const patient = {};
 function setDoctor() {
-    doctor.doctor_password = password.value;
-    doctor.doctor_email = email.value;
-    doctor.doctor_phone = phone.value;
-    doctor.doctor_name = name.value;
-    doctor.doctor_idcard = idCard.value;
-    doctor.doctor_birthday = birthday.value;
-    doctor.doctor_isMale = isMale.value;
-    doctor.doctor_department = department.value;
+    doctor.doctorPassword = password.value;
+    doctor.doctorMail = email.value;
+    doctor.doctorPhone = phone.value;
+    doctor.doctorName = name.value;
+    doctor.doctorNumber = idCard.value;
+    // doctor.doctorSection = department.value;
 }
 function setPatient() {
-    patient.doctor_password = password.value;
-    patient.doctor_email = email.value;
-    patient.doctor_phone = phone.value;
-    patient.doctor_name = name.value;
-    patient.doctor_idcard = idCard.value;
-    patient.doctor_birthday = birthday.value;
-    patient.doctor_isMale = isMale.value;
+    patient.patientPassword = password.value;
+    patient.patientMail = email.value;
+    patient.patientPhone = phone.value;
+    patient.patientName = name.value;
+    patient.patientNumber = idCard.value;
+    patient.patientBirthday = birthday.value;
+    patient.patientSex = isMale.value;
 }
 //判断传输是否成功的变量
 const judreg = ref(0);
 function registerbt() {
-    //首先验证验证码
-    axios.post('http://localhost:8080/verifyCode', {
-        email: email.value,
-        verifyCode: verifyCode.value,
-    })
-        .then(response => {
-            console.log(response.data)
-            judreg.value = 1;
-        })
-        .catch(error => {
-            console.error(error)
-            judreg.value = -1;
-        })
+    //验证码和个人信息一起传入后端
+    // axios.post('http://localhost:8080/verifyCode', {
+    //     email: email.value,
+    //     verifyCode: verifyCode.value,
+    // })
+    //     .then(response => {
+    //         console.log(response.data)
+    //         judreg.value = 1;
+    //     })
+    //     .catch(error => {
+    //         console.error(error)
+    //         judreg.value = -1;
+    //     })
     if (is_patient == '我是医生') {
         setDoctor();
-        axios.post('http://localhost:8080//docter_register', {
-            patient
-        })
+        axios.post('http://localhost:8080//docterRegister', patient, {
+            params: {
+                code: verifyCode.value,
+                comfirmPW: confirmPassword.value,
+            }
+        }
+        )
             .then(response => {
                 console.log(response.data)
                 judreg.value = 1;
@@ -196,8 +197,11 @@ function registerbt() {
     }
     else {
         setPatient();
-        axios.post('http://localhost:8080//patientRegister', {
-            doctor
+        axios.post('http://localhost:8080//patientRegister', doctor, {
+            params: {
+                code: verifyCode.value,
+                comfirmPW: confirmPassword.value,
+            }
         })
             .then(response => {
                 console.log(response.data)
@@ -214,7 +218,10 @@ function registerbt() {
   
 <style scoped>
 .register {
-    max-width: 500px;
+    position: absolute;
+    top: 100px;
+    left: 30%;
+    width: 550px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -272,5 +279,10 @@ input[type='text'] {
     left: 600px;
     width: 400px;
     top: 20px;
+}
+
+.zhuce {
+    position: relative;
+    left: 40%;
 }
 </style>

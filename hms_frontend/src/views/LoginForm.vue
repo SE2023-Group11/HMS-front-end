@@ -4,22 +4,22 @@
         <form @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="uid">用户id</label>
-                <InputText type="text" id="uid" v-model="uid" />
+                <InputText :placeholder="'请输入您的id号或身份证号'" type="text" id="uid" v-model="uid" />
             </div>
 
             <div class="form-group">
                 <label for="password">密码</label>
-                <Password id="password" v-model="password" toggleMask />
+                <Password :placeholder="'请输入您的密码'" id="password" v-model="password" toggleMask />
             </div>
-
+            <br>
             <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
-
+            <br>
             <div>
                 <router-link to="/register">用户注册</router-link>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link to="/ForgetPwd">忘记密码</router-link>
             </div>
-
+            <br>
             <Button label="登录" @click="loginbt" />
         </form>
     </div>
@@ -54,8 +54,10 @@ function loginbt() {
     else role.value = 'n';
     if (role.value == 'y') {
         axios.post('http://localhost:8080/loginPatient', {
-            uid: uid.value,
-            password: password.value,
+            params: {
+                uid: uid.value,
+                password: password.value,
+            }
         })
             .then(response => {
                 console.log(response.data)
@@ -68,8 +70,10 @@ function loginbt() {
     }
     if (role.value == 'n') {
         axios.post('http://localhost:8080/loginDoctor', {
-            uid: uid.value,
-            password: password.value,
+            params: {
+                uid: uid.value,
+                password: password.value,
+            }
         })
             .then(response => {
                 console.log(response.data)
@@ -87,7 +91,10 @@ function loginbt() {
   
 <style scoped>
 .login {
-    max-width: 500px;
+    position: absolute;
+    left: 30%;
+    top: 100px;
+    width: 500px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;

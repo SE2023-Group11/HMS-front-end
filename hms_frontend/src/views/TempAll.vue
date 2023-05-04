@@ -39,3 +39,9 @@
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 </script>
+
+                    <!-- <div class="title">{{ notification.title }}</div>
+                <div class="description">{{ notification.description }}</div> -->
+
+                                <!-- <div class="title">{{ notification1.title }}</div>
+                <div class="description">{{ notification1.description }}</div> -->

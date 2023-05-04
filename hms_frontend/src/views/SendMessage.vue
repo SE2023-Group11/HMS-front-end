@@ -1,5 +1,4 @@
 <template>
-    <!-- <canvas id="myCanvas2"></canvas> -->
     <div class="all">
         <button @click="add">增加消息</button>
         <div class="header">
@@ -7,36 +6,42 @@
             <div class="badge" v-if="unreadCount > 0">{{ unreadCount }}</div>
         </div>
         <div class="topp">
-            <h2>&nbsp&nbsp未读消息</h2>
-            <Button label="标为已读" class="btt" @click="alreadyread()" />
 
-            <div class="notifications">
-                <Accordion :activeIndex="0" class="notification" v-for="(notification, index) in notifications"
-                    :key="index">
-                    <!-- <div class="title">{{ notification.title }}</div>
-                <div class="description">{{ notification.description }}</div> -->
-                    <AccordionTab :header="notification.title">
-                        <p>
-                            {{ notification.description }}
-                        </p>
-                    </AccordionTab>
-                </Accordion>
+            <div class="f1">
+                <h2 class="hea">&nbsp&nbsp未读消息</h2>
+                <Button label="标为已读" class="yidu" @click="alreadyread()" />
             </div>
+            <!-- <div class="notifications"> -->
+            <Accordion :activeIndex="-1" class="notification" v-for="(notification, index) in notifications" :key="index">
+
+                <AccordionTab :header="notification.title">
+                    <p>
+                        {{ notification.description }}
+                    </p>
+                </AccordionTab>
+            </Accordion>
+            <!-- </div> -->
         </div>
-        <h2>&nbsp&nbsp已读消息</h2>
-        <div class="notifications">
-            <Accordion :activeIndex="0" class="notification" v-for="(notification1, index) in notificationalready"
+        <br>
+        <div class="topp">
+            <div class="f1">
+                <h2 class="hea">&nbsp&nbsp已读消息</h2>
+                <Button label="删除" class="yidu" @click="deleteNotification()" />
+            </div>
+            <!-- <div class="notifications"> -->
+            <Accordion :activeIndex="-1" class="notification" v-for="(notification1, index) in notificationalready"
                 :key="index">
-                <!-- <div class="title">{{ notification1.title }}</div>
-                <div class="description">{{ notification1.description }}</div> -->
+
                 <AccordionTab :header="notification1.title">
                     <p>
                         {{ notification1.description }}
                     </p>
                 </AccordionTab>
-                <Button @click="deleteNotification(index)">删除</Button>
+                <!-- <Button @click="deleteNotification(index)">删除</Button> -->
             </Accordion>
+            <!-- </div> -->
         </div>
+        <br>
     </div>
 </template>
   
@@ -46,12 +51,7 @@ import axios from 'axios';
 import { onMounted } from 'vue';
 //import notifications from './mock/notifications.js'
 //primevue
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import Card from 'primevue/card';
-import Panel from 'primevue/panel';
-import Textarea from 'primevue/textarea';
-import Message from 'primevue/message';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 
@@ -63,24 +63,24 @@ const unreadCount = ref(0);
 //     created();
 // })
 
-// function created() {
-//     loadNotifications()
-//     setInterval(this.loadNotifications, 5000) // 每5秒请求一次数据
-// }
+function created() {
+    loadNotifications()
+    setInterval(this.loadNotifications, 5000) // 每5秒请求一次数据
+}
 
-// function loadNotifications() {
-//     axios.get('/api/notifications')
-//         .then(response => {
-//             const newNotifications = response.data.filter(notification => {
-//                 return !this.notifications.some(n => n.id === notification.id)
-//             })
-//             this.notifications = this.notifications.concat(newNotifications)
-//             this.unreadCount += newNotifications.length
-//         })
-//         .catch(error => {
-//             console.log(error)
-//         })
-// }
+function loadNotifications() {
+    axios.get('/api/notifications')
+        .then(response => {
+            const newNotifications = response.data.filter(notification => {
+                return !this.notifications.some(n => n.id === notification.id)
+            })
+            this.notifications = this.notifications.concat(newNotifications)
+            this.unreadCount += newNotifications.length
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
 
 function add() {
     notifications.value.push({
@@ -91,18 +91,20 @@ function add() {
     })
     unreadCount.value += 1
 }
-function deleteNotification(index) {
-    const notification = notificationalready.value[index]
-    //axios.delete(`/api/notifications/${notification.id}`)
-    //    .then(() => {
-    notificationalready.value.splice(index, 1)
-    //     if (!notification.read) {
-    //         unreadCount.value -= 1
-    //     }
-    // })
-    // .catch(error => {
-    //     console.log(error)
-    // })
+function deleteNotification() {
+    while (notificationalready.value.length > 0) {
+        //const notification = notificationalready.value[index]
+        //axios.delete(`/api/notifications/${notification.id}`)
+        //    .then(() => {
+        notificationalready.value.splice(index, 1)
+        //     if (!notification.read) {
+        //         unreadCount.value -= 1
+        //     }
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
+    }
 }
 const index = ref(0);
 function alreadyread() {
@@ -177,6 +179,12 @@ function alreadyread() {
     left: 20px;
 }
 
+.yidu {
+    position: relative;
+    left: 200px;
+    bottom: 55px;
+}
+
 .topp {
     border: 1px solid rgb(204, 204, 204);
     position: relative;
@@ -201,12 +209,12 @@ function alreadyread() {
     margin-bottom: 10px;
 }
 
-.btt {
+/* .btt {
     position: relative;
     right: 10px;
     button: 80px;
     z-index: 9999;
-}
+} */
 
 .title {
     font-weight: bold;

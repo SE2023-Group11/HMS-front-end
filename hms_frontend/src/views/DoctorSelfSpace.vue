@@ -5,7 +5,7 @@
     <div class="bg-image">
         <div class="leftpart">
             <div class="avatar">
-                <img src="../../public/jay.jpg" v-if="!imageUrl" />
+                <img src="../../public/person.png" v-if="!imageUrl" />
                 <img :src="imageUrl" v-if="imageUrl">
             </div>
             <div class="bt_changePic">
@@ -18,7 +18,7 @@
 
         <div class="message">
             <Card class="mycard">
-                <template #title>用户{{ pid }}的个人信息</template>
+                <template #title>医生{{ namecontent }}的个人信息</template>
                 <template #content>
                     <div class="edit">
                         <!-- 姓名 -->
@@ -30,40 +30,22 @@
                                     @keyup.enter="namestopEditing" />
                             </div>
                         </div>
-                        <!-- 年龄 -->
+                        <!-- 诊室 -->
                         <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">年龄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">所在诊室&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                             <div style="float:left">
-                                <div v-if="!ageediting" @click="agestartEditing">{{ agecontent }}</div>
-                                <InputText v-if="ageediting" type="text" v-model="agetempContent" @blur="agestopEditing"
-                                    @keyup.enter="agestopEditing" />
+                                <div v-if="!deptediting" @click="deptstartEditing">{{ deptcontent }}</div>
+                                <InputText v-if="deptediting" type="text" v-model="depttempContent" @blur="deptstopEditing"
+                                    @keyup.enter="deptstopEditing" />
                             </div>
                         </div>
-                        <!-- // 性别 -->
+                        <!-- 职务 -->
                         <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">性别&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                            <div style="float:left">职务&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                             <div style="float:left">
-                                <div v-if="!sexediting" @click="sexstartEditing">{{ sexcontent }}</div>
-                                <InputText v-if="sexediting" type="text" v-model="sextempContent" @blur="sexstopEditing"
-                                    @keyup.enter="sexstopEditing" />
-                            </div>
-                        </div>
-                        <!-- // 出生日期 -->
-                        <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">出生日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                            <div style="float:left">
-                                <div v-if="!birediting" @click="birstartEditing">{{ bircontent }}</div>
-                                <InputText v-if="birediting" type="text" v-model="birtempContent" @blur="birstopEditing"
-                                    @keyup.enter="birstopEditing" />
-                            </div>
-                        </div>
-                        <!-- //地区 -->
-                        <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">地区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                            <div style="float:left">
-                                <div v-if="!regediting" @click="regstartEditing">{{ regcontent }}</div>
-                                <InputText v-if="regediting" type="text" v-model="regtempContent" @blur="regstopEditing"
-                                    @keyup.enter="regstopEditing" />
+                                <div v-if="!titleediting" @click="titlestartEditing">{{ titlecontent }}</div>
+                                <InputText v-if="titleediting" type="text" v-model="titletempContent"
+                                    @blur="titlestopEditing" @keyup.enter="titlestopEditing" />
                             </div>
                         </div>
                         <!-- // 邮箱 -->
@@ -101,7 +83,7 @@
                 </template>
             </Card>
             <div class="history">
-                <Panel v-if="!historyediting" header="病史" class="panel">
+                <Panel v-if="!historyediting" header="经历简介" class="panel">
                     {{ historycontent }}
                 </Panel>
                 <div>
@@ -122,8 +104,8 @@
         <Message v-if="judmess == -1" severity="error">保存信息卡失败</Message>
 
         <!-- 编辑病史 -->
-        <Message v-if="judhis == 1" severity="success">编辑病史成功</Message>
-        <Message v-if="judhis == -1" severity="error">编辑病史失败</Message>
+        <Message v-if="judhis == 1" severity="success">编辑简历成功</Message>
+        <Message v-if="judhis == -1" severity="error">编辑简历失败</Message>
     </div>
 </template>
 
@@ -140,14 +122,6 @@ import Textarea from 'primevue/textarea';
 import Message from 'primevue/message';
 //进行数据传输的时候用的变量
 const id = ref('123');
-const name = ref('');
-const age = ref('');
-const sex = ref('');
-const birthday = ref('');
-const region = ref('');
-const email = ref('');
-const idCard = ref('');
-const history = ref('');
 
 // onMounted(() => {
 //     getinfo();
@@ -155,25 +129,21 @@ const history = ref('');
 
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
 function getinfo() {
-    axios.get('http://localhost:8080/getPatientInformation', {
-        params: {
-            patient_id: id.value // 传递 ID 参数
-        }
+    axios.get('http://localhost:8080//getDoctorInformation', {
+        // params: {
+        //     patient_id: id.value // 传递 ID 参数
+        // }
     })
         .then(response => {
             // 成功获取数据后的处理逻辑
             console.log(response.data)
             const data = response.data;
-
-            namecontent.value = data.name;
-            agecontent.value = data.age;
-            sexcontent.value = data.sex;
-            bircontent.value = data.birthday;
-            //regcontent.value = data.region;//这个暂时定为不返回
-            emailcontent.value = data.email;
-            idCardcontent.value = data.idCard;
-            phonecontent.value = data.phone;
-            historycontent.value = data.history;
+            namecontent.value = data.doctorName;
+            deptcontent.value = data.doctorSection;
+            titlecontent.value = data.doctorTitle;
+            emailcontent.value = data.doctorMail;
+            idCardcontent.value = data.doctorNumber;
+            phonecontent.value = data.doctorPhone;
         })
         .catch(error => {
             // 处理错误的逻辑
@@ -190,7 +160,7 @@ const pid = ref('21371101');
 //下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
 // 姓名
 const nameediting = ref(false)
-const namecontent = ref('Hello, world!')
+const namecontent = ref('李四')
 const nametempContent = ref('')
 function namestartEditing() {
     nameediting.value = true
@@ -201,61 +171,36 @@ function namestopEditing() {
     nameediting.value = false
     namecontent.value = nametempContent.value
 }
-// 年龄
-const ageediting = ref(false)
-const agecontent = ref('Hello, world!')
-const agetempContent = ref('')
-function agestartEditing() {
-    ageediting.value = true
-    agetempContent.value = agecontent.value
+//诊室
+const deptediting = ref(false)
+const deptcontent = ref('外科')
+const depttempContent = ref('')
+function deptstartEditing() {
+    deptediting.value = true
+    depttempContent.value = deptcontent.value
     judmess.value = 0
 }
-function agestopEditing() {
-    ageediting.value = false
-    agecontent.value = agetempContent.value
+function deptstopEditing() {
+    deptediting.value = false
+    deptcontent.value = depttempContent.value
 }
-// 性别
-const sexediting = ref(false)
-const sexcontent = ref('Hello, world!')
-const sextempContent = ref('')
-function sexstartEditing() {
-    sexediting.value = true
-    sextempContent.value = sexcontent.value
+// 职务
+const titleediting = ref(false)
+const titlecontent = ref('主治医师')
+const titletempContent = ref('')
+function titlestartEditing() {
+    titleediting.value = true
+    titletempContent.value = titlecontent.value
     judmess.value = 0
 }
-function sexstopEditing() {
-    sexediting.value = false
-    sexcontent.value = sextempContent.value
+function titlestopEditing() {
+    titleediting.value = false
+    titlecontent.value = titletempContent.value
 }
-// 出生日期
-const birediting = ref(false)
-const bircontent = ref('Hello, worldasdasd!')
-const birtempContent = ref('')
-function birstartEditing() {
-    birediting.value = true
-    birtempContent.value = bircontent.value
-    judmess.value = 0
-}
-function birstopEditing() {
-    birediting.value = false
-    bircontent.value = birtempContent.value
-}
-// 地区
-const regediting = ref(false)
-const regcontent = ref('Hello, world!')
-const regtempContent = ref('')
-function regstartEditing() {
-    regediting.value = true
-    regtempContent.value = regcontent.value
-    judmess.value = 0
-}
-function regstopEditing() {
-    regediting.value = false
-    regcontent.value = regtempContent.value
-}
+
 // 邮箱
 const emailediting = ref(false)
-const emailcontent = ref('Hello, world!')
+const emailcontent = ref('133324432@qq.com')
 const emailtempContent = ref('')
 function emailstartEditing() {
     emailediting.value = true
@@ -268,7 +213,7 @@ function emailstopEditing() {
 }
 //手机号
 const phoneediting = ref(false)
-const phonecontent = ref('Hello, world!')
+const phonecontent = ref('143439534345')
 const phonetempContent = ref('')
 function phonestartEditing() {
     phoneediting.value = true
@@ -281,7 +226,7 @@ function phonestopEditing() {
 }
 // 身份证号
 const idCardediting = ref(false)
-const idCardcontent = ref('Hello, world!')
+const idCardcontent = ref('32445353453645564')
 const idCardtempContent = ref('')
 function idCardstartEditing() {
     idCardediting.value = true
@@ -295,22 +240,21 @@ function idCardstopEditing() {
 
 //这些是对于病史的框的代码，点击按钮可以进行修改内容
 const historyediting = ref(false)
-const historycontent = ref('Hello, world!')
+const historycontent = ref('这是我的简历')
 const historytempContent = ref('')
-const bthis = ref('编辑病史')
+const bthis = ref('编辑简历')
 //判断传输的结果
 const judhis = ref(0);
 function edithistory() {
-    if (bthis.value == '编辑病史') {
+    if (bthis.value == '编辑简历') {
         historyediting.value = true;
         historytempContent.value = historycontent.value;
-        bthis.value = '保存病史';
+        bthis.value = '保存简历';
 
     }
     else {
         //这里首先要实现一个数据库对于病史的更新，向后端传输数据
-        axios.post("http://localhost:8080/savehistory", {
-            pid: pid.value,
+        axios.post("http://localhost:8080/saveIntroduction", {
             phistory: historytempContent.value,
         }).then(res => {
             console.log(res);
@@ -322,28 +266,28 @@ function edithistory() {
 
         historyediting.value = false;
         historycontent.value = historytempContent.value;
-        bthis.value = '编辑病史';
+        bthis.value = '编辑简历';
     }
 
 }
 
-
+//修改的时候对新的信息进行封装
+const doctor = {};
+function setDoctor() {
+    doctor.doctorMail = emailcontent.value;
+    doctor.doctorPhone = phonecontent.value;
+    doctor.doctorName = namecontent.value;
+    doctor.doctorNumber = idCardcontent.value;
+    doctor.doctorSection = deptcontent.value;
+    doctor.doctorTitle = titlecontent.value;
+}
 //进行保存按钮的方法的编写,同时返回结果
 const judmess = ref(0);
 function save() {
-    axios.post('http://localhost:8080/changePatient', {
-        params: {
-            patient_id: pid.value,
-            patient_name: namecontent.value,
-            patient_idcard: idCardcontent.value,
-            patient_mail: emailcontent.value,
-            patient_phone: phonecontent.value,
-            patient_sex: sexcontent.value,
-            patient_birthday: bircontent.value,
-            patient_region: regcontent.value
-
-        }
-    })
+    setDoctor();
+    axios.post('http://localhost:8080/changeDoctor',
+        doctor
+    )
         .then(response => {
             console.log(response.data)
             judmess.value = 1;
