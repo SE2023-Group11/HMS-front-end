@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>确认预约</title>
+  </head>
+  <body>
+    <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <h3>请确认你的预约信息：</h3>
+    <hr />
+    <p>医生名字：{{doctorName}}</p>
+    <p>医生职称：{{doctorTitle}}</p>
+    <p>医生科室：{{section}}</p>
+    <p>日期：{{date}}</p>
+    <p>时间段：{{time}}</p>
+    <input type="button" value="确认预约" @click="confirmAppointment()" />
+    <input type="button" value="取消预约" @click="cancelAppointment()" />
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data() {
+          return {
+            doctorName: "zhansan",
+            section: "",
+            date: "",
+            time: "",
+          };
+        },
+        methods: {
+          getAppointmentInfo: function () {
+            //unfinished
+          },
+          confirmAppointment() {},
+          cancelAppointment() {},
+        },
+        mounted() {
+          // 初始化页面时获取信息
+          this.getAppointmentInfo();
+        },
+      });
+    </script>
+  </body>
+</html>

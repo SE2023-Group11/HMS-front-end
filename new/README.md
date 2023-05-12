@@ -1,4 +1,4 @@
-# hms_frontend
+# new
 
 ## Project setup
 ```

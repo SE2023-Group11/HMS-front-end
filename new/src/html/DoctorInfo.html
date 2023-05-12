@@ -1,0 +1,114 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>医生/科室信息</title>
+    <!-- 图标 -->
+    <link rel="stylesheet" href="../css/demo.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="title">
+            <img class="img_top" src="../Pic/img.jpeg" />
+            <div class="text">
+                医院信息管理系统
+            </div>
+            <img src="../Pic/img2.png" alt="" class="img_peo">
+        </div>
+        <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        
+
+        <div id="app">
+            <label for="section-select">Choose a section:</label>
+            <select id="section-select" v-model="selectedSection" @change="getDoctors">
+              <option value="surgery" selected>内科</option>
+              <option value="pediatrics">外科</option>
+              <option value="internal-medicine">儿科</option>
+            </select>
+            <hr>
+            <p id="">
+              <h3>科室介绍：</h3>
+              {{RoomInfo}}
+            </p>
+            <hr>
+
+            <h3>医生信息列表:</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>名字</th>
+                  <th>职称</th>
+                  <th>介绍</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="doctor in doctors" :key="doctor.id">
+                  <td>{{ doctor.name }}</td>
+                  <td>{{ doctor.title}}</td>
+                  <td>{{ doctor.introduction }}</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <script>
+            var app = new Vue ({
+              el:'#app',
+              data() {
+                return {
+                  selectedSection: '内科', // 默认选中内科
+                  doctors: [], // 医生信息列表
+                  RoomInfo:'科室信息'//科室信息
+                };
+              },
+              methods: {
+                getDoctors() {
+                  // 向后端发送请求获取医生信息
+                  fetch(`/doctors?section=${this.selectedSection}`)
+                    .then(response => response.json())
+                    .then(data => {
+                      this.doctors = data;
+                    });
+                },
+                getRoomInfo() {
+                  // 向后端发送请求获取科室信息
+                  fetch(`/rooms?name=${this.selectedRoom}`)
+                  .then(response => response.json())
+                  .then(data => {
+                  this.roomInfo = data;
+                  });
+                }
+              },
+              mounted() {
+                // 初始化页面时获取医生信息
+                this.getDoctors();
+                this.getRoomInfo();
+              },
+           
+            });
+
+            </script>
+
+
+
+        <div class="bottom">
+            <div class="left">
+                版权所有 2014-2022 北京航空航天大学<br>
+                京ICP备05004617-3<br>
+                文保网安备案号1101080018
+            </div>
+            <img class="img_bottom" src="../Pic/img.jpeg" />
+            <div class="right">
+                地址：北京市海淀区学院路37号<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邮编：100191<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：82317114
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

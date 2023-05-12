@@ -1,0 +1,102 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的预约</title>
+    <!-- 图标 -->
+    <link rel="stylesheet" href="../css/demo.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="title">
+            <img class="img_top" src="../Pic/img.jpeg" />
+            <div class="text">
+                医院信息管理系统
+            </div>
+            <img src="../Pic/img2.png" alt="" class="img_peo">
+        </div>
+        <script src="http://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+        <div id="app">
+          <table>
+            <thead>
+              <tr>
+                <th>预约id</th>
+                <th>患者id</th>
+                <th>医生id</th>
+                <th>日期</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>预约状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <h3>历史预约：</h3>
+              <hr>
+              <tr v-for="appointment in appointments">
+                <td>{{ appointment.orderId }}</td>
+                <td>{{ appointment.patientId }}</td>
+                <td>{{ appointment.doctorId }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time_start }}</td>
+                <td>{{ appointment.time_end }}</td>
+                <td>{{ appointment.orderStatus }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+          
+          <script>
+            var app = new Vue({
+              el: '#app',
+              data: {
+                appointments: []
+              },
+              methods:{
+                cancelAppointment: function(appointment) {
+                  if (appointment.orderStatus === '待就诊') {
+                    console.log(1);
+                  } else {
+                    alert("预约状态不是待就诊，无法取消预约！");
+                  }
+                }
+
+              },
+              mounted() {
+                axios.get('http://121.199.161.134:8080/getPatientAppointments')
+                  .then(response => {
+                    this.appointments = response.data;
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+              }
+            });
+          </script>
+          
+
+
+
+        <div class="bottom">
+            <div class="left">
+                版权所有 2014-2022 北京航空航天大学<br>
+                京ICP备05004617-3<br>
+                文保网安备案号1101080018
+            </div>
+            <img class="img_bottom" src="../Pic/img.jpeg" />
+            <div class="right">
+                地址：北京市海淀区学院路37号<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邮编：100191<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：82317114
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
