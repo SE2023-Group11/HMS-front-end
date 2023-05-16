@@ -141,7 +141,7 @@ import Textarea from 'primevue/textarea';
 import Message from 'primevue/message';
 //进行数据传输的时候用的变量
 const id = ref('123');
-
+const token = sessionStorage.getItem('token');
 // onMounted(() => {
 //     getinfo();
 // })
@@ -164,7 +164,7 @@ function calculateAge(birthday) {
 function getinfo() {
     axios.get('http://localhost:8080/getPatientInformation', {
         params: {
-            patient_id: id.value // 传递 ID 参数
+            token: token.value, // 传递token
         }
     })
         .then(response => {
@@ -305,7 +305,7 @@ function edithistory() {
     else {
         //这里首先要实现一个数据库对于病史的更新，向后端传输数据
         axios.post("http://localhost:8080/savehistory", {
-            pid: pid.value,
+            token: token.value, // 传递token
             phistory: historytempContent.value,
         }).then(res => {
             console.log(res);
@@ -322,21 +322,23 @@ function edithistory() {
 
 }
 
-
+const patient = {};
+function setpatinet() {
+    patient.patient_id = pid.value,
+        patient.patient_name = namecontent.value,
+        patient.patient_idcard = idCardcontent.value,
+        patient.patient_mail = emailcontent.value,
+        patient.patient_phone = phonecontent.value,
+        patient.patient_sex = sexcontent.value,
+        patient.patient_birthday = bircontent.value
+}
 //进行保存按钮的方法的编写,同时返回结果
 const judmess = ref(0);
 function save() {
+    setpatinet();
     axios.post('http://localhost:8080/changePatient', {
-        params: {
-            patient_id: pid.value,
-            patient_name: namecontent.value,
-            patient_idcard: idCardcontent.value,
-            patient_mail: emailcontent.value,
-            patient_phone: phonecontent.value,
-            patient_sex: sexcontent.value,
-            patient_birthday: bircontent.value,
-
-        }
+        token: token.value,
+        patient
     })
         .then(response => {
             console.log(response.data)

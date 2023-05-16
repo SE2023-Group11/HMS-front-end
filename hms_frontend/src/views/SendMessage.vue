@@ -58,7 +58,10 @@ import AccordionTab from 'primevue/accordiontab';
 const notifications = ref([]);
 const notificationalready = ref([]);
 const unreadCount = ref(0);
+const token = sessionStorage.getItem('token');
 
+//首先需要确定一下当前的用户的身份
+const role = sessionStorage.getItem('role');
 // onMounted(() => {
 //     created();
 // })
@@ -68,20 +71,30 @@ function created() {
     setInterval(this.loadNotifications, 5000) // 每5秒请求一次数据
 }
 
+const str = ref('');
 function loadNotifications() {
-    axios.get('/api/notifications')
+    if (role.value == 'n') str.value = 'http://localhost:8080//getDoctorMessage'
+    else str.value = 'http://localhost:8080//getPatientMessage'
+    axios.get(str,
+        token = token.value
+    )
         .then(response => {
-            const newNotifications = response.data.filter(notification => {
-                return !this.notifications.some(n => n.id === notification.id)
-            })
-            this.notifications = this.notifications.concat(newNotifications)
-            this.unreadCount += newNotifications.length
+            const data = response.data
+            for (let i = 0; i < data.length; i++) {
+                let newN
+                newN.id = data[i].info_id.value,
+                    newN.title = "新消息",
+                    newN.description = data[i].info_body,
+                    notifications = notifications.value.push(newN)
+            }
+
+            unreadCount += newNotifications.length
         })
         .catch(error => {
             console.log(error)
         })
 }
-
+//用于测试界面的函数
 function add() {
     notifications.value.push({
         id: notifications.value.length + 1,
@@ -123,7 +136,24 @@ function alreadyread() {
         notificationalready.value.push(notification);
     }
 }
-
+//真正的函数,删除信息
+function deleteNotification1() {
+    index.value = notifications.value.length;
+    while (index.value > 0) {
+        index.value--;
+        const notification = notifications.value[index.value]
+        axios.delete('http://localhost:8080/deleteMessage',
+            token = token.value,
+            info_id = notification.value.id
+        )
+            .then(() => {
+                notifications.value.splice(index, 1)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+}
 
 
 // export default {

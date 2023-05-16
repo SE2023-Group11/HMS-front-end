@@ -126,13 +126,14 @@ const id = ref('123');
 // onMounted(() => {
 //     getinfo();
 // })
-
+//获取当前的用户的token
+const token = sessionStorage.getItem('token');
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
 function getinfo() {
     axios.get('http://localhost:8080//getDoctorInformation', {
-        // params: {
-        //     patient_id: id.value // 传递 ID 参数
-        // }
+        params: {
+            token: token.value // 传递token
+        }
     })
         .then(response => {
             // 成功获取数据后的处理逻辑
@@ -255,6 +256,7 @@ function edithistory() {
     else {
         //这里首先要实现一个数据库对于病史的更新，向后端传输数据
         axios.post("http://localhost:8080/saveIntroduction", {
+            token: token.value, // 传递token
             phistory: historytempContent.value,
         }).then(res => {
             console.log(res);
@@ -285,8 +287,10 @@ function setDoctor() {
 const judmess = ref(0);
 function save() {
     setDoctor();
-    axios.post('http://localhost:8080/changeDoctor',
+    axios.post('http://localhost:8080/changeDoctor', {
+        token: token.value, // 传递token
         doctor
+    }
     )
         .then(response => {
             console.log(response.data)

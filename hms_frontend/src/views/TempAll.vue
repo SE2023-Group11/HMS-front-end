@@ -1,47 +1,31 @@
-
 <template>
-    <div class="card">
-        <Accordion :activeIndex="0">
-            <AccordionTab header="Header I">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-                    id est laborum.
-                </p>
-            </AccordionTab>
-            <AccordionTab header="Header II">
-                <p>
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
-                    rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-                    explicabo. Nemo enim
-                    ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-                    eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                </p>
-            </AccordionTab>
-            <AccordionTab header="Header III">
-                <p>
-                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
-                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
-                    provident, similique sunt in culpa qui
-                    officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
-                    expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
-                    minus.
-                </p>
-            </AccordionTab>
-        </Accordion>
-    </div>
+    <input type="button" value="gsdk" @click="sendtoback">
 </template>
+    
+    
+<script>
 
-<script setup>
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
+import axios from 'axios';
+
+export default {
+    name: 'App',
+    components: {
+
+    },
+    methods: {
+
+        sendtoback() {
+            console.log("fdfsdfsdfsdfsdfsdfsd");
+            axios.post('http://121.199.161.134:8080/sendToEmail',
+                "type=1&name='wesda'&email='1340585346@qq.com'"
+            )
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+        }
+    }
+}
 </script>
-
-                    <!-- <div class="title">{{ notification.title }}</div>
-                <div class="description">{{ notification.description }}</div> -->
-
-                                <!-- <div class="title">{{ notification1.title }}</div>
-                <div class="description">{{ notification1.description }}</div> -->

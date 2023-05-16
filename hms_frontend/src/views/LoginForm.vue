@@ -61,6 +61,9 @@ function loginbt() {
         })
             .then(response => {
                 console.log(response.data)
+                //将将返回的token存到session中
+                sessionStorage.setItem('token', response.data.token);
+                sessionStorage.setItem('role', role.value);//y是患者，n是医生
                 juglog.value = 1;
             })
             .catch(error => {

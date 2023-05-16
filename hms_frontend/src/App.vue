@@ -1,4 +1,5 @@
 <template>
+  <input type="button" value="gsdk" @click="sendtoback">
   <div id="app">
     <header>
       <p>
@@ -31,7 +32,7 @@
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
-
+import axios from 'axios';
 export default {
   name: 'App',
 
@@ -39,8 +40,26 @@ export default {
     const route = useRoute();
     const router = useRouter();
     return { route, router };
+  },
+
+  methods: {
+
+    sendtoback() {
+      console.log("fdfsdfsdfsdfsdfsdfsd");
+      axios.post('http://121.199.161.134:8080/sendToEmail',
+        "type=1&name='wesda'&email='1340585346@qq.com'"
+      )
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    }
   }
 }
 </script>
 
 <style></style>
+
+

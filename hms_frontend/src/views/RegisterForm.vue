@@ -87,15 +87,21 @@ const emailError = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(60);
+const countdown = ref(5);
 let timer = null;
 const department = ref('');
+const type = ref('');
 
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
-    axios.post('http://localhost:8080/sendToEmail', {
-        email: email.value,
-    })
+    if (is_patient == '我是医生') type.value = 1;
+    else type.value = 3;
+    console.log(type);
+    console.log(name);
+    console.log(email);
+    axios.post('http://121.199.161.134:8080/sendToEmail?type=type.value&name=name.value&email=email.value',
+
+    )
         .then(response => {
             console.log(response.data)
         })
@@ -115,7 +121,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 60;
+            countdown.value = 5;
             sendingVerifyCode.value = false;
         }
     }, 1000);
@@ -179,7 +185,7 @@ function registerbt() {
     //     })
     if (is_patient == '我是医生') {
         setDoctor();
-        axios.post('http://localhost:8080//docterRegister', patient, {
+        axios.post('http://121.199.161.134:8080/docterRegister', patient, {
             params: {
                 code: verifyCode.value,
                 comfirmPW: confirmPassword.value,
@@ -197,7 +203,7 @@ function registerbt() {
     }
     else {
         setPatient();
-        axios.post('http://localhost:8080//patientRegister', doctor, {
+        axios.post('http://121.199.161.134:8080/patientRegister', doctor, {
             params: {
                 code: verifyCode.value,
                 comfirmPW: confirmPassword.value,

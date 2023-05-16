@@ -34,6 +34,7 @@ import 'primeicons/primeicons.css';
 
 
 const app = createApp(App);
+// app.config
 app.use(PrimeVue, { ripple: true });
 app.use(router);
 app.directive('ripple', Ripple);
