@@ -3,9 +3,9 @@ import Login from "../views/LoginForm.vue";
 import Register from "../views/RegisterForm.vue";
 import Temp from "../views/TempAll.vue";
 import Space from "../views/SelfSpace.vue";
-import Message from "../views/SendMessage.vue";
+import Message from "../views/Message.vue";
 import ForgetPwd from "@/views/ForgetPwd.vue";
-
+import App from '../App.vue';
 const routes = [
     {
         path: "/login",
@@ -29,7 +29,7 @@ const routes = [
     },
     {
         path: "/message",
-        name: "SendMessage",
+        name: "Message",
         component: Message
     },
     {
@@ -37,6 +37,11 @@ const routes = [
         name: "ForgetPwd",
         component: ForgetPwd
     },
+    {
+        path: "/",
+        name: "App",
+        component: App
+    }
 ];
 
 const router = createRouter({

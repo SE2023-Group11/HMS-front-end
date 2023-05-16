@@ -1,25 +1,39 @@
-import axios from 'axios';
 <template>
     <div class="header">
       <div class="logo">
         <i class="pi pi-hospital"></i>
-        <span> 医院信息管理系统</span>
+        <img class="img_top" src="./Pic/img.jpeg" />
+        <span display="flex" >医院信息管理系统</span>
       </div>
       <div class="user-info" @mouseover="showMenu = true" @mouseleave="showMenu = false">
         <img class="avatar" src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="User Avatar"/>
         <div v-if="showMenu" class="user-menu">
           <ul>
-            <li><a href="#">消息通知</a></li>
+            <li> <router-link to="/message">消息通知</router-link></li>
             <li><a href="#">退出登录</a></li>
             <li><a href="#">个人信息</a></li>
           </ul>
         </div>
-      </div>
+      </div> 
     </div>
   <div>
-    <button @click="showAppointmentList">今日候诊</button>
-    <button @click="showSchedule">排班信息</button>
-    <div v-if="showingAppointmentList" class ="appointmentLists">
+   <form class="Nav">
+    <p></p>
+    <p v-if="showingSchedule" class="navigate-black" @click="showAppointmentList" >  今日候诊  </p>
+    <p v-else class="navigate-white" @click="showAppointmentList">  今日候诊  </p>
+    <p v-if="showingAppointmentList" class="navigate-black" @click="showSchedule"  >  排班信息  </p>
+    <p v-else class="navigate-white" @click="showSchedule" >  排班信息  </p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+   </form>
+    <div v-if="showingAppointmentList" class ="appointmentLists" ref="listContainer">
       <table>
         <thead>
           <tr class ="appointmentListHead">
@@ -29,7 +43,7 @@ import axios from 'axios';
             <th width="200px">预约状态</th>
           </tr>
         </thead>
-        <tbody>    
+        <tbody ref="listWrapper">    
           <tr v-for="(appointment, index) in appointmentList" :key="index">
             <td align="center">{{ appointment.patientName }}</td>
             <td align="center">{{ appointment.appointmentTime }}</td>
@@ -50,46 +64,78 @@ import axios from 'axios';
       <table>
         <thead>
           <tr>
-            <th>    </th>
-            <th>周一</th>
-            <th>周二</th>
-            <th>周三</th>
-            <th>周四</th>
-            <th>周五</th>
-            <th>周六</th>
-            <th>周日</th>
+            <th class="rowTitle">    </th>
+            <th class="rowTitle">8:00-8:30</th>
+            <th class="rowTitle">8:30-9:00</th>
+            <th class="rowTitle">9:00-9:30</th>
+            <th class="rowTitle">9:30-10:00</th>
+            <th class="rowTitle">10:00-10:30</th>
+            <th class="rowTitle">10:30-11:00</th>
+            <th class="rowTitle">11:00-11:30</th>
+            <th class="rowTitle">14:00-14:30</th>
+            <th class="rowTitle">14:30-15:00</th>
+            <th class="rowTitle">15:00-15:30</th>
+            <th class="rowTitle">15:30-16:00</th>
+            <th class="rowTitle">16:00-16:30</th>
+            <th class="rowTitle">16:30-17:00</th> 
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td width="100px">上午</td>
-            <td width="200px" align="center">{{ schedule.monday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.tuesday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.wednesday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.thursday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.friday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.saturday.morning }}</td>
-            <td width="200px" align="center">{{ schedule.sunday.morning }}</td>
+            <td width="100px" >周一</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              orange: schedule.mon1[i]=== 3,
+              green: schedule.mon1[i] === 2,
+              white: schedule.mon1[i] ===1
+           }" > </td>
           </tr>
           <tr>
-            <td width="100px">下午</td>
-            <td width="200px" align="center">{{ schedule.monday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.tuesday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.wednesday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.thursday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.friday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.saturday.afternoon }}</td>
-            <td width="200px" align="center">{{ schedule.sunday.afternoon }}</td>
+            <td width="100px">周二</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.tue1[i] === 3,
+              'green': schedule.tue1[i] === 2,
+              'white': schedule.tue1[i] ===1
+           }" > </td>
           </tr>
           <tr>
-            <td width="100px">晚上</td>
-            <td width="200px" align="center">{{ schedule.monday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.tuesday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.wednesday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.thursday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.friday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.saturday.evening }}</td>
-            <td width="200px" align="center">{{ schedule.sunday.evening }}</td>
+            <td width="100px">周三</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.wed1[i] === 3,
+              'green': schedule.wed1[i] === 2,
+              'white': schedule.wed1[i] ===1
+           }" > </td>
+          </tr>
+            <tr>
+            <td width="100px">周四</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.thu1[i] === 3,
+              'green': schedule.thu1[i] === 2,
+              'white': schedule.thu1[i] ===1
+           }" > </td>
+          </tr>
+            <tr>
+            <td width="100px">周五</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.fri1[i] === 3,
+              'green': schedule.fri1[i] === 2,
+              'white': schedule.fri1[i] ===1
+           }" > </td>
+          </tr>
+            <tr>
+            <td width="100px">周六</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.sat1[i] === 3,
+              'green': schedule.sat1[i] === 2,
+              'white': schedule.sat1[i] ===1
+           }" > </td>
+          </tr>
+            <tr>
+            <td width="100px">周日</td>
+            <td v-for="i in 14" :key="i--" width="100px" align="center" :class="{
+              'orange': schedule.sun1[i] === 3,
+              'green': schedule.sun1[i] === 2,
+              'white': schedule.sun1[i] ===1
+           }" > </td>
           </tr>
         </tbody>
       </table>
@@ -102,6 +148,7 @@ import axios from 'axios';
          京ICP备05004617-3<br>
          文保网安备案号1101080018</p>
       </div>
+      <img class="img_bottom" src="./Pic/img.jpeg" />
     <div class="right">
     <p>地址：北京市海淀区学院路37号<br> 
        邮编：100191<br>
@@ -112,56 +159,43 @@ import axios from 'axios';
 </template>
 
 <script> 
+import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { Button } from 'primevue/button';
 import { Card } from 'primevue/card';
+import { Listbox } from 'primevue/listbox';
+import { useRoute, useRouter } from 'vue-router';
+import Vue from 'vue';
 export default {
+  name:'App',
   setup() {
       const showMenu = ref(false);
-      return { showMenu };},
+      const route = useRoute();
+    const router = useRouter();
+      return { showMenu,route, router};},
   data() {
     return {
       showingAppointmentList: true,
       showingSchedule: false,
-      appointmentList: [ ],
-      schedule: {
-        monday: {
-          morning: '出勤',
-          afternoon: '出勤',
-          evening: '休假'
-        },
-        tuesday: {
-          morning: '出勤',
-          afternoon: '休假',
-          evening: '出勤'
-        },
-        wednesday: {
-          morning: '休假',
-          afternoon: '出勤',
-          evening: '出勤'
-        },
-        thursday: {
-          morning: '出勤',
-          afternoon: '出勤',
-          evening: '出勤'
-        },
-        friday: {
-          morning: '出勤',
-          afternoon: '出勤',
-          evening: '出勤'
-        },
-        saturday: {
-          morning: '出勤',
-          afternoon: '休假',
-          evening: '休假'
-        },
-        sunday: {
-          morning: '休假',
-          afternoon: '休假',
-          evening: '休假'
-        }
-      }
+      appointmentList: [{
+  "patientName": "张三",
+  "patientId":100001,
+  "time_end": "2023-05-11T09:30:00",
+  "time_start": "2023-05-11T09:00:00"
+} ],
+      schedule: {mon1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+tue1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+wed1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+thu1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+fri1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+sat1:[2,2,2,2,2,2,2,2,2,2,2,2,2],
+sun1:[2,2,2,2,2,2,2,2,2,2,2,2,2] }
     };
+  },
+  computed: {
+    showScrollbar() {
+      return this.appointmentList.length > 5
+    }
   },
   props: {
     patientId: {
@@ -176,8 +210,12 @@ export default {
   components: {
     Button,
     Card,
+    Listbox,
   },
   methods: {
+    goToSendMessage() {
+      this.$router.push('/message')
+    },
     showAppointmentList() {
       this.showingAppointmentList = true;
       this.showingSchedule = false;
@@ -190,11 +228,52 @@ export default {
       this.appointmentList[index].status = '已完成';
     },
     navigateToPatient() {
-
       console.log(`Navigating to patient ${this.patientId}`);
     },
+    sendMessage() {
+      axios.post('/ChangeAppointmentStatus', {
+        OrderId: this.OrderId
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
+    getPatientId(index,id){
+      axios.post('/ChangeAppointmentStatus', {
+        patientId: id
+      })
+      .then(response => {
+        this.appointmentList[index].patientName=response.patientName;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
+    getPatientInfo(index,id){
+      axios.post('/ChangeAppointmentStatus', {
+        patientId: id
+      })
+      .then(response => {
+        this.appointmentList[index].patientName=response.patientName;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    },
+    initListScroll() {
+      const listWrapper = this.$refs.listWrapper
+      const listContainer = this.$refs.listContainer
+      listContainer.style.overflowY = 'scroll'
+      listWrapper.style.paddingRight = `${listContainer.offsetWidth - listWrapper.offsetWidth}px`
+    }
   },
   mounted() {
+    if (this.showScrollbar) {
+      this.initListScroll()
+    }
     axios.post('/appointmentList')
       .then(response => {
         this.appointmentList = response.data;
@@ -209,25 +288,65 @@ export default {
       .catch(error => {
         console.log(error);
       });
-      
-  }
+  },
 };
 </script>
 
 <style scoped>
+.Nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff00;
+  color: rgb(255, 255, 255);
+}
+  .navigate-black{
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.025rem;
+    text-transform: uppercase;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 将边框半径设置为50%以创建椭圆形 */
+ background: #ffffff;
+ color: #333;
+}
+ .navigate-white{
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.025rem;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: #007bff;
+  color: #ffffff;
+ }
+  .img_top{
+    height: 80px;
+  }
   .appointmentListHead{
-    width: 4000px;
+    width: 2000px;
   }
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #f5f5f5;
+    padding: 10px;
+    background-color: #ffffff;
+    height:60px;
   }
   .avatar{
     position: fixed;
+    top:10px;
     right: 50px;
+  }
+  .rowTitle{
+    width: 100px;
+    font-size: 10px;
   }
   .logo {
     display: flex;
@@ -263,7 +382,7 @@ export default {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2);
   }
   
   .user-menu ul {
@@ -287,7 +406,7 @@ export default {
   }
   
   .user-menu a:hover {
-    background-color: #f5f5f5;
+    background-color:rgb(255, 255, 255);
   }
   .footer {
     position: fixed;
@@ -296,7 +415,7 @@ export default {
     align-items: center;
     margin-top: 20px;
     font-size: 1.2px;
-    background-color:grey;
+    background-color:rgb(255, 255, 255);
   }
 
   .footer .left p {
@@ -307,7 +426,12 @@ export default {
     height: 50px;
     overflow: auto;
   }
-
+  .img_bottom {
+    position: fixed;
+    bottom: 50px;
+    height: 100px;
+    left:500px;
+  }
   .footer .right p {
     position: fixed;
     bottom: 50px;
@@ -315,5 +439,19 @@ export default {
     width: 300px;
     height: 50px;
     overflow: auto;
+  }
+  .white {
+    background-color: #fef2f2;
+    color: #e53e3e;
+  }
+  
+  .orange {
+    background-color: #eff6ff;
+    color: #3b82f6;
+  }
+  
+  .green {
+    background-color: #f0fdf4;
+    color: #10b981;
   }
   </style>

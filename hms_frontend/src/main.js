@@ -24,18 +24,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Ripple from 'primevue/ripple';
-import router from "./router/index.js";
-
+import router from "./router/index";
 import Dialog from 'primevue/dialog';
-// css
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 
 const app = createApp(App);
 app.use(PrimeVue, { ripple: true });
-app.use(router);
+app.use(router).mount('#app');
 app.directive('ripple', Ripple);
-app.mount('#app')
-Vue.prototype.$primevue = { ripple: true };
-Vue.component('Dialog', Dialog);
