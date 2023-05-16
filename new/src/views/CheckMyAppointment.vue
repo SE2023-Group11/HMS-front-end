@@ -12,6 +12,7 @@
                 <th>开始时间</th>
                 <th>结束时间</th>
                 <th>预约状态</th>
+                <th>取消预约</th>
               </tr>
             </thead>
             <h3>历史预约：</h3>
@@ -25,6 +26,10 @@
                 <td>{{ appointment.time_start }}</td>
                 <td>{{ appointment.time_end }}</td>
                 <td>{{ appointment.orderStatus }}</td>
+                <td>
+                    <input v-if = "appointment.orderStatus == 3" type="button" value="取消预约" @click="deleteAppointment(appointment.orderId)">
+                    <input v-else type="text" value="无法取消">
+                </td>
               </tr>
             </tbody>
           </table>
@@ -53,16 +58,18 @@ export default {
         }
     },
     methods: {
-        cancelAppointment(appointment) {
-        if (appointment.orderStatus === '待就诊') {
-            console.log("预约状态是待就诊，可以取消预约！");
-        } else {
-            alert("预约状态不是待就诊，无法取消预约！");
-        }
+        deleteAppointment(orderId) {
+        axios.delete(`{{$baseURL}}/deleteAppointment/${orderId}`)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.error(error);
+        })
         },
     },
     mounted() {
-        axios.get('http://121.199.161.134:8080/getPatientAppointments')
+        axios.get('{{$baseURL}}/getPatientAppointments')
         .then(response => {
             this.appointments = response.data;
         })

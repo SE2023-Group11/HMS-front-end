@@ -19,6 +19,7 @@
 <script>
 import DemoBottom from '../components/DemoBottom.vue';
 import DemoTitle from '../components/DemoTitle.vue';
+import axios from 'axios';
 export default {
   name:"ConfirmAppointment",
   components:{
@@ -49,7 +50,13 @@ export default {
   },
   methods: {
     confirmAppointment() {
-      // 在此添加向数据库添加预约信息的代码
+      axios.post(`{{$baseURL}}/deleteAppointment`)////unfinished
+      .then(response => {
+          console.log(response);
+      })
+      .catch(error => {
+          console.error(error);
+      })
       this.$router.go(-1); // 返回上一页
     },
     cancelAppointment() {

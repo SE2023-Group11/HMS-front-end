@@ -4,19 +4,15 @@
 
     <div>
         <label for="department-select">选择科室：</label>
-        <select id="department-select" v-model="selectedDepartment" @change="getDoctorAvailability">
-            <option value="internal-medicine" selected>内科系统</option>
-            <option value="surgery">外科系统</option>
-            <option value="obstetrics-gynecology">妇产科儿科</option>
-            <option value="otolaryngology">五官科</option>
-            <option value="other">其他科室</option>
-            <option value="diagnosis-related">诊断相关科室</option>
+        <select id="department-select" v-model="selectedDepartment" @change="getDoctorAvailability(selectedDate,selectedDepartment)">
+            <option v-for="section in sections" :key="section.sectionId">{{ section.sectionFirName }}</option>
         </select>
+
     </div>
 
     <div>
         <label for="date-select">选择日期：</label>
-        <select id="date-select" v-model="selectedDate" @change="getDoctorAvailability">
+        <select id="date-select" v-model="selectedDate" @change="getDoctorAvailability(selectedDate,selectedDepartment)">
             <option value="Today" selected>今天（{{today}}）</option>
             <option value="Tomorrow">明天（{{tomorrow}}）</option>
             <option value="Day After Tomorrow">后天（{{dayAfterTomorrow}}）</option>
@@ -40,17 +36,35 @@
                 </thead>
                 <tbody>
                     <tr v-for="doctor in availableDoctors" :key="doctor.id"
-                        @mouseover="hoveredDoctor = doctor; hoveredDoctorPhoto = doctor.photo"
-                        @mouseout="hoveredDoctor = null; hoveredDoctorPhoto = null">
+                        @mouseover="hoveredDoctor = doctor"
+                        @mouseout="hoveredDoctor = null">
                         <td>{{ doctor.name }}</td>
                         <td>{{ doctor.section }}</td>
                         <td>{{ doctor.title}}</td>
                         <td>{{ doctor.phone }}</td>
                         <td>
-                            <img v-if="hoveredDoctor === doctor" :src="hoveredDoctorPhoto" style="max-height: 100px;">
-                        </td>
-                        <td>
-                            <input type="button" value="预约挂号" @click="addAppointment">
+                            <div @mouseover="hoveredDoctor = doctor" @mouseout="hoveredDoctor = null">
+                                <img :src="doctor.doctorImg" style="max-height: 100px;">
+                                <div v-if="hoveredDoctor === doctor">
+                                    <h4>{{ doctor.doctorName }}</h4>
+                                    <h4>
+                                        医生预约情况：
+                                    </h4>
+                                    <h5>上午：</h5>
+                                    <div v-for="(time,index) in morningTimes" :key="index">
+                                        <p>{{ time }}</p>
+                                        <input v-if="selectedDoctorSchedule[index]=1" text="预约挂号" @click="addAppointment(time)" />
+                                        <input v-else type="text" value="无法预约" />
+                                    </div>
+                                    <h5>下午：</h5>
+                                    <div v-for="(time,index) in afternoonTimes" :key="index">
+                                        <p>{{ time }}</p>
+                                        <cinput v-if="selectedDoctorSchedule[index+7]=1" text="预约挂号" @click="addAppointment(time)" />
+                                        <input v-else type="text" value="无法预约" />
+                                    </div>
+
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -68,7 +82,7 @@
 <script>
 import DemoBottom from '../components/DemoBottom.vue';
 import DemoTitle from '../components/DemoTitle.vue';
-//import axios from 'axios';
+import axios from 'axios';
 
 export default {
     name:"AddAppointment",
@@ -85,14 +99,51 @@ export default {
             dayAfterTomorrow: "",
             availableDoctors: [],
             selectStartTime:"",
-            selectEndTime:""
+            selectEndTime:"",
+            sections:[],
+            selectedDoctorSchedule:[],
+            morningTimes: [
+                '8:00-8:30',
+                '8:30-9:00',
+                '9:00-9:30',
+                '9:30-10:00',
+                '10:00-10:30',
+                '10:30-11:00',
+                '11:00-11:30',
+            ],
+            afternoonTimes: [
+                '14:00-14:30',
+                '14:30-15:00',
+                '15:00-15:30',
+                '15:30-16:00',
+                '16:00-16:30',
+                '16:30-17:00',
+            ],
         };
     },
     methods: {
-        getDoctorAvailability() {
-            let availableDoctors = [];
-            //// unfinished
-            this.availableDoctors = availableDoctors;
+        getSectionName(){
+            axios.get('{{$baseURL}}/getRoomName')
+            .then(response => {
+            this.sections = response.data.data;
+            })
+            .catch(error => {
+            console.error(error);
+            });
+        },
+        getDoctorAvailability(date, roomName) {
+            axios.get('{{$baseURL}}/getDoctorsBySchedule', {
+            params: {
+                date: date,
+                roomName: roomName
+            }
+            })
+            .then(response => {
+            this.availableDoctors = response.data.data;
+            })
+            .catch(error => {
+            console.error(error);
+            });
         },
         formatDate(date) {
             let year = date.getFullYear();
@@ -104,7 +155,6 @@ export default {
             const doctor = this.hoveredDoctor;
             const date = this.selectedDate;
             const appointment = {
-                patient_id: 1, // 假设当前患者的id为1
                 doctor_id: doctor.id,
                 date: date,
                 time_start: this.selectStartTime,
@@ -122,6 +172,7 @@ export default {
 
     },
     mounted() {
+        this.getSectionName();
         this.getDoctorAvailability();
 
         let today = new Date();
