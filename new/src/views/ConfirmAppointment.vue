@@ -1,6 +1,4 @@
 <template>
-  <DemoTitle/>
-
   <div class="appointment-info">
     <p>Patient ID: {{ patient_id }}</p>
     <p>Doctor ID: {{ doctor_id }}</p>
@@ -13,19 +11,13 @@
     <button @click="cancelAppointment">取消预约</button>
   </div>
 
-  <DemoBottom/>
 </template>
 
 <script>
-import DemoBottom from '../components/DemoBottom.vue';
-import DemoTitle from '../components/DemoTitle.vue';
 import axios from 'axios';
 export default {
   name:"ConfirmAppointment",
-  components:{
-    DemoBottom,
-    DemoTitle
-  },
+
   props: {
     patient_id: {
       type: String,

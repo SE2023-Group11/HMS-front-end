@@ -3,10 +3,18 @@ import AddAppointment from "../views/AddAppointment.vue";
 import CheckDoctorInfo from "../views/CheckDoctorInfo.vue";
 import CheckMyAppointment from "../views/CheckMyAppointment.vue";
 import ConfirmAppointment from "../views/ConfirmAppointment.vue";
-
+import PatientRoot from "../views/PatientRoot.vue"
 
 
 const routes = [
+    {path:"/",
+    redirect:"/patientRoot"
+    },
+    {
+        path:"/patientRoot",
+        name:"PatientRoot",
+        component: PatientRoot
+    },
     {
         path: "/addAppointment",
         name: "AddAppointment",

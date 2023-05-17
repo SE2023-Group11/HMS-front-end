@@ -1,6 +1,4 @@
 <template>
-    <DemoTitle></DemoTitle>
-
     <div>
         <label for="department-select">选择科室：</label>
         <select id="department-select" v-model="selectedDepartment" @change="getDoctorAvailability">
@@ -47,21 +45,13 @@
         </div>
         
     </div>
-
-    <DemoBottom></DemoBottom>
 </template>
 
 <script>
-import DemoBottom from '../components/DemoBottom.vue';
-import DemoTitle from '../components/DemoTitle.vue';
 import axios from 'axios';
 
 export default {
     name:"CheckDoctorInfo",
-    components:{
-        DemoBottom,
-        DemoTitle
-    },
     data() {
         return {
             selectedDepartment: "internal-medicine",

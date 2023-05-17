@@ -1,6 +1,4 @@
 <template>
-    <demo-title/>
-
     <div id="app">
           <table>
             <thead>
@@ -35,23 +33,13 @@
           </table>
         </div>
     
-
-
-
-    <demo-bottom/>
 </template>
 
 <script>
-import DemoBottom from '../components/DemoBottom.vue';
-import DemoTitle from '../components/DemoTitle.vue';
 import axios from 'axios';
 
 export default {
     name:'CheckMyAppointment',
-    components: { 
-        DemoBottom,
-        DemoTitle 
-    },
     data() {
         return {
             appointments: [],
