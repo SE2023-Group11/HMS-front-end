@@ -1,4 +1,22 @@
 <template>
+    <div class="head1">
+        <div class="kuang">
+            <div class="logal">
+                <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
+            </div>
+            <div class="titl">
+                医疗预约系统
+            </div>
+        </div>
+        <div class="P1"></div>
+    </div>
+    <div class="Picdoc" v-if="is_patient === '我是医生'">
+        <img src="../Pic/doctor.jpg" v-if="!imageUrl" />
+    </div>
+
+    <div class="Picpat" v-if="is_patient === '我是患者'">
+        <img src="../Pic/patient.jpg" v-if="!imageUrl" />
+    </div>
     <div class="register">
         <h1>用户注册</h1>
         <form @submit.prevent="submitForm">
@@ -9,9 +27,11 @@
                 <div class="form-group" v-if="is_patient === '我是医生'">
 
                     <label for="department">所在科室</label>
-                    <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
-                        class="w-full md:w-14rem" />
+                    <!-- <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
+                        class="w-full md:w-14rem" /> -->
+                    <InputText v-model="department" placeholder="填写您所在的诊室" />
                 </div>
+
             </div>
 
 
@@ -34,7 +54,7 @@
             </div>
             <div class="form-group">
                 <label for="confirmPassword">确认密码</label>
-                <Password type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword"
+                <Password class="pwd" type="password" id="confirmPassword" v-model="confirmPassword" @blur="checkPassword"
                     :placeholder="'请输入您的密码'" />
                 <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
             </div>
@@ -75,7 +95,7 @@ const alldepartment = ref([
     { name: '心脑血管科', code: 'IST' },
 ]);
 const options = ref(['我是患者', '我是医生']);
-const is_patient = ref('off');
+const is_patient = ref('我是患者');
 const email = ref('');
 const name = ref('');
 const idCard = ref('');
@@ -225,12 +245,84 @@ function registerbt() {
 <style scoped>
 .register {
     position: absolute;
-    top: 100px;
-    left: 30%;
+    top: 150px;
+    left: 25%;
     width: 550px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1;
+    background-color: #fff;
+}
+
+.head1 {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+}
+
+.titl {
+    position: relative;
+    font-size: 40px;
+    color: #fff;
+    bottom: 80px;
+    left: 200px;
+}
+
+.pwd {
+    width: 40px;
+}
+
+.P1 {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    top: 110px;
+    left: 0px;
+    background-image: url("../Pic/b1.jpg");
+    filter: blur(5px);
+    background-size: cover;
+    z-index: 0;
+}
+
+.logal img {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    left: 0px;
+    z-index: 99;
+}
+
+.kuang {
+    position: relative;
+    bottom: 10px;
+    height: 130px;
+    left: 0px;
+    background-color: #007bff;
+    z-index: 10;
+}
+
+.Picpat img {
+    position: absolute;
+    top: 130px;
+    left: 53%;
+    width: 550px;
+    height: 735px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.Picdoc img {
+    position: absolute;
+    top: 130px;
+    left: 53%;
+    width: 550px;
+    height: 815px;
+    margin: 0 auto;
+    padding: 20px;
     border-radius: 5px;
 }
 

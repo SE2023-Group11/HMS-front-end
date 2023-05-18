@@ -1,4 +1,17 @@
 <template>
+    <div class="head1">
+        <div class="kuang">
+            <div class="logal">
+                <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
+            </div>
+            <div class="titl">
+                医疗预约系统
+            </div>
+        </div>
+        <div class="P1"></div>
+    </div>
+
+
     <div class="register">
         <h1>忘记密码</h1>
         <form @submit.prevent="submitForm">
@@ -163,13 +176,58 @@ function registerbt() {
 <style scoped>
 .register {
     position: absolute;
-    left: 30%;
-    top: 100px;
+    left: 38%;
+    top: 150px;
     width: 500px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #fff;
+}
+
+.head1 {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+}
+
+.titl {
+    position: relative;
+    font-size: 40px;
+    color: #fff;
+    bottom: 80px;
+    left: 200px;
+}
+
+.P1 {
+    position: absolute;
+    width: 100%;
+    height: 90%;
+    top: 110px;
+    left: 0px;
+    background-image: url("../Pic/b1.jpg");
+    filter: blur(5px);
+    background-size: cover;
+    z-index: 0;
+}
+
+.logal img {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    left: 0px;
+    z-index: 99;
+}
+
+.kuang {
+    position: relative;
+    bottom: 10px;
+    height: 130px;
+    left: 0px;
+    background-color: #007bff;
+    z-index: 10;
 }
 
 .form-group {
@@ -228,6 +286,8 @@ input[type='text'] {
 .xiugai {
     position: relative;
     left: 50%;
+    width: 200px;
+    height: 50px;
     transform: translateX(-50%);
 }
 </style>

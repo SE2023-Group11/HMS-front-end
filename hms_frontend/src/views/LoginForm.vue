@@ -1,6 +1,15 @@
 <template>
+    <div class="Pic">
+        <!-- <img src="../Pic/yiyuan.jpg" v-if="!imageUrl" /> -->
+    </div>
+    <div class="Pic1">
+        <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
+    </div>
+    <img class="l1" src="../Pic/EorC.jpg" v-if="!imageUrl" />
     <div class="login">
-        <h1>用户登录</h1>
+
+        <h1>医院信息管理系统</h1>
+        <h2>用户登录</h2>
         <form @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="uid">用户id</label>
@@ -20,7 +29,7 @@
                 <router-link to="/ForgetPwd">忘记密码</router-link>
             </div>
             <br>
-            <Button label="登录" @click="loginbt" />
+            <Button class="bttt" label="登录" @click="loginbt" />
         </form>
     </div>
     <!-- 消息的通知 -->
@@ -28,6 +37,16 @@
         <!-- 用户登录 -->
         <Message v-if="judlog == 1" severity="success">登录成功！</Message>
         <Message v-if="judlog == -1" severity="error">登录失败</Message>
+    </div>
+
+    <div class="xia">
+        版权所有 2014-2022 北京航空航天大学
+        京ICP备05004617-3
+        文保网安备案号1101080018
+        <br>
+        地址：北京市海淀区学院路37号
+        邮编：100191
+        电话：82317114
     </div>
 </template>
   
@@ -93,15 +112,49 @@ function loginbt() {
 </script>
   
 <style scoped>
+.Pic1 img {
+    position: absolute;
+    top: 10px;
+    width: 150px;
+    right: 340px;
+}
+
+.Pic {
+    position: absolute;
+    background-image: url("../Pic/yiyuan.jpg");
+    background-size: cover;
+    top: 0px;
+    width: 74%;
+    height: 100%;
+}
+
+.l1 {
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.bttt {
+    position: relative;
+    width: 200px;
+    left: 140px;
+}
+
+.Pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .login {
     position: absolute;
-    left: 30%;
-    top: 100px;
+    left: 75%;
+    top: 200px;
     width: 500px;
     margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
 }
 
 .form-group {
@@ -120,6 +173,13 @@ function loginbt() {
 label {
     font-weight: bold;
     margin-bottom: 5px;
+}
+
+.xia {
+    position: absolute;
+    bottom: 10%;
+    left: 1430px;
+    width: 500px;
 }
 
 input[type='uid'],

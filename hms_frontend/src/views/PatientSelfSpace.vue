@@ -1,24 +1,50 @@
 <template>
-    <div class="Hello">
-        <p>欢迎来到{{ pid }}的个人空间！</p>
-    </div>
-    <div class="bg-image">
-        <div class="leftpart">
-            <div class="avatar">
-                <img src="../../public/person.png" v-if="!imageUrl" />
-                <img :src="imageUrl" v-if="imageUrl">
-            </div>
-            <div class="bt_changePic">
-                <label for="file-input" class="custom-file-upload">
-                    <i class="fa fa-cloud-upload"></i> 点击更换头像
-                </label>
-                <input id="file-input" type="file" @click="changePic" style="display:none;">
-            </div>
+    <!-- 头部 -->
+    <div class="header9">
+        <div class="logo9">
+            <i class="pi pi-hospital9"></i>
+            <img class="img_top9" src="../Pic/img.jpeg" />
+            <span display="flex9">医院信息管理系统</span>
         </div>
+        <div class="user-info9">
+            <img class="avatar9" src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="User Avatar" />
+        </div>
+    </div>
 
+    <div class="jian">
+        <div class="zi">
+            {{ namecontent }}
+        </div>
+    </div>
+    <div class="card">
+        <TabView :activeIndex="activeTabIndex" @tab-change="handleTabChange">
+            <TabPanel header="个人空间">
+
+            </TabPanel>
+            <TabPanel header="消息通知">
+
+            </TabPanel>
+            <TabPanel header="返回主页">
+
+            </TabPanel>
+        </TabView>
+    </div>
+    <div class="leftpart">
+        <div class="avatar">
+            <img src="../../public/person.png" v-if="!imageUrl" />
+            <img :src="imageUrl" v-if="imageUrl">
+        </div>
+        <div class="bt_changePic">
+            <label for="file-input" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> 点击更换头像
+            </label>
+            <input id="file-input" type="file" @click="changePic" style="display:none;">
+        </div>
+    </div>
+    <div class="pp">
         <div class="message">
             <Card class="mycard">
-                <template #title>用户{{ pid }}的个人信息</template>
+                <!-- <template #title>用户{{ pid }}的个人信息</template> -->
                 <template #content>
                     <div class="edit">
                         <!-- 姓名 -->
@@ -57,15 +83,6 @@
                                     @keyup.enter="birstopEditing" />
                             </div>
                         </div>
-                        <!-- //地区 -->
-                        <!-- <div class="edit-item" style="word-break: break-all;">
-                            <div style="float:left">地区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                            <div style="float:left">
-                                <div v-if="!regediting" @click="regstartEditing">{{ regcontent }}</div>
-                                <InputText v-if="regediting" type="text" v-model="regtempContent" @blur="regstopEditing"
-                                    @keyup.enter="regstopEditing" />
-                            </div>
-                        </div> -->
                         <!-- // 邮箱 -->
                         <div class="edit-item" style="word-break: break-all;">
                             <div style="float:left">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -100,18 +117,23 @@
 
                 </template>
             </Card>
-            <!-- 病史是拓展内容 -->
-            <!-- <div class="history">
-                <Panel v-if="!historyediting" header="病史" class="panel">
-                    {{ historycontent }}
-                </Panel>
-                <div>
-                    <Textarea v-if="historyediting" v-model="historytempContent" rows="5" cols="30" />
-                </div>
-                <Button :label='bthis' @click="edithistory" class="edithistory" />
-            </div> -->
+
+        </div>
+        <!-- 病史是拓展内容 -->
+        <div class="history">
+            <Panel v-if="!historyediting" header="病史" class="panel">
+                {{ historycontent }}
+            </Panel>
+            <div>
+                <Textarea v-if="historyediting" v-model="historytempContent" rows="5" cols="30" />
+            </div>
+            <Button :label='bthis' @click="edithistory" class="edithistory" />
         </div>
     </div>
+    <div>
+        <img class="img_foot9" src="../Pic/bottom.jpg" />
+    </div>
+
     <!-- 消息通知的部分 -->
     <div class="tongzhi">
         <!-- 上传头像 -->
@@ -139,13 +161,27 @@ import Card from 'primevue/card';
 import Panel from 'primevue/panel';
 import Textarea from 'primevue/textarea';
 import Message from 'primevue/message';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+const activeTabIndex = ref(0)
+import { useRouter } from 'vue-router'
+const router = useRouter()
 //进行数据传输的时候用的变量
 const id = ref('123');
 const token = sessionStorage.getItem('token');
 // onMounted(() => {
 //     getinfo();
 // })
-
+function handleTabChange(e) {
+    const index = e.index;
+    if (index === 0) {
+        router.push('/doctorspace');
+    } else if (index === 1) {
+        router.push('/message');
+    } else if (index === 2) {
+        router.push('/page3');
+    }
+}
 //通过患者的生日获得患者的年龄
 function calculateAge(birthday) {
     const now = new Date();
@@ -290,7 +326,7 @@ function idCardstopEditing() {
 
 //这些是对于病史的框的代码，点击按钮可以进行修改内容
 const historyediting = ref(false)
-const historycontent = ref('这是我的病史')
+const historycontent = ref('这是我的病史asdsadasdasdasdsad过敏原：')
 const historytempContent = ref('')
 const bthis = ref('编辑病史')
 //判断传输的结果
@@ -391,29 +427,46 @@ function changePic(event) {
 
 
 <style>
-.Hello {
+.jian {
     position: absolute;
-    left: 250px;
-    top: 10px;
-    width: 800px;
-    font-size: 30px;
+    top: 70px;
+    width: 100%;
+    height: 200px;
+    background-image: url("../Pic/jianyue.jpg");
+    z-index: 200;
 }
 
-.bg-image {
+.zi {
+    font-size: 40px;
+    z-index: 400;
+    position: relative;
+    left: 40%;
+    top: 50%;
+    z-index: 500;
+    color: #fff;
+}
+
+.card {
     position: absolute;
-    left: 30%;
+    z-index: 60990;
+    left: 710px;
+    top: 280px;
+}
+
+.pp {
+    position: absolute;
+    left: 25%;
     width: 1000px;
     height: 900px;
-    top: 200px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    top: 150px;
+    background-color: #ffffff;
 }
 
 .message {
     position: absolute;
-    top: 200px;
+    bottom: 70px;
+    right: 500px;
+    font-size: 20px;
 }
 
 .bt_changePic {
@@ -423,13 +476,21 @@ function changePic(event) {
     z-index: 9999;
 }
 
+.history {
+    position: absolute;
+    left: 50px;
+    top: 350px;
+    width: 400px;
+    height: 300px;
+}
+
 .leftpart {
     position: relative;
     left: 100px;
     width: 250px;
     height: 600px;
     top: 100px;
-    border-right: 2px solid rgb(11, 11, 18);
+    /* border-right: 2px solid rgb(11, 11, 18); */
 }
 
 
@@ -461,18 +522,11 @@ function changePic(event) {
 .mycard {
     position: relative;
     left: 450px;
-    bottom: 120px;
+    bottom: 220px;
     width: 400px;
     height: 460px;
 }
 
-.history {
-    position: relative;
-    left: 450px;
-    bottom: 50px;
-    width: 400px;
-    height: 300px;
-}
 
 .panel .p-panel-content {
     word-wrap: break-word;
@@ -499,6 +553,96 @@ function changePic(event) {
     left: 600px;
     width: 400px;
     top: 20px;
+}
+
+
+
+/* 没什么用 */
+.img_top9 {
+    height: 80px;
+}
+
+.appointmentListHead9 {
+    width: 2000px;
+}
+
+.header9 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+}
+
+.avatar9 {
+    position: fixed;
+    top: 10px;
+    right: 50px;
+}
+
+.rowTitle9 {
+    width: 100px;
+    font-size: 10px;
+}
+
+.logo9 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo i {
+    font-size: 32px;
+    margin-right: 10px;
+}
+
+.user-info9 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.user-info9 img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-left: 60px;
+}
+
+.user-menu9 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-menu9 li {
+    border-bottom: 1px solid #ccc;
+}
+
+.user-menu9 li:last-child {
+    border-bottom: none;
+}
+
+.user-menu9 a {
+    display: block;
+    padding: 10px;
+    color: #333;
+}
+
+.user-menu9 a:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.img_foot9 {
+    z-index: 999999999;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    border-top: 1px solid #ccc;
 }
 </style>
 
