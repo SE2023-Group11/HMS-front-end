@@ -4,9 +4,17 @@ import Register from "../views/RegisterForm.vue";
 import Temp from "../views/TempAll.vue";
 import Space from "../views/SelfSpace.vue";
 import Message from "../views/Message.vue";
-import ForgetPwd from "@/views/ForgetPwd.vue";
-import App from '../App.vue';
+import ForgetPwd from "../views/ForgetPwd.vue";
+import Doctor from "../views/Doctor.vue";
 const routes = [
+    {   path:"/",
+        redirect:"/doctor"
+    },
+    {
+        path:"/doctor",
+        name:"Doctor",
+        component:Doctor
+    },
     {
         path: "/login",
         name: "Login",
@@ -36,11 +44,6 @@ const routes = [
         path: "/ForgetPwd",
         name: "ForgetPwd",
         component: ForgetPwd
-    },
-    {
-        path: "/",
-        name: "App",
-        component: App
     }
 ];
 

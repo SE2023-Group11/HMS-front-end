@@ -4,22 +4,22 @@
         <form @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="uid">用户id</label>
-                <InputText type="text" id="uid" v-model="uid" />
+                <InputText :placeholder="'请输入您的id号或身份证号'" type="text" id="uid" v-model="uid" />
             </div>
 
             <div class="form-group">
                 <label for="password">密码</label>
-                <Password id="password" v-model="password" toggleMask />
+                <Password :placeholder="'请输入您的密码'" id="password" v-model="password" toggleMask />
             </div>
-
+            <br>
             <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
-
+            <br>
             <div>
                 <router-link to="/register">用户注册</router-link>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link to="/ForgetPwd">忘记密码</router-link>
             </div>
-
+            <br>
             <Button label="登录" @click="loginbt" />
         </form>
     </div>
@@ -45,29 +45,59 @@ const uid = ref('');
 const password = ref('');
 const options = ref(['患者身份进入', '非患者身份进入']);
 const is_patient = ref('off');
-
+const role = ref('y')//判断是不是患者
 //用于判断登录是否成功的变量
 const juglog = ref(0);
 function loginbt() {
-    axios.post('http://localhost:8080/login', {
-        uid: uid.value,
-        password: password.value,
-    })
-        .then(response => {
-            console.log(response.data)
-            juglog.value = 1;
+    //首先判断是不是患者
+    if (options == '患者身份进入') role.value = 'y';
+    else role.value = 'n';
+    if (role.value == 'y') {
+        axios.post('http://localhost:8080/loginPatient', {
+            params: {
+                uid: uid.value,
+                password: password.value,
+            }
         })
-        .catch(error => {
-            console.error(error)
-            judlog.value = -1;
+            .then(response => {
+                console.log(response.data)
+                //将将返回的token存到session中
+                sessionStorage.setItem('token', response.data.token);
+                sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                juglog.value = 1;
+            })
+            .catch(error => {
+                console.error(error)
+                judlog.value = -1;
+            })
+    }
+    if (role.value == 'n') {
+        axios.post('http://localhost:8080/loginDoctor', {
+            params: {
+                uid: uid.value,
+                password: password.value,
+            }
         })
+            .then(response => {
+                console.log(response.data)
+                juglog.value = 1;
+            })
+            .catch(error => {
+                console.error(error)
+                judlog.value = -1;
+            })
+    }
+
 }
 
 </script>
   
 <style scoped>
 .login {
-    max-width: 500px;
+    position: absolute;
+    left: 30%;
+    top: 100px;
+    width: 500px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
