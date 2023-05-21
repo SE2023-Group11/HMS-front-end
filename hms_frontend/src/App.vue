@@ -43,64 +43,11 @@ import { useRoute, useRouter } from 'vue-router';
 import Vue from 'vue';
 export default {
   name:'App',
-  directives: {
-    fixedFooter: {
-      mounted(el) {
-        // 初始化页面时，先调整一次页脚位置
-        positionFooter(el);
-        // 监听窗口大小变化和滚动事件
-        window.addEventListener('resize', () => positionFooter(el));
-        window.addEventListener('scroll', () => positionFooter(el));
-      }
-    }
-  },
-  computed: {
-    footerPosition() {
-      const wrapper = document.querySelector('.page-wrapper');
-      const footer = document.querySelector('.page-footer');
-
-      // 获取窗口高度、页面内容高度和滚动条高度
-      const windowHeight = window.innerHeight;
-      const contentHeight = wrapper.offsetHeight;
-      const scrollHeight = wrapper.scrollHeight;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      // 计算页脚元素的位置
-      let position = 'static';
-      if (scrollHeight > windowHeight) {
-        if (scrollTop + windowHeight >= scrollHeight) {
-          position = 'absolute';
-        } else {
-          position = 'relative';
-        }
-      } else {
-        if (contentHeight + footer.offsetHeight < windowHeight) {
-          position = 'absolute';
-        } else {
-          position = 'relative';
-        }
-      }
-      return position;
-    }
-  },
-  mounted() {
-    // 初始化页面时，先调整一次页脚位置
-    this.$nextTick(() => {
-    const footer = this.$refs.footer;
-    positionFooter(footer);
-    window.addEventListener('resize', () => positionFooter(footer));
-    window.addEventListener('scroll', () => positionFooter(footer));
-  });
-  },
   setup() {
       const showMenu =ref(false);
     const route = useRoute();
     const router = useRouter();
       return {showMenu,route, router};},
-
-}
-function positionFooter(el) {
-  el.style.position = el.closest('.page-wrapper').querySelector('.page-footer').getAttribute('data-fixed-footer');
 }
 
 </script>

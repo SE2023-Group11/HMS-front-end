@@ -1,5 +1,6 @@
 <template>
 <div>
+  <button @click="test">asaf</button>
   <div class="Nav">
     <p v-if="showingSchedule" class="navigate-black" @click="showAppointmentList" style="margin-left: 150px">  今日候诊  </p>
     <p v-else class="navigate-white" @click="showAppointmentList" style="margin-left: 150px">  今日候诊  </p>
@@ -23,15 +24,15 @@
           <tr style="border: 0.1px solid rgb(0, 105, 128);
           border-radius: 10px;" v-for="(appointment, index) in appointmentList" :key="index">
             <td align="center">{{ appointment.patientName }}</td>
-            <td align="center">{{ appointment.appointmentTime }}</td>
+            <td align="center">{{ appointment.time_start.substr(-8)+"-"+appointment.time_end.substr(-8) }}</td>
             <td align="center">
               <div class="patient-label" @click="navigateToPatient">
-                {{ labelText }}
+                <button>患者信息</button>
               </div>
               </td>
             <td align="center">
-              <button class= "blueBtn" v-if="appointment.status === FALSE" @click="completeAppointment(index)">待完成</button>
-              <button class= "greenBtn" v-else>已完成</button>
+              <button  class="blueBtn" v-if="appointment.status ===FALSE" @click="openNewWindow">待完成</button>
+              <button  class="greenBtn" v-else>已完成</button>
             </td>
           </tr>
         </tbody>
@@ -127,10 +128,6 @@ export default {
     }
   },
   props: {
-    patientId: {
-      type: Number,
-      required: true,
-    },
     labelText: {
       type: String,
       default: '患者信息',
@@ -142,6 +139,9 @@ export default {
     Listbox,
   },
   methods: {
+    openNewWindow() {
+      window.open('/clickAgain', '_blank', 'width=300,height=200');
+    },
     showAppointmentList() {
       this.showingAppointmentList = true;
       this.showingSchedule = false;
@@ -152,13 +152,15 @@ export default {
     },
     completeAppointment(index) {
       this.appointmentList[index].status =true;
-
     },
     navigateToPatient() {
-      console.log(`Navigating to patient ${this.patientId}`);
+      window.open('/selfSpace', '_blank', 'width=800,height=400');
     },
     sendMessage() {
-      axios.post('http://121.199.161.134:8080/ChangeAppointmentStatus',"OrderId: this.OrderId")
+      axios.post('http://121.199.161.134:8080/ChangeAppointmentStatus',null,{
+        params: {
+          token:"sad"
+        }})
       .then(response => {
         console.log(response.data);
       })
@@ -167,14 +169,31 @@ export default {
       });
     },
     getPatientName(index,id){
-      axios.post('http://121.199.161.134:8080/getPatientName?token=lkj',"patientId=" + id)
+      axios.post('http://121.199.161.134:8080/getPatientName',null,{
+        params: {
+          token:"sad",
+          patientId:id
+        }})
       .then(response => {
+        console.log("as");
         this.appointmentList[index].patientName=response.patientName;
       })
       .catch(error => {
         console.log(error);
       });
-      
+    },
+    test(){
+      axios.post('http://121.199.161.134:8080/getAppointmentList',null,{
+        params: {
+          token:'sad'
+        }})
+      .then(response => {
+        console.log("asad");
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
     },
     initListScroll() {
       const listWrapper = this.$refs.listWrapper
@@ -187,15 +206,19 @@ export default {
     if (this.showScrollbar) {
       this.initListScroll()
     }
-    axios.post('http://121.199.161.134:8080/getAppointmentList?token=lkj'
-    )
+    axios.post('http://121.199.161.134:8080/getAppointmentList',null,{
+        params: {
+          token:'sad'
+        }})
       .then(response => {
         this.appointmentList = response.data;
       })
       .catch(error => {
         console.log(error);
       });
-    axios.post('http://121.199.161.134:8080/getSchedule?token=lkj')
+    axios.post('http://121.199.161.134:8080/getSchedule',null,{
+        params: {
+        }})
       .then(response => {
         this.schedule = response.data;
       })

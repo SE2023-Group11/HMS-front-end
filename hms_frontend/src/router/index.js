@@ -6,6 +6,7 @@ import Space from "../views/SelfSpace.vue";
 import Message from "../views/Message.vue";
 import ForgetPwd from "../views/ForgetPwd.vue";
 import Doctor from "../views/Doctor.vue";
+import ClickAgain from "../views/ClickAgain.vue"
 const routes = [
     {   path:"/",
         redirect:"/doctor"
@@ -14,6 +15,11 @@ const routes = [
         path:"/doctor",
         name:"Doctor",
         component:Doctor
+    },
+    {
+        path:"/clickAgain",
+        name:"ClickAgain",
+        component:ClickAgain
     },
     {
         path: "/login",
