@@ -1,16 +1,15 @@
 <template>
-    <div class="head1">
-        <div class="kuang">
+    <div class="P1">
+        <img src="../Pic/b1.jpg" v-if="!imageUrl" />
+    </div> 
+    <div class="kuang">
             <div class="logal">
                 <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
             </div>
             <div class="titl">
                 医疗预约系统
             </div>
-        </div>
-        <div class="P1"></div>
     </div>
-
 
     <div class="register">
         <h1>忘记密码</h1>
@@ -77,18 +76,31 @@ const verifyCode = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(60);
+const countdown = ref(2);
 let timer = null;
-
-//把邮箱给后端，后端发送验证码
+const name = ref('尊敬的用户');
+const type = ref(2);
 function sendtoback() {
-    axios.post('http://localhost:8080/sendToEmail', {
-        email: email.value,
-    })
+    if (is_patient.value == '我是医生') type.value = 2;
+    else type.value = 4;
+    console.log(typeof(type.value));
+    console.log(name.value);
+    console.log(email.value);
+    console.log('dasdasdasdas');
+    axios.post('http://121.199.161.134:8080/sendToEmail',null,{
+        params:{
+            type:type.value,
+            name:name.value,
+            email:email.value
+        }
+    }
+
+    )
         .then(response => {
             console.log(response.data)
         })
         .catch(error => {
+            console.log('dasdasd');
             console.error(error)
         })
 }
@@ -104,7 +116,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 60;
+            countdown.value = 2;
             sendingVerifyCode.value = false;
         }
     }, 1000);
@@ -122,20 +134,8 @@ const checkPassword = () => {
 const judchange = ref(0);
 function registerbt() {
     //验证码和个人的信息一起上传
-    // axios.post('http://localhost:8080/verifyCode', {
-    //     email: email.value,
-    //     verifyCode: verifyCode.value,
-    // })
-    //     .then(response => {
-    //         console.log(response.data)
-    //         judchange.value = 1;
-    //     })
-    //     .catch(error => {
-    //         console.error(error)
-    //         judchange.value = -1;
-    //     })
-    if (is_patient == '我是医生') {
-        axios.post('http://localhost:8080//docterChangepwd', {
+    if (is_patient.value == '我是医生') {
+        axios.post('http://121.199.161.134:8080/docterChangepwd',null, {
             params: {
                 code: verifyCode.value,
                 email: email.value,
@@ -153,7 +153,7 @@ function registerbt() {
             })
     }
     else {
-        axios.post('http://localhost:8080//patientChangepwd', {
+        axios.post('http://121.199.161.134:8080/patientChangepwd', null,{
             params: {
                 code: verifyCode.value,
                 email: email.value,
@@ -194,42 +194,43 @@ function registerbt() {
 }
 
 .titl {
-    position: relative;
-    font-size: 40px;
+    position: absolute;
+    font-size: 30px;
     color: #fff;
-    bottom: 80px;
-    left: 200px;
+    bottom: 30px;
+    left: 150px;
 }
 
-.P1 {
+.pwd {
+    width: 40px;
+}
+
+.P1 img{
     position: absolute;
     width: 100%;
-    height: 90%;
+    height: 100%;
     top: 110px;
-    left: 0px;
     background-image: url("../Pic/b1.jpg");
     filter: blur(5px);
-    background-size: cover;
-    z-index: 0;
+    /* background-size: cover; */
+    z-index: -1;
 }
 
 .logal img {
     position: relative;
-    width: 130px;
-    height: 130px;
+    width: 110px;
+    height: 110px;
     left: 0px;
     z-index: 99;
 }
 
 .kuang {
-    position: relative;
-    bottom: 10px;
-    height: 130px;
-    left: 0px;
+    position: absolute;
+    height: 110px;
+    width: 100%;
     background-color: #007bff;
     z-index: 10;
 }
-
 .form-group {
     display: flex;
     flex-direction: column;
@@ -281,6 +282,7 @@ input[type='text'] {
     left: 600px;
     width: 400px;
     top: 20px;
+    z-index: 9999999;
 }
 
 .xiugai {

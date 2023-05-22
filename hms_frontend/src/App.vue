@@ -1,6 +1,5 @@
 <template>
   <!-- <input type="button" value="gsdk" @click="sendtoback"> -->
-  <div id="app">
     <!-- <header>
       <p>
         <router-link to="/temp">Temp</router-link>
@@ -24,10 +23,9 @@
         <router-link to="/ForgetPwd">ForgetPwd</router-link>
       </p>
     </header> -->
-    <main>
+    <div>
       <router-view></router-view>
-    </main>
-  </div>
+    </div>
 </template>
 
 <script>

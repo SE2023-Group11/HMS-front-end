@@ -1,286 +1,284 @@
 <template>
-    <!-- 头部 -->
-    <div class="header9">
-        <div class="logo9">
-            <i class="pi pi-hospital9"></i>
-            <img class="img_top9" src="../Pic/img.jpeg" />
-            <span display="flex9">医院信息管理系统</span>
-        </div>
-        <div class="user-info9">
-            <img class="avatar9" src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="User Avatar" />
-        </div>
-    </div>
 
-    <div class="jian">
-        <div class="zi">
-            {{ namecontent }}
-        </div>
-    </div>
-    <div class="card">
-        <TabView :activeIndex="activeTabIndex" @tab-change="handleTabChange">
-            <TabPanel header="个人空间">
-
-            </TabPanel>
-            <TabPanel header="消息通知">
-
-            </TabPanel>
-            <TabPanel header="返回主页">
-
-            </TabPanel>
-        </TabView>
-    </div>
-    <div class="leftpart">
-        <div class="avatar">
-            <img src="../../public/person.png" v-if="!imageUrl" />
-            <img :src="imageUrl" v-if="imageUrl">
-        </div>
-        <div class="bt_changePic">
-            <label for="file-input" class="custom-file-upload">
-                <i class="fa fa-cloud-upload"></i> 点击更换头像
-            </label>
-            <input id="file-input" type="file" @click="changePic" style="display:none;">
-        </div>
-    </div>
-    <button @click="add">增加消息</button>
-    <div class="header">
-        <h1>消息通知</h1>
-        <div class="badge" v-if="unreadCount > 0">{{ unreadCount }}</div>
-    </div>
-    <div class="pp1">
-        <div class="all">
-            <div class="topp">
-                <!-- <div class="f1">
-                <h2 class="hea">&nbsp&nbsp未读消息</h2>
-                <Button label="标为已读" class="yidu" @click="alreadyread()" />
-            </div> -->
-                <Accordion :activeIndex="0" class="notification" v-for="(notification, index) in notifications"
-                    :key="index">
-
-                    <AccordionTab :header="notification.title">
-                        <p>
-                            {{ notification.description }}
-                        </p>
-                    </AccordionTab>
-                </Accordion>
-            </div>
-            <div class="tian">
-
-            </div>
-            <br>
-            <!-- <div class="topp">
-            <div class="f1">
-                <h2 class="hea">&nbsp&nbsp已读消息</h2>
-                <Button label="删除" class="yidu" @click="deleteNotification()" />
-            </div>
-            <Accordion :activeIndex="-1" class="notification" v-for="(notification1, index) in notificationalready"
-                :key="index">
-
-                <AccordionTab :header="notification1.title">
-                    <p>
-                        {{ notification1.description }}
-                    </p>
-                </AccordionTab>
-            </Accordion>
-        </div> -->
-            <br>
-        </div>
-    </div>
-    <!-- 尾部 -->
-    <!-- <div class="content9">
-        <div class="footer9">
-            <div class="left9">
-                <p>版权所有 2014-2022 北京航空航天大学<br>
-                    京ICP备05004617-3<br>
-                    文保网安备案号1101080018</p>
-            </div>
-            <img class="img_bottom9" src="../Pic/img.jpeg" />
-            <div class="right9">
-                <p>地址：北京市海淀区学院路37号<br>
-                    邮编：100191<br>
-                    电话：82317114</p>
-            </div>
-        </div>
-    </div> -->
     <div>
-        <img class="img_foot9" src="../Pic/bottom.jpg" />
-    </div>
-</template>
-  
-<script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { onMounted } from 'vue';
-//import notifications from './mock/notifications.js'
-//primevue
-import Button from 'primevue/button';
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
-
-const notifications = ref([]);
-const notificationalready = ref([]);
-const unreadCount = ref(0);
-const token = sessionStorage.getItem('token');
-const activeTabIndex = ref(1)
-import { useRouter } from 'vue-router'
-const router = useRouter()
-//首先需要确定一下当前的用户的身份
-// const role = sessionStorage.getItem('role');
-const role = ref('y')//用于测试
-// onMounted(() => {
-//     created();
-// })
-// const containerHeight = ref(500)
-// function mounted() {
-//         // 在组件挂载完成后计算容器高度
-//         containerHeight = refs.all
-//     },
-function handleTabChange(e) {
-    const index = e.index;
-    if (index === 0) {
-        if (role.value === 'y') router.push('/patientSpace');
-        else router.push('/doctorSpace');
-    } else if (index === 1) {
-        router.push('/page2');
-    } else if (index === 2) {
-        router.push('/page3');
+          <head>
+              <meta charset="UTF-8">
+              <title>HMS医院门诊预约系统</title>
+          </head>
+        <div class='body'>
+              <div class="container" id="container">
+                  <div class="header">
+                      <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
+                      <h1 class="header_tag">HMS医院门诊预约系统</h1>
+                      <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
+                          <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img"/>
+                          <h1 class="header_user_word">登录/注册</h1>
+                          <div id="triangle-down"></div>
+                          <div id="header_list">
+                              <div class="header_list_item">个人主页</div>
+                              <div class="header_list_item">消息通知</div>
+                              <div class="header_list_item">账号注销</div>
+                              <div class="header_list_item">退出登录</div>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- <div class="main"></div> -->
+              <div class="main1">
+                <!-- 从这里开始是重要的 -->
+                  <div class="jian">
+                    <div class="zi">
+                        {{ namecontent }}
+                    </div>
+                  </div>
+                  <div class="card">
+                      <TabView :activeIndex="activeTabIndex" @tab-change="handleTabChange">
+                          <TabPanel header="个人空间">
+    
+                          </TabPanel>
+                          <TabPanel header="消息通知">
+    
+                          </TabPanel>
+                          <TabPanel header="返回主页">
+    
+                          </TabPanel>
+                      </TabView>
+                  </div>
+                  <div class="leftpart">
+                      <div class="avatar">
+                          <img src="../../public/person.png" v-if="!imageUrl" />
+                          <img :src="imageUrl" v-if="imageUrl">
+                      </div>
+                      <div class="bt_changePic">
+                          <label for="file-ibt_changePicnput" class="custom-file-upload">
+                              <i class="fa fa-cloud-upload"></i> 点击更换头像
+                          </label>
+                          <input id="file-input" type="file" @click="changePic" style="display:none;">
+                      </div>
+                  </div>
+    
+                  <button class="bttt" @click="add">增加消息</button>
+                  <div class="header1">
+                      <h1>消息通知</h1>
+                      <div class="badge" v-if="unreadCount > 0">{{ unreadCount }}</div>
+                  </div>
+                  <div class="pp1">
+                      <div class="all">
+                              <Accordion :activeIndex="0" class="notification" v-for="(notification, index) in notifications"
+                                  :key="index">
+    
+                                  <AccordionTab :header="notification.title">
+                                      <p>
+                                          {{ notification.description }}
+                                      </p>
+                                  </AccordionTab>
+                              </Accordion>
+                          <div class="tian"></div>
+                      </div>
+                  </div>
+              </div>
+      
+                  <div class="footer">
+                      <div class="footer_box">
+                          <ul class="footer_list_box">
+                              <li>
+                                  <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_1.png" alt="">
+                                  <span>电话：010-82317114</span>
+                              </li>
+                              <li>
+                                  <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_2.png" alt="">
+                                  <span>传真：010-82328136</span>
+                              </li>
+                              <li>
+                                  <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_3.png" alt="">
+                                  <span>邮编：100191</span>
+                              </li>
+                              <li>
+                                  <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_4.png" alt="">
+                                  <span>地址：北京市海淀区学院路37号</span>
+                              </li>
+                          </ul>
+                      </div>
+                      <div class="footer_item">Copyright ©️ 2023-2033</div>
+                      <div class="footer_item">HMS Powered by SEGroup11</div>
+                      <div class="footer_item">HMS Designed by AlpaCa</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+    </template>
+    
+    <script setup>
+    import { ref } from 'vue';
+    import axios from 'axios';
+    import { onMounted } from 'vue';
+    //primevue
+    import Button from 'primevue/button';
+    import Accordion from 'primevue/accordion';
+    import AccordionTab from 'primevue/accordiontab';
+    import TabView from 'primevue/tabview';
+    import TabPanel from 'primevue/tabpanel';
+    import { useRouter } from 'vue-router'
+    const notifications = ref([]);
+    const notificationalready = ref([]);
+    const unreadCount = ref(0);
+    const token = sessionStorage.getItem('token');
+    const activeTabIndex = ref(1)
+    //用于界面的设计
+    // const box1 = document.getElementById('main1');
+    // const box2 = document.getElementById('footer');
+    // const distance = 20; // 设置间距
+    
+    // const box1Height = box1.offsetHeight;
+    // box2.style.top = `${box1Height + distance}px`;
+    
+    const router = useRouter()
+    //首先需要确定一下当前的用户的身份
+    // const role = sessionStorage.getItem('role');
+    const role = ref('y')//用于测试
+    // onMounted(() => {
+    //     created();
+    // })
+    // const containerHeight = ref(500)
+    // function mounted() {
+    //         // 在组件挂载完成后计算容器高度
+    //         containerHeight = refs.all
+    //     },
+    function handleTabChange(e) {
+      const index = e.index;
+      if (index === 0) {
+          if (role.value === 'y') router.push('/patientSpace');
+          else router.push('/doctorSpace');
+      } else if (index === 1) {
+          router.push('/page2');
+      } else if (index === 2) {
+          router.push('/page3');
+      }
     }
-}
-function created() {
-    loadNotifications()
-    setInterval(this.loadNotifications, 5000) // 每5秒请求一次数据
-}
-
-const str = ref('');
-function loadNotifications() {
-    if (role.value == 'n') str.value = 'http://localhost:8080//getDoctorMessage'
-    else str.value = 'http://localhost:8080//getPatientMessage'
-    axios.get(str,
-        token = token.value
-    )
-        .then(response => {
-            const data = response.data
-            for (let i = 0; i < data.length; i++) {
-                let newN
-                newN.id = data[i].info_id.value,
-                    newN.title = "新消息",
-                    newN.description = data[i].info_body,
-                    notifications = notifications.value.push(newN)
-            }
-
-            unreadCount += newNotifications.length
-        })
-        .catch(error => {
-            console.log(error)
-        })
-}
-//用于测试界面的函数
-function add() {
-    notifications.value.push({
-        id: notifications.value.length + 1,
-        title: '新消息' + (notifications.value.length + 1),
-        description: '这是一条新的通知消息。',
-        read: false
-    })
-    unreadCount.value += 1
-}
-function deleteNotification() {
-    while (notificationalready.value.length > 0) {
-        //const notification = notificationalready.value[index]
-        //axios.delete(`/api/notifications/${notification.id}`)
-        //    .then(() => {
-        notificationalready.value.splice(index, 1)
-        //     if (!notification.read) {
-        //         unreadCount.value -= 1
-        //     }
-        // })
-        // .catch(error => {
-        //     console.log(error)
-        // })
+    function created() {
+      loadNotifications()
+      setInterval(this.loadNotifications, 5000) // 每5秒请求一次数据
     }
-}
-const index = ref(0);
-function alreadyread() {
-    index.value = notifications.value.length;
-    while (index.value > 0) {
-        index.value--;
-        const notification = notifications.value[index.value]
-        //axios.delete(`/api/notifications/${notification.id}`)
-        //    .then(() => {
-        notifications.value.splice(index, 1)
-        unreadCount.value -= 1
-        //    })
-        //    .catch(error => {
-        //        console.log(error)
-        //    })
-        notificationalready.value.push(notification);
+    
+    const str = ref('');
+    function loadNotifications() {
+      if (role.value == 'n') str.value = 'http://localhost:8080//getDoctorMessage'
+      else str.value = 'http://localhost:8080//getPatientMessage'
+      axios.get(str,
+          token = token.value
+      )
+          .then(response => {
+              const data = response.data
+              for (let i = 0; i < data.length; i++) {
+                  let newN
+                  newN.id = data[i].info_id.value,
+                      newN.title = "新消息",
+                      newN.description = data[i].info_body,
+                      notifications = notifications.value.push(newN)
+              }
+    
+              unreadCount += newNotifications.length
+          })
+          .catch(error => {
+              console.log(error)
+          })
     }
-}
-//真正的函数,删除信息
-function deleteNotification1() {
-    index.value = notifications.value.length;
-    while (index.value > 0) {
-        index.value--;
-        const notification = notifications.value[index.value]
-        axios.delete('http://localhost:8080/deleteMessage',
-            token = token.value,
-            info_id = notification.value.id
-        )
-            .then(() => {
-                notifications.value.splice(index, 1)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+    //用于测试界面的函数
+    function add() {
+      notifications.value.push({
+          id: notifications.value.length + 1,
+          title: '新消息' + (notifications.value.length + 1),
+          description: '这是一条新的通知消息。',
+          read: false
+      })
+      unreadCount.value += 1
     }
-}
-
-
-// export default {
-//     data() {
-//         return {
-//             notifications: notifications,
-//             unreadCount: notifications.filter(notification => !notification.read).length
-//         }
-//     },
-//     created() {
-//         setInterval(() => {
-//             this.loadNotifications()
-//         }, 5000000)
-//     },
-//     methods: {
-//         loadNotifications() {
-//             // 用mock数据模拟后端返回
-//             this.notifications.push({
-//                 id: this.notifications.length + 1,
-//                 title: '新消息' + (this.notifications.length + 1),
-//                 description: '这是一条新的通知消息。',
-//                 read: false
-//             })
-//             this.unreadCount += 1
-//         },
-//         deleteNotification(index) {
-//             const notification = this.notifications[index]
-//             this.notifications.splice(index, 1)
-//             if (!notification.read) {
-//                 this.unreadCount -= 1
-//             }
-//         },
-//     }
-// }
-</script>
-  
-<style>
+    function deleteNotification() {
+      while (notificationalready.value.length > 0) {
+          //const notification = notificationalready.value[index]
+          //axios.delete(`/api/notifications/${notification.id}`)
+          //    .then(() => {
+          notificationalready.value.splice(index, 1)
+          //     if (!notification.read) {
+          //         unreadCount.value -= 1
+          //     }
+          // })
+          // .catch(error => {
+          //     console.log(error)
+          // })
+      }
+    }
+    const index = ref(0);
+    function alreadyread() {
+      index.value = notifications.value.length;
+      while (index.value > 0) {
+          index.value--;
+          const notification = notifications.value[index.value]
+          //axios.delete(`/api/notifications/${notification.id}`)
+          //    .then(() => {
+          notifications.value.splice(index, 1)
+          unreadCount.value -= 1
+          //    })
+          //    .catch(error => {
+          //        console.log(error)
+          //    })
+          notificationalready.value.push(notification);
+      }
+    }
+    //真正的函数,删除信息
+    function deleteNotification1() {
+      index.value = notifications.value.length;
+      while (index.value > 0) {
+          index.value--;
+          const notification = notifications.value[index.value]
+          axios.delete('http://localhost:8080/deleteMessage',
+              token = token.value,
+              info_id = notification.value.id
+          )
+              .then(() => {
+                  notifications.value.splice(index, 1)
+              })
+              .catch(error => {
+                  console.log(error)
+              })
+      }
+    }
+    
+    //统一的函数
+    function showList(){
+        var list = document.getElementById("header_list");
+        console.log("in");
+        list.style.display = "block";
+    };
+    function unShowList(){
+        var list = document.getElementById("header_list");
+        console.log("out");
+        list.style.display = "none";
+    };
+    </script>
+    
+<style scoped>
 .jian {
-    position: absolute;
-    top: 70px;
+    position: relative;
+    top: 50px;
     width: 100%;
     height: 200px;
     background-image: url("../Pic/jianyue.jpg");
-    z-index: 200;
+    z-index: 9999999;
 }
-
+.bttt{
+    position: absolute;
+    top:100px;
+    z-index: 1000000000000;
+}
+/* .main1 {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  height: 900px;
+  top: 150px;
+  background-color: #ffffff;
+} */
 .zi {
     font-size: 40px;
     z-index: 400;
@@ -290,7 +288,12 @@ function deleteNotification1() {
     z-index: 500;
     color: #fff;
 }
-
+.bt_changePic {
+    position: relative;
+    left: 50px;
+    top: 20px;
+    z-index: 9999;
+}
 .card {
     position: absolute;
     z-index: 60990;
@@ -302,10 +305,9 @@ function deleteNotification1() {
     position: absolute;
     left: 0px;
     top: 350px;
-    width: 1000px;
+    width: 1052px;
     z-index: 99999;
-    /* border: 1px solid rgb(204, 204, 204); */
-    border-radius: 1%;
+    /* border-radius: 1%; */
     background-color: #ffffff;
 
 }
@@ -313,7 +315,8 @@ function deleteNotification1() {
 .tian {
     position: absolute;
     left: 0%;
-    width: 1000px;
+    right: -0%;
+    /* width: 1000px; */
     height: 300px;
     z-index: 100;
     background-color: #ffffff;
@@ -321,20 +324,22 @@ function deleteNotification1() {
 
 .pp1 {
     position: absolute;
-    left: 22%;
-    width: 1000px;
-    height: 900px;
+    left: 15%;
+    right: 15%;
+    /* width: 1000px; */
+    height: 1200px;
     top: 150px;
     background-color: #ffffff;
 }
 
-.header {
+.header1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     position: absolute;
-    left: 500px;
+    left: 400px;
+    top:400px;
     z-index: 99999999;
 }
 
@@ -344,17 +349,10 @@ function deleteNotification1() {
     bottom: 55px;
 }
 
-/* .topp {
-    border: 1px solid rgb(204, 204, 204);
-    position: relative;
-    left: 10px;
-    width: 800px
-} */
-
 .notification {
     position: relative;
     left: 10px;
-    width: 700px;
+    width: 760px;
     border-radius: 1%;
     margin-bottom: 10px;
 }
@@ -389,137 +387,200 @@ button {
     left: 550px;
     z-index: 99999999;
 }
-
-.img_top9 {
-    height: 80px;
-}
-
-.appointmentListHead9 {
-    width: 2000px;
-}
-
-.header9 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #ffffff;
-    height: 60px;
-    border-bottom: 1px solid #ccc;
-}
-
-.avatar9 {
-    position: fixed;
-    top: 10px;
-    right: 50px;
-}
-
-.rowTitle9 {
-    width: 100px;
-    font-size: 10px;
-}
-
-.logo9 {
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.img_foot9 {
-    z-index: 999999999;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    border-top: 1px solid #ccc;
-}
-
-.logo i {
-    font-size: 32px;
-    margin-right: 10px;
-}
-
-.user-info9 {
-    display: flex;
-    align-items: center;
+.leftpart {
     position: relative;
-    cursor: pointer;
+    left: 430px;
+    width: 250px;
+    height: 600px;
+    top: -80px;
+    z-index: 9999999;
 }
 
-.user-info9 img {
-    width: 60px;
-    height: 60px;
+
+.avatar {
+    position: relative;
+    /* left: 150px;*/
+    width: 200px;
+    height: 200px;
+    top: 10px;
     border-radius: 50%;
-    margin-left: 60px;
-}
-
-.user-menu9 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.user-menu9 li {
-    border-bottom: 1px solid #ccc;
-}
-
-.user-menu9 li:last-child {
-    border-bottom: none;
-}
-
-.user-menu9 a {
-    display: block;
-    padding: 10px;
-    color: #333;
-}
-
-.user-menu9 a:hover {
-    background-color: rgb(255, 255, 255);
-}
-
-.content9 {
-    position: absolute;
-    bottom: 100px;
+    overflow: hidden;
     z-index: 999999;
+}
+
+.choosePic {
+    color: blue;
+}
+
+.avatar img {
     width: 100%;
-    /* height: 200px; */
-    /* border-top: 1px solid rgb(82, 79, 79); */
-    opacity: 1;
+    height: 100%;
+    object-fit: cover;
 }
 
-.footer9 {
-    position: fixed;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    font-size: 1.2px;
-    background-color: rgb(157, 151, 151);
 
-}
 
-.footer9 .left9 p {
-    position: fixed;
-    bottom: 50px;
-    left: 50px;
-    width: 300px;
-    height: 50px;
-    overflow: auto;
-}
 
-.img_bottom9 {
-    position: fixed;
-    bottom: 50px;
-    height: 100px;
-    left: 800px;
-}
 
-.footer9 .right9 p {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    width: 300px;
-    height: 50px;
-    overflow: auto;
+/* 这是统一的css */
+* {
+        margin: 0;
+        padding: 0;
+    }
+    html {
+        height: 100%;
+    }
+    .body {
+        /* height: 100%; */
+        min-height: 100vh;
+        
+    }
+body{
+    position: relative;
 }
+    .container {
+        position: relative;
+        height: 100%;
+        padding-top: 0.1px;
+        /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
+        /*background-image: url("../img/back_img3.jpg");*/
+        /*background-size: cover;*/
+    }
+    .background{
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        /*background-image: url("../img/back_img3.jpg");*/
+        position: fixed;
+        z-index: -999;
+    }
+    .header{
+        top:0px;
+        height: 60px;
+        width: 100%;
+        background-color: whitesmoke;
+        border-bottom: rgba(0, 0, 0, 0.3) solid 1px;
+        position: fixed;
+        z-index: 99999999999;
+    }
+    .header_img{
+        /* background-color: red; */
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin-left: 8%;
+    }
+    .header_tag{
+        /* background-color: blue; */
+        margin-left: 1%;
+        line-height: 60px;
+        font-family: Arial;
+        float: left;
+        font-size: 18px;
+    }
+    .header_user{
+        /* background-color: green; */
+        float: right;
+        margin-right: 8%;
+        height: 60px;
+        width: 150px;
+    }
+    #header_list{
+        background-color: #c1c0c0;
+        display: none;
+        margin-top: 60px;
+        width: 150px;
+        height: 200px;
+    }
+    .header_list_item{
+        width: 150px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+    }
+    .header_list_item:hover{
+        background-color: rgb(137, 132, 132);
+        cursor: pointer;
+    }
+    .header_user:hover{
+        background-color: #c1c0c0;
+        /* cursor: pointer; */
+    }
+    .header_user_word{
+        /* background-color: white; */
+        margin-left: 10px;
+        line-height: 60px;
+        font-size: 13px;
+        float: left;
+    }
+    .header_user_img{
+        /* background-color: blue; */
+        margin-top: 5px;
+        margin-left: 5px;
+        width: 50px;
+        height: 50px;
+        float: left;
+        border-radius: 100%;
+    }
+    #triangle-down{
+        float: left;
+        margin-top: 25px;
+        margin-left: 5px;
+        width:0px;
+        height:0px;
+        border-left:6px solid transparent;
+        border-right:6px solid transparent;
+        border-top:10px black solid;
+    }
+    .main{
+        border-radius: 5px;
+        margin-left: 15%;
+        margin-right: 15%;
+        margin-top: 70px;
+        width: 70%;
+        min-height: 600px;
+        background-color: rgb(255, 255, 255);
+    }
+    .footer{
+        position: absolute;
+        bottom: -1000px;
+        height: 220px;
+        width: 100%;
+        /* margin-top: 300px; */
+        background-color: rgba(0, 0, 0, 0.85);
+    }
+    .footer_img{
+        margin: auto;
+        width: 400px;
+    }
+    .footer_item{
+        width: 100%;
+        text-align: center;
+        color: rgba(255,255,255,0.7);
+        font-size: 15px;
+        line-height: 25px;
+    }
+    .footer_box{
+        padding-top: 10px;
+        margin-top: 20px;
+        margin: auto;
+        width: 100%;
+        height: 120px;
+    }
+    .footer_list_box{
+        margin: auto;
+        list-style: none;
+        width: 620px;
+        height: 100%;
+        /* float: left; */
+    }
+    .footer_list_box>li {
+        padding: 15px 0 10px;
+        width: 310px;
+        height: 50px;
+        color: rgba(255,255,255,0.7);
+        box-sizing: border-box;
+        float: left;
+        position: relative;
+    }
 </style>

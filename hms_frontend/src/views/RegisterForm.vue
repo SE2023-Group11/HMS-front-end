@@ -1,22 +1,22 @@
 <template>
-    <div class="head1">
-        <div class="kuang">
+    <div class="P1">
+        <img src="../Pic/b1.jpg" v-if="!imageUrl" />
+    </div> 
+    <div class="kuang">
             <div class="logal">
                 <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
             </div>
             <div class="titl">
                 医疗预约系统
             </div>
-        </div>
-        <div class="P1"></div>
     </div>
-    <div class="Picdoc" v-if="is_patient === '我是医生'">
+    <!-- <div class="Picdoc" v-if="is_patient === '我是医生'">
         <img src="../Pic/doctor.jpg" v-if="!imageUrl" />
     </div>
 
     <div class="Picpat" v-if="is_patient === '我是患者'">
         <img src="../Pic/patient.jpg" v-if="!imageUrl" />
-    </div>
+    </div>  -->
     <div class="register">
         <h1>用户注册</h1>
         <form @submit.prevent="submitForm">
@@ -27,19 +27,16 @@
                 <div class="form-group" v-if="is_patient === '我是医生'">
 
                     <label for="department">所在科室</label>
-                    <!-- <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
-                        class="w-full md:w-14rem" /> -->
-                    <InputText v-model="department" placeholder="填写您所在的诊室" />
+                    <Dropdown v-model="department" :options="alldepartment" optionLabel="name" placeholder="选择您所在的诊室"
+                        class="w-full md:w-14rem" />
+                    <!-- <InputText v-model="department" placeholder="填写您所在的诊室" /> -->
                 </div>
 
             </div>
-
-
             <div class="form-group">
                 <label for="email">邮箱</label>
                 <InputText type="email" id="email" v-model="email" :placeholder="'请输入您的邮箱'" />
             </div>
-
             <div class="form-group">
                 <label for="name">姓名</label>
                 <InputText type="text" id="name" v-model="name" :placeholder="'请输入您的姓名'" />
@@ -69,9 +66,8 @@
             <Button label="注册" @click="registerbt" class="zhuce" />
         </form>
     </div>
-    <!-- 用于错误的消息的通知 -->
-    <div class="tongzhi">
-        <!-- 用户注册 -->
+    <!-- 用于错误的消息的通知  -->
+     <div class="tongzhi">
         <Message v-if="judreg == 1" severity="success">注册成功！</Message>
         <Message v-if="judreg == -1" severity="error">注册失败</Message>
     </div>
@@ -107,25 +103,30 @@ const emailError = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(5);
+const countdown = ref(0);
 let timer = null;
 const department = ref('');
-const type = ref('');
-
+const type = ref();
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
-    if (is_patient == '我是医生') type.value = 1;
-    else type.value = 3;
-    console.log(type);
-    console.log(name);
-    console.log(email);
-    axios.post('http://121.199.161.134:8080/sendToEmail?type=type.value&name=name.value&email=email.value',
+    if (is_patient.value === '我是患者') {
+        type.value = 3;
+    }    
+    else type.value = 1;
+    axios.post('http://121.199.161.134:8080/sendToEmail',null,{
+        params:{
+            type:type.value,
+            name:name.value,
+            email:email.value
+        }
+    }
 
     )
         .then(response => {
             console.log(response.data)
         })
         .catch(error => {
+            console.log('dasdasd');image.png
             console.error(error)
         })
 }
@@ -141,7 +142,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 5;
+            countdown.value = 2;
             sendingVerifyCode.value = false;
         }
     }, 1000);
@@ -176,7 +177,6 @@ function setDoctor() {
     doctor.doctorPhone = phone.value;
     doctor.doctorName = name.value;
     doctor.doctorNumber = idCard.value;
-    // doctor.doctorSection = department.value;
 }
 function setPatient() {
     patient.patientPassword = password.value;
@@ -191,26 +191,14 @@ function setPatient() {
 const judreg = ref(0);
 function registerbt() {
     //验证码和个人信息一起传入后端
-    // axios.post('http://localhost:8080/verifyCode', {
-    //     email: email.value,
-    //     verifyCode: verifyCode.value,
-    // })
-    //     .then(response => {
-    //         console.log(response.data)
-    //         judreg.value = 1;
-    //     })
-    //     .catch(error => {
-    //         console.error(error)
-    //         judreg.value = -1;
-    //     })
-    if (is_patient == '我是医生') {
+    if (is_patient.value == '我是医生') {
+        console.log('da333333333333333');
         setDoctor();
-        axios.post('http://121.199.161.134:8080/docterRegister', patient, {
-            params: {
-                code: verifyCode.value,
-                comfirmPW: confirmPassword.value,
-            }
-        }
+        axios.post('http://121.199.161.134:8080/doctorRegister', doctor,{
+            params:{
+            code: verifyCode.value,
+            confirmPW: confirmPassword.value
+        }}
         )
             .then(response => {
                 console.log(response.data)
@@ -223,12 +211,14 @@ function registerbt() {
     }
     else {
         setPatient();
-        axios.post('http://121.199.161.134:8080/patientRegister', doctor, {
+        console.log(verifyCode.value);
+        axios.post('http://121.199.161.134:8080/patientRegister', patient, {
             params: {
                 code: verifyCode.value,
-                comfirmPW: confirmPassword.value,
+                confirmPW: confirmPassword.value,
             }
-        })
+        },
+  )
             .then(response => {
                 console.log(response.data)
                 judreg.value = 1;
@@ -246,8 +236,9 @@ function registerbt() {
 .register {
     position: absolute;
     top: 150px;
-    left: 25%;
-    width: 550px;
+    left: 35%;
+    right:35%;
+    height: 790px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -256,55 +247,49 @@ function registerbt() {
     background-color: #fff;
 }
 
-.head1 {
-    position: absolute;
-    top: 0%;
-    width: 100%;
-    height: 100%;
-}
-
 .titl {
-    position: relative;
-    font-size: 40px;
+    position: absolute;
+    font-size: 30px;
     color: #fff;
-    bottom: 80px;
-    left: 200px;
+    bottom: 30px;
+    left: 150px;
 }
 
 .pwd {
     width: 40px;
 }
 
-.P1 {
+.P1 img{
     position: absolute;
     width: 100%;
-    height: 90%;
+    height: 130%;
     top: 110px;
-    left: 0px;
     background-image: url("../Pic/b1.jpg");
     filter: blur(5px);
-    background-size: cover;
-    z-index: 0;
+    /* background-size: cover; */
+    z-index: -1;
 }
 
 .logal img {
     position: relative;
-    width: 130px;
-    height: 130px;
+    width: 110px;
+    height: 110px;
     left: 0px;
     z-index: 99;
 }
 
 .kuang {
-    position: relative;
-    bottom: 10px;
-    height: 130px;
-    left: 0px;
+    position: absolute;
+    height: 110px;
+    width: 100%;
     background-color: #007bff;
     z-index: 10;
 }
-
-.Picpat img {
+.bigest{
+    width: 80%;
+    height: 80%;
+}
+/* .Picpat img {
     position: absolute;
     top: 130px;
     left: 53%;
@@ -324,7 +309,7 @@ function registerbt() {
     margin: 0 auto;
     padding: 20px;
     border-radius: 5px;
-}
+} */
 
 .form-group {
     display: flex;
@@ -374,9 +359,10 @@ input[type='text'] {
 
 .tongzhi {
     position: absolute;
-    left: 600px;
-    width: 400px;
+    left: 300px;
+    width: 300px;
     top: 20px;
+    z-index: 99999;
 }
 
 .zhuce {

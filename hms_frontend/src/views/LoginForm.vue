@@ -5,7 +5,6 @@
     <div class="Pic1">
         <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
     </div>
-    <img class="l1" src="../Pic/EorC.jpg" v-if="!imageUrl" />
     <div class="login">
 
         <h1>医院信息管理系统</h1>
@@ -13,17 +12,18 @@
         <form @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="uid">用户id</label>
-                <InputText :placeholder="'请输入您的id号或身份证号'" type="text" id="uid" v-model="uid" />
+                <InputText :placeholder="'请输入您的id号或身份证号'" type="text" id="uid" v-model="uid" class="inp"/>
             </div>
 
             <div class="form-group">
                 <label for="password">密码</label>
-                <Password :placeholder="'请输入您的密码'" id="password" v-model="password" toggleMask />
+                <Password :placeholder="'请输入您的密码'" id="password" v-model="password"  />
             </div>
             <br>
             <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
             <br>
             <div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link to="/register">用户注册</router-link>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link to="/ForgetPwd">忘记密码</router-link>
@@ -40,13 +40,15 @@
     </div>
 
     <div class="xia">
-        版权所有 2014-2022 北京航空航天大学
+        <pre>
+            版权所有 2014-2022 北京航空航天大学
         京ICP备05004617-3
         文保网安备案号1101080018
         <br>
         地址：北京市海淀区学院路37号
         邮编：100191
         电话：82317114
+        </pre>
     </div>
 </template>
   
@@ -60,8 +62,8 @@ import Password from 'primevue/password';
 import SelectButton from 'primevue/selectbutton';
 import Message from 'primevue/message';
 
-const uid = ref('');
-const password = ref('');
+const uid = ref('D00000000001');
+const password = ref('p100000006939210');
 const options = ref(['患者身份进入', '非患者身份进入']);
 const is_patient = ref('off');
 const role = ref('y')//判断是不是患者
@@ -69,17 +71,20 @@ const role = ref('y')//判断是不是患者
 const juglog = ref(0);
 function loginbt() {
     //首先判断是不是患者
-    if (options == '患者身份进入') role.value = 'y';
+    if (is_patient.value === '患者身份进入') role.value = 'y';
     else role.value = 'n';
+    console.log(role.value);
     if (role.value == 'y') {
-        axios.post('http://localhost:8080/loginPatient', {
+        axios.post('http://121.199.161.134:8080/loginPatient',null, {
             params: {
                 uid: uid.value,
                 password: password.value,
-            }
-        })
+            }}
+        )
             .then(response => {
-                console.log(response.data)
+                console.log('dasdasdas');
+                console.log(response);
+                console.log(response.data.data);
                 //将将返回的token存到session中
                 sessionStorage.setItem('token', response.data.token);
                 sessionStorage.setItem('role', role.value);//y是患者，n是医生
@@ -87,23 +92,26 @@ function loginbt() {
             })
             .catch(error => {
                 console.error(error)
-                judlog.value = -1;
+                //judlog.value = -1;
             })
     }
     if (role.value == 'n') {
-        axios.post('http://localhost:8080/loginDoctor', {
-            params: {
+        axios.post('http://121.199.161.134:8080/loginDoctor',null,{params: {
                 uid: uid.value,
                 password: password.value,
-            }
-        })
+            }}
+        )
             .then(response => {
-                console.log(response.data)
-                juglog.value = 1;
+                console.log(response.data.value);
+                //将将返回的token存到session中
+                // sessionStorage.setItem('token', response.data.token);
+                // sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                // juglog.value = 1;
             })
             .catch(error => {
                 console.error(error)
-                judlog.value = -1;
+                // judlog.value = -1;
+
             })
     }
 
@@ -114,9 +122,9 @@ function loginbt() {
 <style scoped>
 .Pic1 img {
     position: absolute;
-    top: 10px;
-    width: 150px;
-    right: 340px;
+    width: 100px;
+    top:0px;
+    right: 285px;
 }
 
 .Pic {
@@ -127,7 +135,9 @@ function loginbt() {
     width: 74%;
     height: 100%;
 }
-
+.inp{
+    width: 300px;
+}
 .l1 {
     position: absolute;
     top: 10px;
@@ -137,7 +147,7 @@ function loginbt() {
 .bttt {
     position: relative;
     width: 200px;
-    left: 140px;
+    left: 60px;
 }
 
 .Pic img {
@@ -149,8 +159,8 @@ function loginbt() {
 .login {
     position: absolute;
     left: 75%;
-    top: 200px;
-    width: 500px;
+    top: 90px;
+    width: 350px;
     margin: 0 auto;
     padding: 20px;
     /* border: 1px solid #ccc;
@@ -177,9 +187,11 @@ label {
 
 .xia {
     position: absolute;
-    bottom: 10%;
-    left: 1430px;
-    width: 500px;
+    bottom: 0%;
+    font: 5px;
+    left: 1180px;
+    width: 300px;
+    
 }
 
 input[type='uid'],
