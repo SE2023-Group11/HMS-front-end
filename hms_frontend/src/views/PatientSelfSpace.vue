@@ -135,12 +135,11 @@
           <!-- 病史是拓展内容 -->
           <div class="history">
               <Panel  v-if="!historyediting" header="病史" class="panel">
-                  <!-- {{ historycontent }} -->
-                  <pre>{{ historycontent }}</pre>
+                  {{ historycontent }}
               </Panel>
               
               <div>
-                  <Textarea v-if="historyediting" v-model="historytempContent" rows="5" cols="30" />
+                  <Textarea v-if="historyediting" v-model="historytempContent" rows="20" cols="40" />
               </div>
               <Button :label='bthis' @click="edithistory" class="edithistory" />
           </div>
@@ -189,7 +188,7 @@
         <Message v-if="judhis == 1" severity="success">编辑简历成功</Message>
         <Message v-if="judhis == -1" severity="error">编辑简历失败</Message>
     </div>
-    <Button :label="保存" class="test" @click="getinfo" />
+    <Button :label="保存" class="test" @click="gethistory" />
 
     </template>
     
@@ -355,10 +354,14 @@
     
         }
         else {
+            console.log('qqqqqqqqqqqqqqqqq');
             //这里首先要实现一个数据库对于病史的更新，向后端传输数据
-            axios.post("http://121.199.161.134:8080/savehistory", {
-                token: token.value, // 传递token
-                phistory: historytempContent.value,
+            axios.post("http://121.199.161.134:8080/savehistory",null, {
+                params:{
+                    // token: token.value,
+                    token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
+                    phistory: historytempContent.value,
+                }
             }).then(res => {
                 console.log(res);
                 judhis.value = 1;
@@ -385,8 +388,7 @@
             .then(response => {
                 // 成功获取数据后的处理逻辑
                 console.log(response.data)
-                const data = response.data.data;
-    
+                const data = response.data.data;    
                 namecontent.value = data.patientName;
                 sexcontent.value = data.patientSex==true?'男':'女';
                 bircontent.value = data.patientBirthday;
@@ -394,7 +396,23 @@
                 emailcontent.value = data.patientMail;
                 idCardcontent.value = data.patientNumber;
                 phonecontent.value = data.patientPhone;
-                console.log(data);
+            })
+            .catch(error => {
+                // 处理错误的逻辑
+                console.error(error)
+            })
+    }
+    function gethistory() {
+        axios.get('http://121.199.161.134:8080/getHistory',{
+            params: {
+                // token: token.value, 
+                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+            }
+        })
+            .then(response => {
+                // 成功获取数据后的处理逻辑
+                console.log(response.data.data)
+                historycontent.value=response.data.data
             })
             .catch(error => {
                 // 处理错误的逻辑
@@ -402,20 +420,19 @@
             })
     }
 
-
     const patient = {};
-    function setpatinet() {
+    function setpatient() {
             patient.patientName = namecontent.value,
             patient.patientNumber = idCardcontent.value,
             patient.patientMail = emailcontent.value,
             patient.patientPhone = phonecontent.value,
-            patient.patientSex = sexcontent.value,
+            patient.patientSex = sexcontent.value=='男'?true:false,
             patient.patientBirthday = bircontent.value
     }
     //进行保存按钮的方法的编写,同时返回结果
     const judmess = ref(0);
     function save() {
-        setpatinet();
+        setpatient();
         axios.post('http://121.199.161.134:8080/changePatient',patient, {
             params:{
                 // token: token.value,
@@ -544,6 +561,7 @@
   .edithistory {
     position: relative;
     left: 150px;
+    z-index: 9999999999999;
   }
   .panel .p-panel-content {
     word-wrap: break-word;
@@ -570,6 +588,7 @@
     left: 600px;
     width: 400px;
     top: 20px;
+    z-index: 99999999999999;
   } 
   
   button {

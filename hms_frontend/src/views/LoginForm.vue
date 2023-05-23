@@ -62,8 +62,8 @@ import Password from 'primevue/password';
 import SelectButton from 'primevue/selectbutton';
 import Message from 'primevue/message';
 
-const uid = ref('D00000000001');
-const password = ref('p100000006939210');
+const uid = ref('P00000000000');
+const password = ref('newpassword');
 const options = ref(['患者身份进入', '非患者身份进入']);
 const is_patient = ref('off');
 const role = ref('y')//判断是不是患者
@@ -178,6 +178,7 @@ function loginbt() {
     left: 600px;
     width: 400px;
     top: 20px;
+    z-index: 999999999999;
 }
 
 label {
