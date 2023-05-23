@@ -179,11 +179,11 @@
         <Message v-if="judhis == 1" severity="success">编辑简历成功</Message>
         <Message v-if="judhis == -1" severity="error">编辑简历失败</Message>
     </div>
-    <Button :label="保存" class="test" @click="getinfo" />
+    <!-- <Button :label="保存" class="test" @click="getinfo" /> -->
 </template>
     
 <script setup>
-import { ref } from 'vue';
+import { ref ,onMounted} from 'vue';
 import axios from 'axios';
 //primevue
 import InputText from 'primevue/inputtext';
@@ -196,23 +196,28 @@ import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import { useRouter } from 'vue-router'
 const activeTabIndex = ref(0)
-
+const role = sessionStorage.getItem("role");
 const router = useRouter()
 //进行数据传输的时候用的变量
 const id = ref('123');
 function handleTabChange(e) {
     const index = e.index;
     if (index === 0) {
-        router.push('/doctorspace');
+        if (role.value === 'patient') router.push('/patientSpace');
+        else router.push('/doctorSpace');
     } else if (index === 1) {
         router.push('/message');
     } else if (index === 2) {
-        router.push('/page3');
+        if (role.value === 'patient') router.push('/patientRoot');
+        else router.push('/doctorRoot');
     }
 }
-// onMounted(() => {
-//     getinfo();
-// })
+onMounted( ()=>{
+    getinfo();
+    console.log(sessionStorage.getItem("role"));
+    console.log(sessionStorage.getItem("token"));
+})
+
 //获取当前的用户的token
 const token = sessionStorage.getItem('token');
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
@@ -240,9 +245,6 @@ function getinfo() {
             console.error(error)
         })
 }
-
-
-
 
 // 对于个人的信息框的设置
 const pid = ref('21371101');

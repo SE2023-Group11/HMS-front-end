@@ -83,10 +83,11 @@ const type = ref(2);
 function sendtoback() {
     if (is_patient.value == '我是医生') type.value = 2;
     else type.value = 4;
+    console.log(type.value);
     console.log(typeof(type.value));
     console.log(name.value);
     console.log(email.value);
-    console.log('dasdasdasdas');
+    console.log('1111111111111');
     axios.post('http://121.199.161.134:8080/sendToEmail',null,{
         params:{
             type:type.value,
@@ -94,15 +95,15 @@ function sendtoback() {
             email:email.value
         }
     }
-
     )
-        .then(response => {
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.log('dasdasd');
-            console.error(error)
-        })
+    .then(response => {
+        console.log('adddddddddddddddd');
+        console.log(response.data)
+    })
+    .catch(error => {
+        console.log('dasdasd');
+        console.error(error)
+    })
 }
 const sendVerifyCode = () => {
     //首先改一下消息的通知
@@ -145,7 +146,16 @@ function registerbt() {
         })
             .then(response => {
                 console.log(response.data)
-                judchange.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    judchange.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    judchange.value = -1;
+                    console.log('登录失败');                    
+                } 
             })
             .catch(error => {
                 console.error(error)
@@ -162,7 +172,16 @@ function registerbt() {
         })
             .then(response => {
                 console.log(response.data)
-                judchange.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    judchange.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    judchange.value = -1;
+                    console.log('登录失败');                    
+                } 
             })
             .catch(error => {
                 console.error(error)

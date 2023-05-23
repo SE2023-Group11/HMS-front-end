@@ -33,13 +33,10 @@
                 <div class="card">
                     <TabView :activeIndex="activeTabIndex" @tab-change="handleTabChange">
                         <TabPanel header="个人空间">
-
                         </TabPanel>
                         <TabPanel header="消息通知">
-
                         </TabPanel>
                         <TabPanel header="返回主页">
-
                         </TabPanel>
                     </TabView>
                 </div>
@@ -56,7 +53,7 @@
                     </div>
                 </div>
 
-                <button class="bttt" @click="loadNotifications">增加消息</button>
+                <!-- <button class="bttt" @click="loadNotifications">增加消息</button> -->
                 <div class="header1">
                     <h1>消息通知</h1>
                     <div class="badge" v-if="unreadCount > 0">{{ unreadCount }}</div>
@@ -126,12 +123,14 @@ const token = sessionStorage.getItem('token');
 const activeTabIndex = ref(1)
 
 const router = useRouter()
+onMounted(() => {
+    loadNotifications();
+    console.log(sessionStorage.getItem("role"));
+    console.log(sessionStorage.getItem("token"));
+})
 //首先需要确定一下当前的用户的身份
-// const role = sessionStorage.getItem('role');
-const role = ref('y')//用于测试
-// onMounted(() => {
-//     created();
-// })
+const role = sessionStorage.getItem('role');
+
 // const containerHeight = ref(500)
 // function mounted() {
 //         // 在组件挂载完成后计算容器高度
@@ -140,12 +139,13 @@ const role = ref('y')//用于测试
 function handleTabChange(e) {
     const index = e.index;
     if (index === 0) {
-        if (role.value === 'y') router.push('/patientSpace');
+        if (role.value === 'patient') router.push('/patientSpace');
         else router.push('/doctorSpace');
     } else if (index === 1) {
         router.push('/page2');
     } else if (index === 2) {
-        router.push('/page3');
+        if (role.value === 'patient') router.push('/patientRoot');
+        else router.push('/doctorRoot');
     }
 }
 function created() {
@@ -156,7 +156,7 @@ function created() {
 const str = ref('');
 function loadNotifications() {
     console.log('saddasdasdasd');
-    if (role.value == 'n') str.value = 'http://121.199.161.134:8080/getDoctorMessage'
+    if (role.value == 'doctor') str.value = 'http://121.199.161.134:8080/getDoctorMessage'
     else str.value = 'http://121.199.161.134:8080/getPatientMessage'
     axios.post(str.value,null,{
         params:{

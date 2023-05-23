@@ -35,8 +35,8 @@
     <!-- 消息的通知 -->
     <div class="tongzhi">
         <!-- 用户登录 -->
-        <Message v-if="judlog == 1" severity="success">登录成功！</Message>
-        <Message v-if="judlog == -1" severity="error">登录失败</Message>
+        <Message z-index=9999999999999 v-if="judlog == 1" severity="success">登录成功！</Message>
+        <Message z-index=9999999999999 v-if="judlog == -1" severity="error">登录失败</Message>
     </div>
 
     <div class="xia">
@@ -66,15 +66,15 @@ const uid = ref('P00000000000');
 const password = ref('newpassword');
 const options = ref(['患者身份进入', '非患者身份进入']);
 const is_patient = ref('off');
-const role = ref('y')//判断是不是患者
+const role = ref('patient')//判断是不是患者
 //用于判断登录是否成功的变量
 const juglog = ref(0);
 function loginbt() {
     //首先判断是不是患者
-    if (is_patient.value === '患者身份进入') role.value = 'y';
-    else role.value = 'n';
+    if (is_patient.value === '患者身份进入') role.value = 'patient';
+    else role.value = 'doctor';
     console.log(role.value);
-    if (role.value == 'y') {
+    if (role.value == 'patient') {
         axios.post('http://121.199.161.134:8080/loginPatient',null, {
             params: {
                 uid: uid.value,
@@ -82,36 +82,65 @@ function loginbt() {
             }}
         )
             .then(response => {
-                console.log('dasdasdas');
-                console.log(response);
+                console.log(response.data.code);
+                //传送成功的情况下，判断信息是否正确
+                const jud =response.data.code;
                 console.log(response.data.data);
+                if(jud == 1){
+                    sessionStorage.setItem('token', response.data.data);
+                    sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                    juglog.value = 1;
+                    //window.location.href="/patientRoot";
+                }
                 //将将返回的token存到session中
-                sessionStorage.setItem('token', response.data.token);
-                sessionStorage.setItem('role', role.value);//y是患者，n是医生
-                juglog.value = 1;
+                else if(jud == 2){
+                    sessionStorage.setItem('token', response.data.data);
+                    sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                    juglog.value = 1;
+                    window.location.href="/adminRoot";
+                }
+                else{
+                    console.log('登录失败');
+                    juglog.value = -1;
+                }
             })
             .catch(error => {
                 console.error(error)
-                //judlog.value = -1;
+                judlog.value = -1;
             })
     }
-    if (role.value == 'n') {
+    if (role.value == 'doctor') {
         axios.post('http://121.199.161.134:8080/loginDoctor',null,{params: {
                 uid: uid.value,
                 password: password.value,
             }}
         )
             .then(response => {
-                console.log(response.data.value);
+                console.log(response.data.code);
+                //传送成功的情况下，判断信息是否正确
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    sessionStorage.setItem('token', response.data.data);
+                    sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                    juglog.value = 1;
+                    window.location.href="/doctorRoot";
+                }
                 //将将返回的token存到session中
-                // sessionStorage.setItem('token', response.data.token);
-                // sessionStorage.setItem('role', role.value);//y是患者，n是医生
-                // juglog.value = 1;
+                else if(jud == 2){
+                    sessionStorage.setItem('token', response.data.data);
+                    sessionStorage.setItem('role', role.value);//y是患者，n是医生
+                    juglog.value = 1;
+                    window.location.href="/adminRoot";
+                }
+                else{
+                    console.log('登录失败');
+                    juglog.value = -1;
+                }
             })
             .catch(error => {
                 console.error(error)
-                // judlog.value = -1;
-
+                judlog.value = -1;
             })
     }
 
@@ -178,7 +207,7 @@ function loginbt() {
     left: 600px;
     width: 400px;
     top: 20px;
-    z-index: 999999999999;
+    z-index: 999999999999999999999999;
 }
 
 label {

@@ -201,8 +201,16 @@ function registerbt() {
         }}
         )
             .then(response => {
-                console.log(response.data)
-                judreg.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    jugreg.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    jugreg.value = -1;
+                    console.log('登录失败');                    
+                }                
             })
             .catch(error => {
                 console.error(error)
@@ -220,8 +228,16 @@ function registerbt() {
         },
   )
             .then(response => {
-                console.log(response.data)
-                judreg.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    jugreg.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    jugreg.value = -1;
+                    console.log('登录失败');                    
+                }
             })
             .catch(error => {
                 console.error(error)

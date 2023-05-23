@@ -188,316 +188,316 @@
         <Message v-if="judhis == 1" severity="success">编辑简历成功</Message>
         <Message v-if="judhis == -1" severity="error">编辑简历失败</Message>
     </div>
-    <Button :label="保存" class="test" @click="gethistory" />
+    <!-- <Button :label="保存" class="test" @click="fff" /> -->
 
     </template>
     
-    <script setup>
-    import { ref } from 'vue';
-    import axios from 'axios';
-    //primevue
-    import InputText from 'primevue/inputtext';
-    import Button from 'primevue/button';
-    import Card from 'primevue/card';
-    import Panel from 'primevue/panel';
-    import Textarea from 'primevue/textarea';
-    import Message from 'primevue/message';
-    import TabView from 'primevue/tabview';
-    import TabPanel from 'primevue/tabpanel';
-    import { useRouter } from 'vue-router'
-    const activeTabIndex = ref(0)
-    const router = useRouter()
-    //进行数据传输的时候用的变量
-    const id = ref('123');
-    const token = sessionStorage.getItem('token');
-    // onMounted(() => {
-    //     getinfo();
-    // })
-    function handleTabChange(e) {
-        const index = e.index;
-        if (index === 0) {
-            router.push('/doctorspace');
-        } else if (index === 1) {
-            router.push('/message');
-        } else if (index === 2) {
-            router.push('/page3');
-        }
+<script setup>
+import { ref ,onMounted} from 'vue';
+import axios from 'axios';
+//primevue
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import Card from 'primevue/card';
+import Panel from 'primevue/panel';
+import Textarea from 'primevue/textarea';
+import Message from 'primevue/message';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import { useRouter } from 'vue-router'
+const activeTabIndex = ref(0)
+const router = useRouter()
+//进行数据传输的时候用的变量
+const id = ref('123');
+const token = sessionStorage.getItem('token');
+const role = sessionStorage.getItem("role");
+onMounted(() => {
+    getinfo();
+    gethistory();
+    console.log(sessionStorage.getItem("role"));
+    console.log(sessionStorage.getItem("token"));
+})
+function handleTabChange(e) {
+    const index = e.index;
+    if (index === 0) {
+        if (role.value === 'patient') router.push('/patientSpace');
+        else router.push('/doctorSpace');
+    } else if (index === 1) {
+        router.push('/message');
+    } else if (index === 2) {
+        if (role.value === 'patient') router.push('/patientRoot');
+        else router.push('/doctorRoot');
     }
-    //通过患者的生日获得患者的年龄
-    function calculateAge(birthday) {
-        const now = new Date();
-        const birthDate = new Date(birthday);
-    
-        let age = now.getFullYear() - birthDate.getFullYear();
-        const monthDiff = now.getMonth() - birthDate.getMonth();
-    
-        if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
-            age--;
-        }
-    
-        return age;
-    }
-    
-    
-    
-    
-    
-    // 对于个人的信息框的设置
-    const pid = ref('21371101');
-    
-    //下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
-    // 姓名
-    const nameediting = ref(false)
-    const namecontent = ref('张三')
-    const nametempContent = ref('')
-    function namestartEditing() {
-        nameediting.value = true
-        nametempContent.value = namecontent.value
-        judmess.value = 0
-    }
-    function namestopEditing() {
-        nameediting.value = false
-        namecontent.value = nametempContent.value
-    }
-    // 年龄
-    const ageediting = ref(false)
-    const agecontent = ref('20')
-    const agetempContent = ref('')
-    function agestartEditing() {
-        ageediting.value = true
-        agetempContent.value = agecontent.value
-        judmess.value = 0
-    }
-    function agestopEditing() {
-        ageediting.value = false
-        agecontent.value = agetempContent.value
-    }
-    // 性别
-    const sexediting = ref(false)
-    const sexcontent = ref('男')
-    const sextempContent = ref('')
-    function sexstartEditing() {
-        sexediting.value = true
-        sextempContent.value = sexcontent.value
-        judmess.value = 0
-    }
-    function sexstopEditing() {
-        sexediting.value = false
-        sexcontent.value = sextempContent.value
-    }
-    // 出生日期
-    const birediting = ref(false)
-    const bircontent = ref('2002-10-24')
-    const birtempContent = ref('')
-    function birstartEditing() {
-        birediting.value = true
-        birtempContent.value = bircontent.value
-        judmess.value = 0
-    }
-    function birstopEditing() {
-        birediting.value = false
-        bircontent.value = birtempContent.value
-    }
-    
-    // 邮箱
-    const emailediting = ref(false)
-    const emailcontent = ref('13303453453@qq.com')
-    const emailtempContent = ref('')
-    function emailstartEditing() {
-        emailediting.value = true
-        emailtempContent.value = emailcontent.value
-        judmess.value = 0
-    }
-    function emailstopEditing() {
-        emailediting.value = false
-        emailcontent.value = emailtempContent.value
-    }
-    //手机号
-    const phoneediting = ref(false)
-    const phonecontent = ref('18345664564')
-    const phonetempContent = ref('')
-    function phonestartEditing() {
-        phoneediting.value = true
-        phonetempContent.value = phonecontent.value
-        judmess.value = 0
-    }
-    function phonestopEditing() {
-        phoneediting.value = false
-        phonecontent.value = phonetempContent.value
-    }
-    // 身份证号
-    const idCardediting = ref(false)
-    const idCardcontent = ref('34243242354534')
-    const idCardtempContent = ref('')
-    function idCardstartEditing() {
-        idCardediting.value = true
-        idCardtempContent.value = idCardcontent.value
-        judmess.value = 0
-    }
-    function idCardstopEditing() {
-        idCardediting.value = false
-        idCardcontent.value = idCardtempContent.value
-    }
-    
-    //这些是对于病史的框的代码，点击按钮可以进行修改内容
-    const historyediting = ref(false)
-    const historycontent = ref('主要症状：\n症状开始时间：症状发展过程：\n症状是否有周期性变化：\n症状是否有加重或缓解：\n相关检查结果：\n既往疾病史：\n家族病史：\n药物过敏史：\n目前正在服用的药物：\n诊断结果：\n医生建议的治疗方案：\n手术史（如果有）：\n治疗效果如何：\n是否需要随访：\n')
-    const historytempContent = ref('')
-    const bthis = ref('编辑病史')
-    //判断传输的结果
-    const judhis = ref(0);
-    function edithistory() {
-        if (bthis.value == '编辑病史') {
-            historyediting.value = true;
-            historytempContent.value = historycontent.value;
-            bthis.value = '保存病史';
-    
-        }
-        else {
-            console.log('qqqqqqqqqqqqqqqqq');
-            //这里首先要实现一个数据库对于病史的更新，向后端传输数据
-            axios.post("http://121.199.161.134:8080/savehistory",null, {
-                params:{
-                    // token: token.value,
-                    token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
-                    phistory: historytempContent.value,
-                }
-            }).then(res => {
-                console.log(res);
-                judhis.value = 1;
-            }).catch(error => {
-                console.error(error)
-                judhis.value = -1;
-            })
-    
-            historyediting.value = false;
-            historycontent.value = historytempContent.value;
-            bthis.value = '编辑病史';
-        }
-    
-    }
-    
-    // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
-    function getinfo() {
-        axios.get('http://121.199.161.134:8080/getPatientInformation',{
-            params: {
-                // token: token.value, 
-                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
-            }
-        })
-            .then(response => {
-                // 成功获取数据后的处理逻辑
-                console.log(response.data)
-                const data = response.data.data;    
-                namecontent.value = data.patientName;
-                sexcontent.value = data.patientSex==true?'男':'女';
-                bircontent.value = data.patientBirthday;
-                agecontent.value = calculateAge(data.patientBirthday);
-                emailcontent.value = data.patientMail;
-                idCardcontent.value = data.patientNumber;
-                phonecontent.value = data.patientPhone;
-            })
-            .catch(error => {
-                // 处理错误的逻辑
-                console.error(error)
-            })
-    }
-    function gethistory() {
-        axios.get('http://121.199.161.134:8080/getHistory',{
-            params: {
-                // token: token.value, 
-                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
-            }
-        })
-            .then(response => {
-                // 成功获取数据后的处理逻辑
-                console.log(response.data.data)
-                historycontent.value=response.data.data
-            })
-            .catch(error => {
-                // 处理错误的逻辑
-                console.error(error)
-            })
+}
+//通过患者的生日获得患者的年龄
+function calculateAge(birthday) {
+    const now = new Date();
+    const birthDate = new Date(birthday);
+
+    let age = now.getFullYear() - birthDate.getFullYear();
+    const monthDiff = now.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
+        age--;
     }
 
-    const patient = {};
-    function setpatient() {
-            patient.patientName = namecontent.value,
-            patient.patientNumber = idCardcontent.value,
-            patient.patientMail = emailcontent.value,
-            patient.patientPhone = phonecontent.value,
-            patient.patientSex = sexcontent.value=='男'?true:false,
-            patient.patientBirthday = bircontent.value
+    return age;
+}
+// 对于个人的信息框的设置
+const pid = ref('21371101');
+
+//下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
+// 姓名
+const nameediting = ref(false)
+const namecontent = ref('张三')
+const nametempContent = ref('')
+function namestartEditing() {
+    nameediting.value = true
+    nametempContent.value = namecontent.value
+    judmess.value = 0
+}
+function namestopEditing() {
+    nameediting.value = false
+    namecontent.value = nametempContent.value
+}
+// 年龄
+const ageediting = ref(false)
+const agecontent = ref('20')
+const agetempContent = ref('')
+function agestartEditing() {
+    ageediting.value = true
+    agetempContent.value = agecontent.value
+    judmess.value = 0
+}
+function agestopEditing() {
+    ageediting.value = false
+    agecontent.value = agetempContent.value
+}
+// 性别
+const sexediting = ref(false)
+const sexcontent = ref('男')
+const sextempContent = ref('')
+function sexstartEditing() {
+    sexediting.value = true
+    sextempContent.value = sexcontent.value
+    judmess.value = 0
+}
+function sexstopEditing() {
+    sexediting.value = false
+    sexcontent.value = sextempContent.value
+}
+// 出生日期
+const birediting = ref(false)
+const bircontent = ref('2002-10-24')
+const birtempContent = ref('')
+function birstartEditing() {
+    birediting.value = true
+    birtempContent.value = bircontent.value
+    judmess.value = 0
+}
+function birstopEditing() {
+    birediting.value = false
+    bircontent.value = birtempContent.value
+}
+
+// 邮箱
+const emailediting = ref(false)
+const emailcontent = ref('13303453453@qq.com')
+const emailtempContent = ref('')
+function emailstartEditing() {
+    emailediting.value = true
+    emailtempContent.value = emailcontent.value
+    judmess.value = 0
+}
+function emailstopEditing() {
+    emailediting.value = false
+    emailcontent.value = emailtempContent.value
+}
+//手机号
+const phoneediting = ref(false)
+const phonecontent = ref('18345664564')
+const phonetempContent = ref('')
+function phonestartEditing() {
+    phoneediting.value = true
+    phonetempContent.value = phonecontent.value
+    judmess.value = 0
+}
+function phonestopEditing() {
+    phoneediting.value = false
+    phonecontent.value = phonetempContent.value
+}
+// 身份证号
+const idCardediting = ref(false)
+const idCardcontent = ref('34243242354534')
+const idCardtempContent = ref('')
+function idCardstartEditing() {
+    idCardediting.value = true
+    idCardtempContent.value = idCardcontent.value
+    judmess.value = 0
+}
+function idCardstopEditing() {
+    idCardediting.value = false
+    idCardcontent.value = idCardtempContent.value
+}
+
+//这些是对于病史的框的代码，点击按钮可以进行修改内容
+const historyediting = ref(false)
+const historycontent = ref('主要症状：\n症状开始时间：症状发展过程：\n症状是否有周期性变化：\n症状是否有加重或缓解：\n相关检查结果：\n既往疾病史：\n家族病史：\n药物过敏史：\n目前正在服用的药物：\n诊断结果：\n医生建议的治疗方案：\n手术史（如果有）：\n治疗效果如何：\n是否需要随访：\n')
+const historytempContent = ref('')
+const bthis = ref('编辑病史')
+//判断传输的结果
+const judhis = ref(0);
+function edithistory() {
+    if (bthis.value == '编辑病史') {
+        historyediting.value = true;
+        historytempContent.value = historycontent.value;
+        bthis.value = '保存病史';
+
     }
-    //进行保存按钮的方法的编写,同时返回结果
-    const judmess = ref(0);
-    function save() {
-        setpatient();
-        axios.post('http://121.199.161.134:8080/changePatient',patient, {
+    else {
+        //这里首先要实现一个数据库对于病史的更新，向后端传输数据
+        axios.post("http://121.199.161.134:8080/savehistory",null, {
             params:{
                 // token: token.value,
-                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
+                phistory: historytempContent.value,
             }
+        }).then(res => {
+            console.log(res);
+            judhis.value = 1;
+        }).catch(error => {
+            console.error(error)
+            judhis.value = -1;
         })
-            .then(response => {
-                console.log(response.data)
-                judmess.value = 1;
-            })
-            .catch(error => {
-                console.error(error)
-                judmess.value = -1;
-            })
+
+        historyediting.value = false;
+        historycontent.value = historytempContent.value;
+        bthis.value = '编辑病史';
     }
-    
-    //实现对于图片的更换和保存
-    const imageUrl = ref('');
-    //将文件转换为formdata形式
-    const formData = new FormData();
-    //判断传输的结果是否成功
-    const judpic = ref(0);
-    function changePic(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-    
-            reader.onload = () => {
-                imageUrl.value = reader.result;
-            };
-            reader.readAsDataURL(file);
+
+}
+
+// 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
+function getinfo() {
+    axios.get('http://121.199.161.134:8080/getPatientInformation',{
+        params: {
+            // token: token.value, 
+            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
         }
-        //将上传的文件存到数据库
-        if (file?.file) {
-            const blob = new Blob([file], { type: file.type });
-            formData.append('file', blob, { filename: 'image.jpg' });
-            axios.post('http://121.199.161.134:8080/savePic', formData, {
-                params: {
-                    pid: pid.value,
-                    image: formData.values,
-                }
-            }).then(response => {
-                console.log('Upload successful!');
-                judpic.value = 1;
-            }).catch(error => {
-                console.error('Upload failed: ', error);
-                judpic.value = -1;
-            });
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data)
+            const data = response.data.data;    
+            namecontent.value = data.patientName;
+            sexcontent.value = data.patientSex==true?'男':'女';
+            bircontent.value = data.patientBirthday;
+            agecontent.value = calculateAge(data.patientBirthday);
+            emailcontent.value = data.patientMail;
+            idCardcontent.value = data.patientNumber;
+            phonecontent.value = data.patientPhone;
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+}
+function gethistory() {
+    axios.get('http://121.199.161.134:8080/getHistory',{
+        params: {
+            // token: token.value, 
+            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
         }
-        else {
-            console.error('文件不存在')
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data.data)
+            historycontent.value=response.data.data
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+}
+
+const patient = {};
+function setpatient() {
+        patient.patientName = namecontent.value,
+        patient.patientNumber = idCardcontent.value,
+        patient.patientMail = emailcontent.value,
+        patient.patientPhone = phonecontent.value,
+        patient.patientSex = sexcontent.value=='男'?true:false,
+        patient.patientBirthday = bircontent.value
+}
+//进行保存按钮的方法的编写,同时返回结果
+const judmess = ref(0);
+function save() {
+    setpatient();
+    axios.post('http://121.199.161.134:8080/changePatient',patient, {
+        params:{
+            // token: token.value,
+            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
         }
+    })
+        .then(response => {
+            console.log(response.data)
+            judmess.value = 1;
+        })
+        .catch(error => {
+            console.error(error)
+            judmess.value = -1;
+        })
+}
+
+//实现对于图片的更换和保存
+const imageUrl = ref('');
+//将文件转换为formdata形式
+const formData = new FormData();
+//判断传输的结果是否成功
+const judpic = ref(0);
+function changePic(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            imageUrl.value = reader.result;
+        };
+        reader.readAsDataURL(file);
     }
-    //统一的函数
-    function showList(){
-          var list = document.getElementById("header_list");
-          console.log("in");
-          list.style.display = "block";
-      };
-      function unShowList(){
-          var list = document.getElementById("header_list");
-          console.log("out");
-          list.style.display = "none";
-      };
-    </script>
+    //将上传的文件存到数据库
+    if (file?.file) {
+        const blob = new Blob([file], { type: file.type });
+        formData.append('file', blob, { filename: 'image.jpg' });
+        axios.post('http://121.199.161.134:8080/savePic', formData, {
+            params: {
+                pid: pid.value,
+                image: formData.values,
+            }
+        }).then(response => {
+            console.log('Upload successful!');
+            judpic.value = 1;
+        }).catch(error => {
+            console.error('Upload failed: ', error);
+            judpic.value = -1;
+        });
+    }
+    else {
+        console.error('文件不存在')
+    }
+}
+//统一的函数
+function showList(){
+        var list = document.getElementById("header_list");
+        console.log("in");
+        list.style.display = "block";
+    };
+function unShowList(){
+    var list = document.getElementById("header_list");
+    console.log("out");
+    list.style.display = "none";
+};
+</script>
     
   <style scoped>
   .jian {
