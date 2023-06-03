@@ -17,7 +17,7 @@
 
             <div class="form-group">
                 <label for="password">密码</label>
-                <Password :placeholder="'请输入您的密码'" id="password" v-model="password"  />
+                <Password :placeholder="'请输入您的密码'" id="password" v-model="password" style="width: 400px; height: 40px" />
             </div>
             <br>
             <SelectButton v-model="is_patient" :options="options" aria-labelledby="basic" />
@@ -40,10 +40,12 @@
     </div>
 
     <div class="xia">
+        
         <pre>
-            版权所有 2014-2022 北京航空航天大学
-        京ICP备05004617-3
-        文保网安备案号1101080018
+
+
+        版权所有 2014-2022 北京航空航天大学
+        京ICP备05004617-3文保网安备案号1101080018
         <br>
         地址：北京市海淀区学院路37号
         邮编：100191
@@ -87,13 +89,15 @@ function loginbt() {
                 const jud =response.data.code;
                 console.log(response.data.data);
                 if(jud == 1){
+                    console.log(response.data);
                     sessionStorage.setItem('token', response.data.data);
                     sessionStorage.setItem('role', role.value);//y是患者，n是医生
                     juglog.value = 1;
-                    //window.location.href="/patientRoot";
+                    window.location.href="/patientRoot";
                 }
                 //将将返回的token存到session中
                 else if(jud == 2){
+
                     sessionStorage.setItem('token', response.data.data);
                     sessionStorage.setItem('role', role.value);//y是患者，n是医生
                     juglog.value = 1;
@@ -131,7 +135,8 @@ function loginbt() {
                     sessionStorage.setItem('token', response.data.data);
                     sessionStorage.setItem('role', role.value);//y是患者，n是医生
                     juglog.value = 1;
-                    window.location.href="/adminRoot";
+                    console.log(sessionStorage.getItem('token'));
+                    // window.location.href="/adminRoot";
                 }
                 else{
                     console.log('登录失败');
@@ -165,7 +170,7 @@ function loginbt() {
     height: 100%;
 }
 .inp{
-    width: 300px;
+    width: 200px;
 }
 .l1 {
     position: absolute;
@@ -176,7 +181,7 @@ function loginbt() {
 .bttt {
     position: relative;
     width: 200px;
-    left: 60px;
+    left: 35px;
 }
 
 .Pic img {
@@ -217,9 +222,9 @@ label {
 
 .xia {
     position: absolute;
-    bottom: 0%;
+    bottom: 0;
     font: 5px;
-    left: 1180px;
+    left: 1140px;
     width: 300px;
     
 }

@@ -18,6 +18,7 @@
         <img src="../Pic/patient.jpg" v-if="!imageUrl" />
     </div>  -->
     <div class="register">
+        <Button onclick="location.href='/login'" label="返回登录" />
         <h1>用户注册</h1>
         <form @submit.prevent="submitForm">
             <div>
@@ -85,10 +86,14 @@ import Dropdown from 'primevue/dropdown';
 import Message from 'primevue/message';
 
 const alldepartment = ref([
-    { name: '心脏科', code: 'NY' },
+    { name: '内科', code: 'NY' },
     { name: '外科', code: 'RM' },
-    { name: '泌尿科', code: 'LDN' },
-    { name: '心脑血管科', code: 'IST' },
+    { name: '妇产科', code: 'LDN' },
+    { name: '儿科', code: 'IST' },
+    { name: '心脏科', code: 'NY' },
+    { name: '五官科', code: 'RM' },
+    { name: '其他科室', code: 'LDN' },
+    { name: '诊断相关诊室', code: 'IST' },
 ]);
 const options = ref(['我是患者', '我是医生']);
 const is_patient = ref('我是患者');
@@ -107,6 +112,7 @@ const countdown = ref(0);
 let timer = null;
 const department = ref('');
 const type = ref();
+const judreg = ref(0);
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
     if (is_patient.value === '我是患者') {
@@ -130,6 +136,7 @@ function sendtoback() {
             console.error(error)
         })
 }
+
 const sendVerifyCode = () => {
     //首先改一下消息的通知
     judreg.value = 0;
@@ -188,11 +195,10 @@ function setPatient() {
     patient.patientSex = isMale.value;
 }
 //判断传输是否成功的变量
-const judreg = ref(0);
+
 function registerbt() {
     //验证码和个人信息一起传入后端
     if (is_patient.value == '我是医生') {
-        console.log('da333333333333333');
         setDoctor();
         axios.post('http://121.199.161.134:8080/doctorRegister', doctor,{
             params:{
@@ -204,11 +210,11 @@ function registerbt() {
                 const jud =response.data.code;
                 console.log(typeof(jud));
                 if(jud == 1){
-                    jugreg.value = 1;
+                    judreg.value = 1;
                     window.location.href="/login";
                 }
                 else{
-                    jugreg.value = -1;
+                    judreg.value = -1;
                     console.log('登录失败');                    
                 }                
             })

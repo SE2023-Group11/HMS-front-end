@@ -135,12 +135,13 @@
           <!-- 病史是拓展内容 -->
           <div class="history">
               <Panel  v-if="!historyediting" header="病史" class="panel">
-                  {{ historycontent }}
+                  <pre class="mypre"> {{ historycontent }}</pre>
               </Panel>
               
               <div>
                   <Textarea v-if="historyediting" v-model="historytempContent" rows="20" cols="40" />
               </div>
+              <br>
               <Button :label='bthis' @click="edithistory" class="edithistory" />
           </div>
       </div>
@@ -208,7 +209,7 @@ import { useRouter } from 'vue-router'
 const activeTabIndex = ref(0)
 const router = useRouter()
 //进行数据传输的时候用的变量
-const id = ref('123');
+const id = ref('');
 const token = sessionStorage.getItem('token');
 const role = sessionStorage.getItem("role");
 onMounted(() => {
@@ -218,14 +219,15 @@ onMounted(() => {
     console.log(sessionStorage.getItem("token"));
 })
 function handleTabChange(e) {
+    const str = sessionStorage.getItem('role')
+    console.log(str);
     const index = e.index;
     if (index === 0) {
-        if (role.value === 'patient') router.push('/patientSpace');
-        else router.push('/doctorSpace');
+
     } else if (index === 1) {
         router.push('/message');
     } else if (index === 2) {
-        if (role.value === 'patient') router.push('/patientRoot');
+        if (str === 'patient') router.push('/patientRoot');
         else router.push('/doctorRoot');
     }
 }
@@ -249,7 +251,7 @@ const pid = ref('21371101');
 //下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
 // 姓名
 const nameediting = ref(false)
-const namecontent = ref('张三')
+const namecontent = ref('')
 const nametempContent = ref('')
 function namestartEditing() {
     nameediting.value = true
@@ -262,7 +264,7 @@ function namestopEditing() {
 }
 // 年龄
 const ageediting = ref(false)
-const agecontent = ref('20')
+const agecontent = ref('')
 const agetempContent = ref('')
 function agestartEditing() {
     ageediting.value = true
@@ -275,7 +277,7 @@ function agestopEditing() {
 }
 // 性别
 const sexediting = ref(false)
-const sexcontent = ref('男')
+const sexcontent = ref('')
 const sextempContent = ref('')
 function sexstartEditing() {
     sexediting.value = true
@@ -288,7 +290,7 @@ function sexstopEditing() {
 }
 // 出生日期
 const birediting = ref(false)
-const bircontent = ref('2002-10-24')
+const bircontent = ref('')
 const birtempContent = ref('')
 function birstartEditing() {
     birediting.value = true
@@ -302,7 +304,7 @@ function birstopEditing() {
 
 // 邮箱
 const emailediting = ref(false)
-const emailcontent = ref('13303453453@qq.com')
+const emailcontent = ref('')
 const emailtempContent = ref('')
 function emailstartEditing() {
     emailediting.value = true
@@ -315,7 +317,7 @@ function emailstopEditing() {
 }
 //手机号
 const phoneediting = ref(false)
-const phonecontent = ref('18345664564')
+const phonecontent = ref('')
 const phonetempContent = ref('')
 function phonestartEditing() {
     phoneediting.value = true
@@ -328,7 +330,7 @@ function phonestopEditing() {
 }
 // 身份证号
 const idCardediting = ref(false)
-const idCardcontent = ref('34243242354534')
+const idCardcontent = ref('')
 const idCardtempContent = ref('')
 function idCardstartEditing() {
     idCardediting.value = true
@@ -359,7 +361,7 @@ function edithistory() {
         axios.post("http://121.199.161.134:8080/savehistory",null, {
             params:{
                 // token: token.value,
-                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
+                token:token,
                 phistory: historytempContent.value,
             }
         }).then(res => {
@@ -382,7 +384,7 @@ function getinfo() {
     axios.get('http://121.199.161.134:8080/getPatientInformation',{
         params: {
             // token: token.value, 
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+            token:token
         }
     })
         .then(response => {
@@ -406,7 +408,7 @@ function gethistory() {
     axios.get('http://121.199.161.134:8080/getHistory',{
         params: {
             // token: token.value, 
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+            token:token
         }
     })
         .then(response => {
@@ -436,7 +438,7 @@ function save() {
     axios.post('http://121.199.161.134:8080/changePatient',patient, {
         params:{
             // token: token.value,
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+            token:token
         }
     })
         .then(response => {
@@ -499,300 +501,305 @@ function unShowList(){
 };
 </script>
     
-  <style scoped>
-  .jian {
+<style scoped>
+.jian {
+position: relative;
+top: 50px;
+width: 100%;
+height: 200px;
+background-image: url("../Pic/jianyue.jpg");
+z-index: 9999999;
+}
+.bttt{
+position: absolute;
+top:100px;
+z-index: 1000000000000;
+}
+.zi {
+font-size: 40px;
+z-index: 400;
+position: relative;
+left: 44%;
+top: 60%;
+z-index: 500;
+color: #fff;
+}
+.bt_changePic {
     position: relative;
-    top: 50px;
-    width: 100%;
-    height: 200px;
-    background-image: url("../Pic/jianyue.jpg");
-    z-index: 9999999;
-  }
-  .bttt{
-    position: absolute;
-    top:100px;
-    z-index: 1000000000000;
-  }
-  .zi {
-    font-size: 40px;
-    z-index: 400;
-    position: relative;
-    left: 44%;
-    top: 60%;
-    z-index: 500;
-    color: #fff;
-  }
-  .bt_changePic {
-      position: relative;
-      left: 50px;
-      top: 20px;
-      z-index: 9999;
-  }
-  .card {
-    position: absolute;
-    z-index: 60990;
-    left: 710px;
-    top: 280px;
-  }
-  .pp {
-    position: absolute;
-    left: 15%;
-    right: 15%;
-    /* width: 1000px; */
-    height: 900px;
-    top: 150px;
-    background-color: #ffffff;
-  }
-  
-  .message {
-    position: absolute;
-    bottom: 180px;
-    right: 200px;
-    font-size: 20px;
-  }
-  
-  .history {
-    position: absolute;
     left: 50px;
-    top: 250px;
-    width: 400px;
-    height: 300px;
-  }
-  .edithistory {
-    position: relative;
-    left: 150px;
-    z-index: 9999999999999;
-  }
-  .panel .p-panel-content {
-    word-wrap: break-word;
-  }
-  
-  .edit-item {
-    position: relative;
-    width: 300px;
-    height: 50px;
-    /* bottom: 10px; */
-    left: 10px;
-  }
-  
-  .save_button {
-    position: relative;
-    width: 70px;
-    height: 50px;
-    bottom: 10px;
-    left: 160px;
-  }
-  
-  .tongzhi {
-    position: absolute;
-    left: 600px;
-    width: 400px;
     top: 20px;
-    z-index: 99999999999999;
-  } 
-  
-  button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-  
-  .leftpart {
-      position: relative;
-      left: 430px;
-      width: 250px;
-      height: 600px;
-      top: -80px;
-      z-index: 9999999;
-  }
-  
-  
-  .avatar {
-      position: relative;
-      /* left: 150px;*/
-      width: 200px;
-      height: 200px;
-      top: 10px;
-      border-radius: 50%;
-      overflow: hidden;
-      z-index: 999999;
-  }
-  
-  
-  
-  .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-  }
-  
-  
-  
-  
-  
-  /* 这是统一的css */
-  * {
-        margin: 0;
-        padding: 0;
-    }
-    html {
-        height: 100%;
-    }
-    .body {
-        height: 100%;
-        min-height: 100vh;
-        
-    }
-  /* body{
+    z-index: 9999;
+}
+.card {
+position: absolute;
+z-index: 60990;
+left: 710px;
+top: 280px;
+}
+.pp {
+position: absolute;
+left: 15%;
+right: 15%;
+/* width: 1000px; */
+height: 900px;
+top: 150px;
+background-color: #ffffff;
+}
+
+.message {
+position: absolute;
+bottom: 180px;
+right: 200px;
+font-size: 20px;
+}
+
+.history {
+position: absolute;
+left: 80px;
+top: 250px;
+width: 400px;
+height: 600px;
+}
+.edithistory {
+position: relative;
+left: 150px;
+z-index: 9999999999999;
+}
+.panel .p-panel-content {
+/* word-wrap: break-word; */
+white-space: pre-line;
+}
+
+.edit-item {
+position: relative;
+width: 300px;
+height: 50px;
+/* bottom: 10px; */
+left: 10px;
+}
+
+.save_button {
+position: relative;
+width: 70px;
+height: 50px;
+bottom: 10px;
+left: 160px;
+}
+
+.tongzhi {
+position: absolute;
+left: 600px;
+width: 400px;
+top: 20px;
+z-index: 99999999999999;
+} 
+
+button {
+background-color: #007bff;
+color: #fff;
+border: none;
+padding: 10px;
+border-radius: 5px;
+margin-top: 10px;
+cursor: pointer;
+}
+
+.leftpart {
     position: relative;
-  } */
-    .container {
-        position: relative;
-        height: 100%;
-        padding-top: 0.1px;
-        /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
-        /*background-image: url("../img/back_img3.jpg");*/
-        /*background-size: cover;*/
-    }
-    .background{
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        /*background-image: url("../img/back_img3.jpg");*/
-        position: fixed;
-        z-index: -999;
-    }
-    .header{
-        top:0px;
-        height: 60px;
-        width: 100%;
-        background-color: whitesmoke;
-        border-bottom: rgba(0, 0, 0, 0.3) solid 1px;
-        position: fixed;
-        z-index: 99999999999;
-    }
-    .header_img{
-        /* background-color: red; */
-        width: 60px;
-        height: 60px;
-        float: left;
-        margin-left: 8%;
-    }
-    .header_tag{
-        /* background-color: blue; */
-        margin-left: 1%;
-        line-height: 60px;
-        font-family: Arial;
-        float: left;
-        font-size: 18px;
-    }
-    .header_user{
-        /* background-color: green; */
-        float: right;
-        margin-right: 8%;
-        height: 60px;
-        width: 150px;
-    }
-    #header_list{
-        background-color: #c1c0c0;
-        display: none;
-        margin-top: 60px;
-        width: 150px;
-        height: 200px;
-    }
-    .header_list_item{
-        width: 150px;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-    }
-    .header_list_item:hover{
-        background-color: rgb(137, 132, 132);
-        cursor: pointer;
-    }
-    .header_user:hover{
-        background-color: #c1c0c0;
-        /* cursor: pointer; */
-    }
-    .header_user_word{
-        /* background-color: white; */
-        margin-left: 10px;
-        line-height: 60px;
-        font-size: 13px;
-        float: left;
-    }
-    .header_user_img{
-        /* background-color: blue; */
-        margin-top: 5px;
-        margin-left: 5px;
-        width: 50px;
-        height: 50px;
-        float: left;
-        border-radius: 100%;
-    }
-    #triangle-down{
-        float: left;
-        margin-top: 25px;
-        margin-left: 5px;
-        width:0px;
-        height:0px;
-        border-left:6px solid transparent;
-        border-right:6px solid transparent;
-        border-top:10px black solid;
-    }
-    .main{
-        border-radius: 5px;
-        margin-left: 15%;
-        margin-right: 15%;
-        margin-top: 70px;
-        width: 70%;
-        min-height: 600px;
-        background-color: rgb(255, 255, 255);
-    }
-    .footer{
-        position: absolute;
-        bottom: -400px;
-        height: 220px;
-        width: 100%;
-        /* margin-top: 300px; */
-        background-color: rgba(0, 0, 0, 0.85);
-    }
-    .footer_img{
-        margin: auto;
-        width: 400px;
-    }
-    .footer_item{
-        width: 100%;
-        text-align: center;
-        color: rgba(255,255,255,0.7);
-        font-size: 15px;
-        line-height: 25px;
-    }
-    .footer_box{
-        padding-top: 10px;
-        margin-top: 20px;
-        margin: auto;
-        width: 100%;
-        height: 120px;
-    }
-    .footer_list_box{
-        margin: auto;
-        list-style: none;
-        width: 620px;
-        height: 100%;
-        /* float: left; */
-    }
-    .footer_list_box>li {
-        padding: 15px 0 10px;
-        width: 310px;
-        height: 50px;
-        color: rgba(255,255,255,0.7);
-        box-sizing: border-box;
-        float: left;
-        position: relative;
-    }
-  </style>
+    left: 430px;
+    width: 250px;
+    height: 600px;
+    top: -80px;
+    z-index: 9999999;
+}
+
+
+.avatar {
+    position: relative;
+    /* left: 150px;*/
+    width: 200px;
+    height: 200px;
+    top: 10px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 999999;
+}
+
+
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+
+
+/* 这是统一的css */
+* {
+    margin: 0;
+    padding: 0;
+}
+html {
+    height: 100%;
+}
+.body {
+    height: 100%;
+    min-height: 100vh;
+    
+}
+/* body{
+position: relative;
+} */
+.mypre{
+    font-size: 18px;
+    left: 50px;
+}
+.container {
+    position: relative;
+    height: 100%;
+    padding-top: 0.1px;
+    /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
+    /*background-image: url("../img/back_img3.jpg");*/
+    /*background-size: cover;*/
+}
+.background{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /*background-image: url("../img/back_img3.jpg");*/
+    position: fixed;
+    z-index: -999;
+}
+.header{
+    top:0px;
+    height: 60px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-bottom: rgba(0, 0, 0, 0.3) solid 1px;
+    position: fixed;
+    z-index: 99999999999;
+}
+.header_img{
+    /* background-color: red; */
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-left: 8%;
+}
+.header_tag{
+    /* background-color: blue; */
+    margin-left: 1%;
+    line-height: 60px;
+    font-family: Arial;
+    float: left;
+    font-size: 18px;
+}
+.header_user{
+    /* background-color: green; */
+    float: right;
+    margin-right: 8%;
+    height: 60px;
+    width: 150px;
+}
+#header_list{
+    background-color: #c1c0c0;
+    display: none;
+    margin-top: 60px;
+    width: 150px;
+    height: 200px;
+}
+.header_list_item{
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.header_list_item:hover{
+    background-color: rgb(137, 132, 132);
+    cursor: pointer;
+}
+.header_user:hover{
+    background-color: #c1c0c0;
+    /* cursor: pointer; */
+}
+.header_user_word{
+    /* background-color: white; */
+    margin-left: 10px;
+    line-height: 60px;
+    font-size: 13px;
+    float: left;
+}
+.header_user_img{
+    /* background-color: blue; */
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 50px;
+    height: 50px;
+    float: left;
+    border-radius: 100%;
+}
+#triangle-down{
+    float: left;
+    margin-top: 25px;
+    margin-left: 5px;
+    width:0px;
+    height:0px;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:10px black solid;
+}
+.main{
+    border-radius: 5px;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 70px;
+    width: 70%;
+    min-height: 600px;
+    background-color: rgb(255, 255, 255);
+}
+.footer{
+    position: absolute;
+    bottom: -400px;
+    height: 220px;
+    width: 100%;
+    /* margin-top: 300px; */
+    background-color: rgba(0, 0, 0, 0.85);
+}
+.footer_img{
+    margin: auto;
+    width: 400px;
+}
+.footer_item{
+    width: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    line-height: 25px;
+}
+.footer_box{
+    padding-top: 10px;
+    margin-top: 20px;
+    margin: auto;
+    width: 100%;
+    height: 120px;
+}
+.footer_list_box{
+    margin: auto;
+    list-style: none;
+    width: 620px;
+    height: 100%;
+    /* float: left; */
+}
+.footer_list_box>li {
+    padding: 15px 0 10px;
+    width: 310px;
+    height: 50px;
+    color: rgba(255,255,255,0.7);
+    box-sizing: border-box;
+    float: left;
+    position: relative;
+}
+</style>

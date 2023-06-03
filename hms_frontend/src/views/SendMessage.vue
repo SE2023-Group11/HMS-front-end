@@ -15,8 +15,8 @@
                         <h1 class="header_user_word">登录/注册</h1>
                         <div id="triangle-down"></div>
                         <div id="header_list">
-                            <div class="header_list_item">个人主页</div>
-                            <div class="header_list_item">消息通知</div>
+                            <div οnclick="window.location.href='/patientspace';" class="header_list_item">个人主页</div>
+                            <div οnclick="window.location.href='/message';" class="header_list_item">消息通知</div>
                             <div class="header_list_item">账号注销</div>
                             <div class="header_list_item">退出登录</div>
                         </div>
@@ -74,7 +74,7 @@
                 </div>
             </div>
     
-                <div class="footer">
+                <!-- <div class="footer">
                     <div class="footer_box">
                         <ul class="footer_list_box">
                             <li>
@@ -98,7 +98,7 @@
                     <div class="footer_item">Copyright ©️ 2023-2033</div>
                     <div class="footer_item">HMS Powered by SEGroup11</div>
                     <div class="footer_item">HMS Designed by AlpaCa</div>
-                </div>
+                </div> -->
             </div>
             </div>
 </div>
@@ -119,14 +119,17 @@ import { useRouter } from 'vue-router'
 const notifications = ref([]);
 const notificationalready = ref([]);
 const unreadCount = ref(0);
-const token = sessionStorage.getItem('token');
+const token = sessionStorage.getItem('token')
 const activeTabIndex = ref(1)
 
+const namecontent = ref('')
 const router = useRouter()
 onMounted(() => {
     loadNotifications();
+    getinfo();
     console.log(sessionStorage.getItem("role"));
     console.log(sessionStorage.getItem("token"));
+    console.log('dasdasd'+namecontent.value)
 })
 //首先需要确定一下当前的用户的身份
 const role = sessionStorage.getItem('role');
@@ -137,14 +140,15 @@ const role = sessionStorage.getItem('role');
 //         containerHeight = refs.all
 //     },
 function handleTabChange(e) {
+    const str = sessionStorage.getItem('role')
+    console.log(str);
     const index = e.index;
     if (index === 0) {
-        if (role.value === 'patient') router.push('/patientSpace');
+        if (str === 'patient') router.push('/patientSpace');
         else router.push('/doctorSpace');
     } else if (index === 1) {
-        router.push('/page2');
     } else if (index === 2) {
-        if (role.value === 'patient') router.push('/patientRoot');
+        if (str === 'patient') router.push('/patientRoot');
         else router.push('/doctorRoot');
     }
 }
@@ -155,13 +159,11 @@ function created() {
 
 const str = ref('');
 function loadNotifications() {
-    console.log('saddasdasdasd');
     if (role.value == 'doctor') str.value = 'http://121.199.161.134:8080/getDoctorMessage'
     else str.value = 'http://121.199.161.134:8080/getPatientMessage'
     axios.post(str.value,null,{
         params:{
-            // token:token.value
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+            token:token
         }
     })
     .then(response => {
@@ -240,7 +242,45 @@ function loadNotifications() {
 //             })
 //     }
 // }
-
+function getinfo() {
+    if(sessionStorage.getItem('role') == 'patient'){
+        axios.get('http://121.199.161.134:8080/getPatientInformation',{
+        params: {
+            // token: token.value, 
+            token:token
+        }
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data)
+            const data = response.data.data;  
+            namecontent.value= data.patientName; 
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+    }
+    else{
+        axios.get('http://121.199.161.134:8080/getDoctorInformation',{
+        params: {
+            // token: token.value, 
+            token:token
+        }
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data)
+            const data = response.data.data;
+            namecontent.value= data.doctorName;     
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+    }
+    
+}
 //统一的函数
 function showList(){
     var list = document.getElementById("header_list");
@@ -278,12 +318,11 @@ function unShowList(){
 } */
 .zi {
     font-size: 40px;
-    z-index: 400;
-    position: relative;
-    left: 40%;
-    top: 50%;
-    z-index: 500;
-    color: #fff;
+z-index: 999999999;
+position: relative;
+left: 44%;
+top: 60%;
+color: #fff;
 }
 .bt_changePic {
     position: relative;

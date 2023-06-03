@@ -12,6 +12,7 @@
     </div>
 
     <div class="register">
+        <Button onclick="location.href='/login'" label="返回登录" />
         <h1>忘记密码</h1>
         <form @submit.prevent="submitForm">
 
@@ -76,7 +77,7 @@ const verifyCode = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(2);
+const countdown = ref(5);
 let timer = null;
 const name = ref('尊敬的用户');
 const type = ref(2);
@@ -85,9 +86,6 @@ function sendtoback() {
     else type.value = 4;
     console.log(type.value);
     console.log(typeof(type.value));
-    console.log(name.value);
-    console.log(email.value);
-    console.log('1111111111111');
     axios.post('http://121.199.161.134:8080/sendToEmail',null,{
         params:{
             type:type.value,

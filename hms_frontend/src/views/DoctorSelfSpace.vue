@@ -16,7 +16,7 @@
                         <div id="triangle-down"></div>
                         <div id="header_list">
                             <div class="header_list_item">个人主页</div>
-                            <div class="header_list_item">消息通知</div>
+                            <div class="header_list_item" onclick="jumpmessage()">消息通知</div>
                             <div class="header_list_item">账号注销</div>
                             <div class="header_list_item">退出登录</div>
                         </div>
@@ -126,7 +126,7 @@
         </div>
         <div class="history">
             <Panel v-if="!historyediting" header="经历简介" class="panel">
-                {{ historycontent }}
+                <pre class="mypre"> {{ historycontent }}</pre>
             </Panel>
             <div>
                 <Textarea class="you" v-if="historyediting" v-model="historytempContent" rows="20" cols="40" />
@@ -199,16 +199,19 @@ const activeTabIndex = ref(0)
 const role = sessionStorage.getItem("role");
 const router = useRouter()
 //进行数据传输的时候用的变量
-const id = ref('123');
+const id = ref('');
 function handleTabChange(e) {
+    const str = sessionStorage.getItem('role')
+    console.log(str);
     const index = e.index;
+    console.log(str);
+    console.log('1111111');
     if (index === 0) {
-        if (role.value === 'patient') router.push('/patientSpace');
-        else router.push('/doctorSpace');
+        
     } else if (index === 1) {
         router.push('/message');
     } else if (index === 2) {
-        if (role.value === 'patient') router.push('/patientRoot');
+        if (str === 'patient') router.push('/patientRoot');
         else router.push('/doctorRoot');
     }
 }
@@ -225,7 +228,7 @@ function getinfo() {
     axios.get('http://121.199.161.134:8080/getDoctorInformation', {
         params: {
             // token: token.value
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVEb2N0b3IiLCJub3dMb2dnZWRJbklkIjoiRDAwMDAwMDAwMDAxIiwiaWF0IjoxNjg0NzQ1MDkwLCJleHAiOjE2ODY1NDUwOTB9.giEqE1LDxux_2OG60_S-nOIbNfWACx94GgKcJl1I_uU"
+            token:token
         }
     })
         .then(response => {
@@ -247,12 +250,12 @@ function getinfo() {
 }
 
 // 对于个人的信息框的设置
-const pid = ref('21371101');
+const pid = ref('');
 
 //下面这些的逻辑是实现当点击对应的信息的时候弹出表框使得可以进行修改
 // 姓名
 const nameediting = ref(false)
-const namecontent = ref('李四')
+const namecontent = ref('')
 const nametempContent = ref('')
 function namestartEditing() {
     nameediting.value = true
@@ -278,7 +281,7 @@ function deptstopEditing() {
 }
 // 职务
 const titleediting = ref(false)
-const titlecontent = ref('主治医师')
+const titlecontent = ref('')
 const titletempContent = ref('')
 function titlestartEditing() {
     titleediting.value = true
@@ -292,7 +295,7 @@ function titlestopEditing() {
 
 // 邮箱
 const emailediting = ref(false)
-const emailcontent = ref('133324432@qq.com')
+const emailcontent = ref('')
 const emailtempContent = ref('')
 function emailstartEditing() {
     emailediting.value = true
@@ -305,7 +308,7 @@ function emailstopEditing() {
 }
 //手机号
 const phoneediting = ref(false)
-const phonecontent = ref('143439534345')
+const phonecontent = ref('')
 const phonetempContent = ref('')
 function phonestartEditing() {
     phoneediting.value = true
@@ -318,7 +321,7 @@ function phonestopEditing() {
 }
 // 身份证号
 const idCardediting = ref(false)
-const idCardcontent = ref('32445353453645564')
+const idCardcontent = ref('')
 const idCardtempContent = ref('')
 function idCardstartEditing() {
     idCardediting.value = true
@@ -350,8 +353,7 @@ function edithistory() {
         //这里首先要实现一个数据库对于病史的更新，向后端传输数据
         axios.post("http://121.199.161.134:8080/saveIntroduction",hisobject, {
             params:{
-                // token: token.value,
-                token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVEb2N0b3IiLCJub3dMb2dnZWRJbklkIjoiRDAwMDAwMDAwMDAxIiwiaWF0IjoxNjg0NzQ1MDkwLCJleHAiOjE2ODY1NDUwOTB9.giEqE1LDxux_2OG60_S-nOIbNfWACx94GgKcJl1I_uU"
+                token: token,
             }
             }).then(res => {
             console.log(res);
@@ -384,8 +386,7 @@ function save() {
     setDoctor();
     axios.post('http://121.199.161.134:8080/changeDoctor',doctor,{
         params:{
-            // token: token.value,
-            token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVEb2N0b3IiLCJub3dMb2dnZWRJbklkIjoiRDAwMDAwMDAwMDAxIiwiaWF0IjoxNjg0NzQ1MDkwLCJleHAiOjE2ODY1NDUwOTB9.giEqE1LDxux_2OG60_S-nOIbNfWACx94GgKcJl1I_uU"
+            token: token
         }
 })
         .then(response => {
@@ -446,6 +447,45 @@ function unShowList(){
     console.log("out");
     list.style.display = "none";
 };
+//当前登录的用户退出登录
+function outlogin(){
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    window.location.href = '/login';
+};
+function zhuxiao(){
+    if(sessionStorage.getItem('role') == 'patient'){
+        axios.post('http://121.199.161.134:8080/zhuxiaoDoctor',null,{
+        params:{
+            token: token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            outlogin();
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+    else{
+        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
+        params:{
+            token: token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            outlogin();
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+function jumpmessage(){
+    window.location.href = '/message';
+}
+}
 </script>
     
 <style scoped>
@@ -599,9 +639,10 @@ html {
     min-height: 100vh;
     
 }
-/* body{
-position: relative;
-} */
+.mypre{
+    font-size: 18px;
+    left: 50px;
+}
 .container {
     position: relative;
     height: 100%;
