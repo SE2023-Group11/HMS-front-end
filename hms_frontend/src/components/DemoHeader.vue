@@ -1,3 +1,44 @@
+<template>
+    <div class="header">
+            <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
+            <h1 class="header_tag">HMS医院门诊预约系统</h1>
+            <div class="header_user" onmouseenter="showList()" onmouseleave="unShowList()">
+                <!-- 显示头像 -->
+                <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img"/>
+                <!-- 未登录时显示登录/注册 -->
+                <!-- 登录后显示用户名 -->
+                <h1 class="header_user_word">登录/注册</h1>
+                <div id="triangle-down"></div>
+
+                <div id="header_list">
+                    <div class="header_list_item">个人主页</div>
+                    <div class="header_list_item">消息通知</div>
+                    <div class="header_list_item">账号注销</div>
+                    <div class="header_list_item">退出登录</div>
+                </div>
+            </div>
+        </div>
+  
+</template>
+
+<script>
+export default {
+    methods:{
+        showList(){
+            var list = document.getElementById("header_list");
+            console.log("in");
+            list.style.display = "block";
+        },
+        unShowList(){
+            var list = document.getElementById("header_list");
+            console.log("out");
+            list.style.display = "none";
+        }
+    }
+}
+</script>
+
+<style>
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +60,7 @@ body {
     width: 100%;
     height: 100%;
     background-size: cover;
+    /*background-image: url("../img/back_img3.jpg");*/
     position: fixed;
     z-index: -999;
 }
@@ -151,3 +193,4 @@ body {
     float: left;
     position: relative;
 }
+</style>

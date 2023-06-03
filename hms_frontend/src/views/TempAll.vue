@@ -1,31 +1,40 @@
 <template>
-    <input type="button" value="gsdk" @click="sendtoback">
+	<div>
+		选择多个文件：<input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
+		选择文件夹，遍历该文件夹下所有文件：<input @change="getFiles($event)" name="files" type="file" webkitdirectory mozdirectory /><br />
+		<button @click="upload" type="submit">上传</button>
+	</div>
 </template>
-    
-    
 <script>
+	export default {
+		name: 'UploadFileVue',
+		data() {
+			return {
+				files: []
+			}
+		},
+		methods: {
+			getFiles: function(event) {
+				var files = event.target.files;
+				for (var i = 0; i < files.length; i++) {
+					ths.files.push(files[i]);
+				}
+			},
+			upload: function() {
+				var formData = new FormData();
+				for (var i = 0; i < this.files.length; i++) {
+					formData.append('files', this.files[i]);
+				}
+				this.$axios.post("/upload", formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				}).then(function(response) {
+					// 请求成功
+				}, function(err) {
 
-import axios from 'axios';
-
-export default {
-    name: 'App',
-    components: {
-
-    },
-    methods: {
-
-        sendtoback() {
-            console.log("fdfsdfsdfsdfsdfsdfsd");
-            axios.post('http://121.199.161.134:8080/sendToEmail',
-                "type=1&name='wesda'&email='1340585346@qq.com'"
-            )
-                .then(response => {
-                    console.log(response.data)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-        }
-    }
-}
+				})
+			}
+		}
+	}
 </script>

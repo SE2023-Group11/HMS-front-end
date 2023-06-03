@@ -1,5 +1,18 @@
 <template>
+    <div class="P1">
+        <img src="../Pic/b1.jpg" v-if="!imageUrl" />
+    </div> 
+    <div class="kuang">
+            <div class="logal">
+                <img src="../Pic/OIP.jpg" v-if="!imageUrl" />
+            </div>
+            <div class="titl">
+                医疗预约系统
+            </div>
+    </div>
+
     <div class="register">
+        <Button onclick="location.href='/login'" label="返回登录" />
         <h1>忘记密码</h1>
         <form @submit.prevent="submitForm">
 
@@ -64,20 +77,31 @@ const verifyCode = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(60);
+const countdown = ref(5);
 let timer = null;
-
-//把邮箱给后端，后端发送验证码
+const name = ref('尊敬的用户');
+const type = ref(2);
 function sendtoback() {
-    axios.post('http://localhost:8080/sendToEmail', {
-        email: email.value,
+    if (is_patient.value == '我是医生') type.value = 2;
+    else type.value = 4;
+    console.log(type.value);
+    console.log(typeof(type.value));
+    axios.post('http://121.199.161.134:8080/sendToEmail',null,{
+        params:{
+            type:type.value,
+            name:name.value,
+            email:email.value
+        }
+    }
+    )
+    .then(response => {
+        console.log('adddddddddddddddd');
+        console.log(response.data)
     })
-        .then(response => {
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.error(error)
-        })
+    .catch(error => {
+        console.log('dasdasd');
+        console.error(error)
+    })
 }
 const sendVerifyCode = () => {
     //首先改一下消息的通知
@@ -91,7 +115,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 60;
+            countdown.value = 2;
             sendingVerifyCode.value = false;
         }
     }, 1000);
@@ -109,20 +133,8 @@ const checkPassword = () => {
 const judchange = ref(0);
 function registerbt() {
     //验证码和个人的信息一起上传
-    // axios.post('http://localhost:8080/verifyCode', {
-    //     email: email.value,
-    //     verifyCode: verifyCode.value,
-    // })
-    //     .then(response => {
-    //         console.log(response.data)
-    //         judchange.value = 1;
-    //     })
-    //     .catch(error => {
-    //         console.error(error)
-    //         judchange.value = -1;
-    //     })
-    if (is_patient == '我是医生') {
-        axios.post('http://localhost:8080//docterChangepwd', {
+    if (is_patient.value == '我是医生') {
+        axios.post('http://121.199.161.134:8080/docterChangepwd',null, {
             params: {
                 code: verifyCode.value,
                 email: email.value,
@@ -132,7 +144,16 @@ function registerbt() {
         })
             .then(response => {
                 console.log(response.data)
-                judchange.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    judchange.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    judchange.value = -1;
+                    console.log('登录失败');                    
+                } 
             })
             .catch(error => {
                 console.error(error)
@@ -140,7 +161,7 @@ function registerbt() {
             })
     }
     else {
-        axios.post('http://localhost:8080//patientChangepwd', {
+        axios.post('http://121.199.161.134:8080/patientChangepwd', null,{
             params: {
                 code: verifyCode.value,
                 email: email.value,
@@ -149,7 +170,16 @@ function registerbt() {
         })
             .then(response => {
                 console.log(response.data)
-                judchange.value = 1;
+                const jud =response.data.code;
+                console.log(typeof(jud));
+                if(jud == 1){
+                    judchange.value = 1;
+                    window.location.href="/login";
+                }
+                else{
+                    judchange.value = -1;
+                    console.log('登录失败');                    
+                } 
             })
             .catch(error => {
                 console.error(error)
@@ -163,15 +193,61 @@ function registerbt() {
 <style scoped>
 .register {
     position: absolute;
-    left: 30%;
-    top: 100px;
+    left: 38%;
+    top: 150px;
     width: 500px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #fff;
 }
 
+.head1 {
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+}
+
+.titl {
+    position: absolute;
+    font-size: 30px;
+    color: #fff;
+    bottom: 30px;
+    left: 150px;
+}
+
+.pwd {
+    width: 40px;
+}
+
+.P1 img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 110px;
+    background-image: url("../Pic/b1.jpg");
+    filter: blur(5px);
+    /* background-size: cover; */
+    z-index: -1;
+}
+
+.logal img {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    left: 0px;
+    z-index: 99;
+}
+
+.kuang {
+    position: absolute;
+    height: 110px;
+    width: 100%;
+    background-color: #007bff;
+    z-index: 10;
+}
 .form-group {
     display: flex;
     flex-direction: column;
@@ -223,11 +299,14 @@ input[type='text'] {
     left: 600px;
     width: 400px;
     top: 20px;
+    z-index: 9999999;
 }
 
 .xiugai {
     position: relative;
     left: 50%;
+    width: 200px;
+    height: 50px;
     transform: translateX(-50%);
 }
 </style>

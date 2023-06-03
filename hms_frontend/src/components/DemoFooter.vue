@@ -1,3 +1,51 @@
+<template>
+  <div class="footer">
+            <div class="footer_box">
+                <ul class="footer_list_box">
+                    <li>
+                        <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_1.png" alt="">
+                        <span>电话：010-82317114</span>
+                    </li>
+                    <li>
+                        <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_2.png" alt="">
+                        <span>传真：010-82328136</span>
+                    </li>
+                    <li>
+                        <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_3.png" alt="">
+                        <span>邮编：100191</span>
+                    </li>
+                    <li>
+                        <img src="https://spoc.buaa.edu.cn/spocResourcebase//rdFileBase/images/af_4.png" alt="">
+                        <span>地址：北京市海淀区学院路37号</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- <img src="./logo.png" alt="" class="footer_img"> -->
+            <div class="footer_item">Copyright ©️ 2023-2033</div>
+            <div class="footer_item">HMS Powered by SEGroup11</div>
+            <div class="footer_item">HMS Designed by AlpaCa</div>
+        </div>
+</template>
+
+<script>
+export default {
+    methods:{
+        showList(){
+            var list = document.getElementById("header_list");
+            console.log("in");
+            list.style.display = "block";
+        },
+        unShowList(){
+            var list = document.getElementById("header_list");
+            console.log("out");
+            list.style.display = "none";
+        }
+    }
+
+}
+</script>
+
+<style>
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +67,7 @@ body {
     width: 100%;
     height: 100%;
     background-size: cover;
+    /*background-image: url("../img/back_img3.jpg");*/
     position: fixed;
     z-index: -999;
 }
@@ -151,3 +200,5 @@ body {
     float: left;
     position: relative;
 }
+
+</style>

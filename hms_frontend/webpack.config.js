@@ -1,21 +1,17 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 module.exports = {
   module: {
     rules: [
       {
-        test: /\.html$/,
+        test: /\.html$/i,
         use: [
           {
-            loader: 'vue-html-loader',
+            loader: 'html-loader',
+            options: {
+              esModule: false,
+            },
           },
         ],
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-    }),
-  ],
 };

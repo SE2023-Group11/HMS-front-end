@@ -4,5 +4,8 @@
     "primeicons": "^6.0.1",
     "primevue": "^3.26.1",
     "vee-validate": "^4.8.4"
+  },
+  "devDependencies": {
+    "html-loader": "^4.2.0"
   }
 }
