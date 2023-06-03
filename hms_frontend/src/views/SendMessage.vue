@@ -319,7 +319,7 @@ function unShowList(){
 .zi {
     font-size: 40px;
 z-index: 999999999;
-position: relative;
+position: absolute;
 left: 44%;
 top: 60%;
 color: #fff;

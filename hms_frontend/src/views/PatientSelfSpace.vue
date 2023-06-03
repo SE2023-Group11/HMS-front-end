@@ -517,8 +517,7 @@ z-index: 1000000000000;
 }
 .zi {
 font-size: 40px;
-z-index: 400;
-position: relative;
+position: absolute;
 left: 44%;
 top: 60%;
 z-index: 500;
