@@ -136,7 +136,7 @@ function loginbt() {
                     sessionStorage.setItem('role', role.value);//y是患者，n是医生
                     juglog.value = 1;
                     console.log(sessionStorage.getItem('token'));
-                    // window.location.href="/adminRoot";
+                    window.location.href="/defaultView";
                 }
                 else{
                     console.log('登录失败');

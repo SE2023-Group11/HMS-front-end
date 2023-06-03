@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory,createWebHashHistory } from "vue-router";
 import Login from "../views/LoginForm.vue";
 import Register from "../views/RegisterForm.vue";
 import Temp from "../views/TempAll.vue";
@@ -13,10 +13,12 @@ import CheckDoctorInfo from "../views/CheckDoctorInfo.vue";
 import CheckMyAppointment from "../views/CheckMyAppointment.vue";
 import ConfirmAppointment from "../views/ConfirmAppointment.vue";
 import PatientRoot from "../views/PatientRoot.vue";
-// import ManagerInfo from '../views/ManagerInfo'
-// import NotifyInfo from '../views/NotifyInfo'
-// import jobInfo from '../views/jobInfo'
-// import newsShow from '../views/newsShow'
+import ManagerInfo from '../manager/components/infoManage/ManagerInfo'
+import NotifyInfo from '../manager/components/notifyManage/NotifyInfo'
+import jobInfo from '../manager/components/jobManage/jobInfo'
+import newsShow from '../manager/components/newsManage/newsShow'
+import managerEnter from '../manager/ManagerEnter'
+import DefaultView from '../manager/DefaultView'
 const routes = [
     {   path:"/",
         redirect:"/login"
@@ -90,26 +92,37 @@ const routes = [
         name: "ConfirmAppointment",
         component: ConfirmAppointment
     },
-    // {
-    //     path: '/managerInfo',
-    //     component: ManagerInfo
-    // },
-    // {
-    //     path: '/notifications',
-    //     component: NotifyInfo
-    // },
-    // {
-    //     path: '/jobManage',
-    //     component: jobInfo
-    // },
-    // {
-    //     path: '/newsManage',
-    //     component: newsShow
-    // }
+
+    {
+        path: '/managerEnter',
+        component: managerEnter,
+        children:[
+            {
+                path: '/managerInfo',
+                component: ManagerInfo
+            },
+            {
+                path:'/defaultView',
+                component: DefaultView
+            },
+            {
+                path: '/notifications',
+                component: NotifyInfo
+            },
+            {
+                path: '/jobManage',
+                component: jobInfo
+            },
+            {
+                path: '/newsManage',
+                component: newsShow
+            },
+        ]
+    }
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 });
 
