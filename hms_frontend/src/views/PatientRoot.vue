@@ -163,7 +163,7 @@
         4. 授牌成为北京2022年冬奥会和冬残奥会定点医院
       </p>
       <img alt="user header" src="../Pic/医院介绍.jpg" style="width: 100%;" />
-      <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;">以心相伴，关怀健康</h1>
+      <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;text-align: center;">以心相伴，关怀健康</h1>
     </div>
     <h2 style="text-align: left;margin-left: 20px;margin-top: 30px;">友情链接</h2>
     <div class="linkContainer">
@@ -311,10 +311,12 @@ body {
 .header{
     height: 80px;
     width: 100%;
+    padding-top: 15px;
+    margin-bottom: 10px;
     /*background-color: whitesmoke;*/
     /* background-color: #ECEBEB; */
-    /*border-bottom: rgba(0, 0, 0, 0.3) solid 1px;*/
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    border: none;
+    background-color: white;
     /*position: fixed;*/
     z-index: 10;
     position:relative;

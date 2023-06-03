@@ -25,7 +25,7 @@
             <router-link :to="'/AddAppointment'" style="text-decoration: none;color:gray;">预约挂号</router-link>
             &nbsp;>&nbsp;
             <router-link :to="'/CheckDoctorInfo'" style="text-decoration: none;color:gray;">{{ this.selectedSectionName }}</router-link>
-            <span class="p-input-icon-left" style="left: 700px;">
+            <span class="p-input-icon-left" style="left: 680px;">
                 <i class="pi pi-search" />
                 <InputText v-model="searchSectionName" placeholder="搜索科室名" @keyup.enter="searchSection"/>
             </span>
@@ -70,71 +70,71 @@
         <div class="slide">
               <ul>
                   <li>
-                      <a href="#">内科系统<i class="iconfont">></i></a>
+                      <a >内科系统<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName='呼吸与危重症医学科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName='呼吸与危重症医学科';getDoctorsByRoomDate()">
                                       <span>呼吸与危重症医学科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName='呼吸睡眠医学科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName='呼吸睡眠医学科';getDoctorsByRoomDate()">
                                       <span>呼吸睡眠医学科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '消化内科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '消化内科';getDoctorsByRoomDate()">
                                       <span>消化内科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '心血管内科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '心血管内科';getDoctorsByRoomDate()">
                                       <span>心血管内科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '高血压科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '高血压科';getDoctorsByRoomDate()">
                                       <span>高血压科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '肾内科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '肾内科';getDoctorsByRoomDate()">
                                       <span>肾内科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '内分泌科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '内分泌科';getDoctorsByRoomDate()">
                                       <span>内分泌科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '风湿免疫科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '风湿免疫科';getDoctorsByRoomDate()">
                                       <span>风湿免疫科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '感染科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '感染科';getDoctorsByRoomDate()">
                                       <span>感染科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '老年科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '老年科';getDoctorsByRoomDate()">
                                       <span>老年科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '神经内科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '神经内科';getDoctorsByRoomDate()">
                                       <span>神经内科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '全科医学科（综合内科）';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '全科医学科（综合内科）';getDoctorsByRoomDate()">
                                       <span>全科医学科（综合内科）</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '急诊内科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '急诊内科';getDoctorsByRoomDate()">
                                       <span>急诊内科</span>
                                   </a>
                               </li>
@@ -142,91 +142,91 @@
                       </div>
                   </li>
                   <li>
-                      <a href="#">外科系统<i class="iconfont">></i></a>
+                      <a >外科系统<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '肝胆外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '肝胆外科';getDoctorsByRoomDate()">
                                       <span>肝胆外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '胃肠外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '胃肠外科';getDoctorsByRoomDate()">
                                       <span>胃肠外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '疝和腹壁外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '疝和腹壁外科';getDoctorsByRoomDate()">
                                       <span>疝和腹壁外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '乳腺外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '乳腺外科';getDoctorsByRoomDate()">
                                       <span>乳腺外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '泌尿外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '泌尿外科';getDoctorsByRoomDate()">
                                       <span>泌尿外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '心外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '心外科';getDoctorsByRoomDate()">
                                       <span>心外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '血管外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '血管外科';getDoctorsByRoomDate()">
                                       <span>血管外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '胸外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '胸外科';getDoctorsByRoomDate()">
                                       <span>胸外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '神经外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '神经外科';getDoctorsByRoomDate()">
                                       <span>神经外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '骨肿瘤科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '骨肿瘤科';getDoctorsByRoomDate()">
                                       <span>骨肿瘤科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '骨关节科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '骨关节科';getDoctorsByRoomDate()">
                                       <span>骨关节科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '创伤骨科（综合内科）';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '创伤骨科（综合内科）';getDoctorsByRoomDate()">
                                       <span>创伤骨科（综合内科）</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '脊柱外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '脊柱外科';getDoctorsByRoomDate()">
                                       <span>脊柱外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '医疗美容科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '医疗美容科';getDoctorsByRoomDate()">
                                       <span>医疗美容科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '整形外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '整形外科';getDoctorsByRoomDate()">
                                       <span>整形外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '创伤救治中心';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '创伤救治中心';getDoctorsByRoomDate()">
                                       <span>创伤救治中心</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '急诊外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '急诊外科';getDoctorsByRoomDate()">
                                       <span>急诊外科</span>
                                   </a>
                               </li>
@@ -236,16 +236,16 @@
                       </div>
                   </li>
                   <li>
-                      <a href="#">妇产科儿科<i class="iconfont">></i></a>
+                      <a >妇产科儿科<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '妇产科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '妇产科';getDoctorsByRoomDate()">
                                       <span>妇产科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '儿科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '儿科';getDoctorsByRoomDate()">
                                       <span>儿科</span>
                                   </a>
                               </li>
@@ -253,21 +253,21 @@
                       </div>
                   </li>
                   <li>
-                      <a href="#">五官科<i class="iconfont">></i></a>
+                      <a >五官科<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '眼科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '眼科';getDoctorsByRoomDate()">
                                       <span>眼科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '耳鼻咽喉头颈外科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '耳鼻咽喉头颈外科';getDoctorsByRoomDate()">
                                       <span>耳鼻咽喉头颈外科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '口腔科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '口腔科';getDoctorsByRoomDate()">
                                       <span>口腔科</span>
                                   </a>
                               </li>
@@ -276,86 +276,86 @@
                       </div>
                   </li>
                   <li>
-                      <a href="#">其他科室<i class="iconfont">></i></a>
+                      <a >其他科室<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '皮科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '皮科';getDoctorsByRoomDate()">
                                       <span>皮科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '中医科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '中医科';getDoctorsByRoomDate()">
                                       <span>中医科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '医学心理科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '医学心理科';getDoctorsByRoomDate()">
                                       <span>医学心理科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '麻醉科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '麻醉科';getDoctorsByRoomDate()">
                                       <span>麻醉科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '疼痛医学科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '疼痛医学科';getDoctorsByRoomDate()">
                                       <span>疼痛医学科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '重症医学科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '重症医学科';getDoctorsByRoomDate()">
                                       <span>重症医学科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '放疗科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '放疗科';getDoctorsByRoomDate()">
                                       <span>放疗科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '介入诊疗中心';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '介入诊疗中心';getDoctorsByRoomDate()">
                                       <span>介入诊疗中心</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '临床营养科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '临床营养科';getDoctorsByRoomDate()">
                                       <span>临床营养科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '输血科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '输血科';getDoctorsByRoomDate()">
                                       <span>输血科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '药学部';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '药学部';getDoctorsByRoomDate()">
                                       <span>药学部</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '中心实验室';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '中心实验室';getDoctorsByRoomDate()">
                                       <span>中心实验室</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '动物实验室';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '动物实验室';getDoctorsByRoomDate()">
                                       <span>动物实验室</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '图书馆';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '图书馆';getDoctorsByRoomDate()">
                                       <span>图书馆</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '病案统计室';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '病案统计室';getDoctorsByRoomDate()">
                                       <span>病案统计室</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '电子显微镜实验室';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '电子显微镜实验室';getDoctorsByRoomDate()">
                                       <span>电子显微镜实验室</span>
                                   </a>
                               </li>
@@ -363,36 +363,36 @@
                       </div>
                   </li>
                   <li>
-                      <a href="#">诊断相关科室<i class="iconfont">></i></a>
+                      <a >诊断相关科室<i class="iconfont">></i></a>
                       <div class="slide-list">
                           <ul style="list-style-type: none;">
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '内镜中心';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '内镜中心';getDoctorsByRoomDate()">
                                       <span>内镜中心</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '放射科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '放射科';getDoctorsByRoomDate()">
                                       <span>放射科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '超声诊断科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '超声诊断科';getDoctorsByRoomDate()">
                                       <span>超声诊断科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '核医学科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '核医学科';getDoctorsByRoomDate()">
                                       <span>核医学科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '检验科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '检验科';getDoctorsByRoomDate()">
                                       <span>检验科</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" style="text-decoration: none;" @click="this.selectedSectionName= '病理科';getDoctorsByRoomDate()">
+                                  <a  style="text-decoration: none;" @click="this.selectedSectionName= '病理科';getDoctorsByRoomDate()">
                                       <span>病理科</span>
                                   </a>
                               </li>
@@ -404,7 +404,7 @@
       </div>
     </div>
     <div class="showInfo" v-if="availableDoctors && availableDoctors.length > 0">
-            <h2 style="margin-top: 20px;margin-bottom: 20px;">可预约医生：</h2>
+            <h3 style="margin-top: 20px;margin-bottom: 20px;">可预约医生：</h3>
             <div class="cardContainer">
                 <Card v-for="doctor in availableDoctors" :key="doctor.doctorId" class="cardItem">
                     <template #header>
@@ -417,18 +417,27 @@
                                     <div class="morning"  style="width: 50%;">
                                         <h5 style="text-align: center;margin-bottom: 10px;">上午：</h5>
                                         <div v-for="(time,index) in morningTimes" :key="index">
-                                            {{ time }} 
-                                            <input v-if="doctorSchedule[index] === '2'" value="预约挂号" type="button" @click="addAppointment(index)" />
-                                            <input v-else type="button" value="无法预约" />
+                                            <div style="font-size: 20px;">{{ time }} <br></div>
+                                            <div v-if="doctorSchedule[index] === '2'">
+                                                <Button icon="pi pi-check" label="预约挂号" severity="Primary" size="small" @click="addAppointment(index)" />
+                                            </div>
+                                            <div v-else>
+                                                <Button icon="pi pi-check" label="无法预约" severity="danger" size="small" @click="addAppointment(index)" disabled />
+                                            </div>
+                                            
                                         </div>
 
                                     </div>
                                     <div class="afternoon"  style="width: 50%;">
                                         <h5 style="text-align: center;margin-bottom: 10px;">下午：</h5>
                                         <div v-for="(time,index) in afternoonTimes" :key="index">
-                                            {{ time }}
-                                            <input v-if="doctorSchedule[index+7] === '2'" value="预约挂号" type="button" @click="addAppointment(index+7)" />
-                                            <input v-else type="button" value="无法预约" />
+                                            <div style="font-size: 20px;">{{ time }} <br></div>
+                                            <div v-if="doctorSchedule[index+7] === '2'">
+                                                <Button icon="pi pi-check" label="预约挂号" severity="Primary" size="small" @click="addAppointment(index+7)" />
+                                            </div>
+                                            <div v-else>
+                                                <Button icon="pi pi-check" label="无法预约" severity="danger" size="small" @click="addAppointment(index+7)" disabled />
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -442,7 +451,7 @@
                     </template>
                     <template #footer>
                         <div v-if="hoveredDoctor != doctor">
-                            <input type="button" value="查看详细信息" @click="hoveredDoctor=doctor">
+                            <Button icon="pi pi-search" label="查看预约信息" severity="Primary" size="small" @click="hoveredDoctor=doctor" style="left:25%"/>
                         </div>
                     </template>
                 </Card>
@@ -602,13 +611,11 @@ export default {
                 return this.afternoonTimes[index-7];
             }
         },
-        addAppointment() {
+        addAppointment(index) {
+            this.selectedTime = index;
             const doctor = this.hoveredDoctor;
             const date = this.selectedDate;
             const time = this.selectedTime;
-            const section = this.selectedSection;
-            console.log("section"+section);
-            console.log("doctorId"+doctor.doctorId);
             this.$router.push({
                 path:'/ConfirmAppointment',
                 query:{
@@ -671,6 +678,87 @@ export default {
 </script>
 
 <style scoped>
+ .header{
+    height: 80px;
+    width: 100%;
+    padding-top: 15px;
+    margin-bottom: 10px;
+    /*background-color: whitesmoke;*/
+    /* background-color: #ECEBEB; */
+    background-color: white;
+    /*position: fixed;*/
+    z-index: 10;
+    position:relative;
+}
+.header_img{
+    /* background-color: red; */
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-left: 8%;
+}
+.header_tag{
+    /* background-color: blue; */
+    margin-left: 1%;
+    line-height: 60px;
+    font-family: Arial;
+    float: left;
+    font-size: 18px;
+}
+.header_user{
+    /* background-color: green; */
+    float: right;
+    margin-right: 8%;
+    height: 60px;
+    width: 150px;
+}
+#header_list{
+    background-color: #c0c0c1;
+    display: none;
+    margin-top: 60px;
+    width: 150px;
+    height: 200px;
+}
+.header_list_item{
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.header_list_item:hover{
+    background-color: rgb(137, 132, 132);
+    cursor: pointer;
+}
+.header_user:hover{
+    background-color: #c1c0c0;
+    /* cursor: pointer; */
+}
+.header_user_word{
+    /* background-color: white; */
+    margin-left: 10px;
+    line-height: 60px;
+    font-size: 13px;
+    float: left;
+}
+.header_user_img{
+    /* background-color: blue; */
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 50px;
+    height: 50px;
+    float: left;
+    border-radius: 100%;
+}
+#triangle-down{
+    float: left;
+    margin-top: 25px;
+    margin-left: 5px;
+    width:0px;
+    height:0px;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:10px black solid;
+}
 .cardContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 

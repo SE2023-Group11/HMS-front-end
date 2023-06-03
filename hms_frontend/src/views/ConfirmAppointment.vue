@@ -34,13 +34,13 @@
           <template #header>
               <img alt="user header" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.tkxaiHkikUQf2ZsE6AvrLAHaFj?w=196&h=147&c=7&r=0&o=5&pid=1.7" style="width:100%" />
           </template>
-          <template #title> 确认预约信息 </template>
+          <template #title> <div style="text-align: center;">确认预约信息</div> </template>
           <template #content>
-            <p>DoctorID: {{ doctorId }}</p>
-            <p>Date: {{ date }}</p>
-            <p>Time: {{ indexToTime(time) }}</p>
-            <p>doctorName:{{ doctorName }}</p>
-            <p>doctorTitle:{{ doctorTitle }}</p>
+            <p>日期: {{ date }}</p>
+            <p>时间段: {{ indexToTime(time) }}</p>
+            <p>医生ID: {{ doctorId }}</p>
+            <p>医生名字:{{ doctorName }}</p>
+            <p>医生职称:{{ doctorTitle }}</p>
           </template>
           <template #footer>
             <div class="buttons">
@@ -111,7 +111,6 @@ export default {
       doctorTitle: this.$route.query.doctorTitle,
       date: this.$route.query.date,
       time: this.$route.query.time,
-
     }
   },
   methods: {

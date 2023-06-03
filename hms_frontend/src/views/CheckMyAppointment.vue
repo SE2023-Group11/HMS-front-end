@@ -1,5 +1,4 @@
 <template>
-    <div class="background"></div>
     <div class="container" id="container">
       <div class="header">
         <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img" />
@@ -65,8 +64,12 @@
                     </Column>
                     <Column header="取消预约">
                         <template #body="data">
-                            <input v-if="data.data.orderStatus === 3" type="button" v-tooltip="'点击取消该预约'" value="取消预约" @click="deleteAppointment(data.data.orderId)" style="background-color:rgb(245, 190, 12);">
-                            <input v-else type="button" value="无法取消" style="background-color: red;">
+                            <div v-if="data.data.orderStatus === 3">
+                                <Button icon="pi pi-times" label="取消预约" severity="warning" size="small" v-tooltip="'点击取消该预约'" @click="deleteAppointment(data.data.orderId)" />
+                            </div>
+                            <div v-else>
+                                <Button icon="pi pi-times" label="无法取消" severity="danger" size="small" v-tooltip="'无法取消该预约'" disabled/>
+                            </div>
                         </template>
                     </Column>       
                 </div>
@@ -230,10 +233,10 @@
   .header{
     height: 80px;
     width: 100%;
+    padding-top: 15px;
     /*background-color: whitesmoke;*/
     /* background-color: #ECEBEB; */
-    border-bottom: rgba(0, 0, 0, 0.3) solid 1px;
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    background-color: white;
     /*position: fixed;*/
     z-index: 10;
     position:relative;
@@ -357,13 +360,10 @@
       position: relative;
   }
 .search-container {
-  position: absolute;
+  position: relative;
   top: 0px;
-  left: 400px;
+  left: 760px;
   margin: 10px;
-}
-.search-container{
-    position: relative;
 }
 .tips {
     display: flex;
