@@ -13,11 +13,10 @@ import CheckDoctorInfo from "../views/CheckDoctorInfo.vue";
 import CheckMyAppointment from "../views/CheckMyAppointment.vue";
 import ConfirmAppointment from "../views/ConfirmAppointment.vue";
 import PatientRoot from "../views/PatientRoot.vue";
-import ManagerInfo from '../views/ManagerInfo'
-import NotifyInfo from '../views/NotifyInfo'
-import jobInfo from '../views/jobInfo'
-import newsShow from '../views/newsShow'
-import DefaultView from '../views/DefaultView'
+// import ManagerInfo from '../views/ManagerInfo'
+// import NotifyInfo from '../views/NotifyInfo'
+// import jobInfo from '../views/jobInfo'
+// import newsShow from '../views/newsShow'
 const routes = [
     {   path:"/",
         redirect:"/login"
@@ -91,26 +90,22 @@ const routes = [
         name: "ConfirmAppointment",
         component: ConfirmAppointment
     },
-    {
-        path: '/defaultView',
-        component: DefaultView
-    },
-    {
-        path: '/managerInfo',
-        component: ManagerInfo
-    },
-    {
-        path: '/notifications',
-        component: NotifyInfo
-    },
-    {
-        path: '/jobManage',
-        component: jobInfo
-    },
-    {
-        path: '/newsManage',
-        component: newsShow
-    }
+    // {
+    //     path: '/managerInfo',
+    //     component: ManagerInfo
+    // },
+    // {
+    //     path: '/notifications',
+    //     component: NotifyInfo
+    // },
+    // {
+    //     path: '/jobManage',
+    //     component: jobInfo
+    // },
+    // {
+    //     path: '/newsManage',
+    //     component: newsShow
+    // }
 ];
 
 const router = createRouter({
