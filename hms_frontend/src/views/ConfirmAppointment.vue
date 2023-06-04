@@ -13,10 +13,10 @@
         <div id="triangle-down"></div>
 
         <div id="header_list" ref="headerList">
-          <div class="header_list_item">个人主页</div>
-          <div class="header_list_item">消息通知</div>
-          <div class="header_list_item">账号注销</div>
-          <div class="header_list_item">退出登录</div>
+          <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
+          <div class="header_list_item" @click="goToMessage">消息通知</div>
+          <div class="header_list_item" @click="goToDelete">账号注销</div>
+          <div class="header_list_item" @click="goToLogin">退出登录</div>
         </div>
       </div>
     </div>
@@ -114,6 +114,18 @@ export default {
     }
   },
   methods: {
+    goToPatientSpace() {
+    this.$router.push('/patientSpace')
+    },
+    goToDelete() {
+    this.$router.push('/login')
+    },
+    goToLogin() {
+    this.$router.push('/login')
+    },
+    goToMessage() {
+    this.$router.push('/message')
+    },
     confirmAppointment() {
       const params = new URLSearchParams();
       params.append('token', 'eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0');

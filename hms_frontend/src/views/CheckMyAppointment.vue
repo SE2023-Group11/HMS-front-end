@@ -12,10 +12,10 @@
           <div id="triangle-down"></div>
   
           <div id="header_list" ref="headerList">
-            <div class="header_list_item">个人主页</div>
-            <div class="header_list_item">消息通知</div>
-            <div class="header_list_item">账号注销</div>
-            <div class="header_list_item">退出登录</div>
+            <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
+            <div class="header_list_item" @click="goToMessage">消息通知</div>
+            <div class="header_list_item" @click="goToDelete">账号注销</div>
+            <div class="header_list_item" @click="goToLogin">退出登录</div>
           </div>
         </div>
       </div>
@@ -127,6 +127,18 @@
           }
       },
       methods: {
+        goToPatientSpace() {
+            this.$router.push('/patientSpace')
+        },
+        goToDelete() {
+            this.$router.push('/login')
+        },
+        goToLogin() {
+            this.$router.push('/login')
+        },
+        goToMessage() {
+            this.$router.push('/message')
+        },
           removeTAndBefore(str) {
               const index = str.indexOf('T');
               return str.substring(index + 1);
@@ -222,13 +234,6 @@
       /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
       /*background-image: url("../img/back_img3.jpg");*/
       /*background-size: cover;*/
-  }
-  .background{
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      position: fixed;
-      z-index: -999;
   }
   .header{
     height: 80px;

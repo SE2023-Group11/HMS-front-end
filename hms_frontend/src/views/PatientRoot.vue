@@ -88,7 +88,7 @@
       </Card>
     </div>
   </div>
-    <h2 style="text-align: left;margin-left: 20px;margin-bottom: 20px;">新闻动态</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-bottom: 20px;">新闻动态</h2>
     <div class="news-container">
       <div class="carouselNewsImage">
         <Carousel :value="newsImages" :numVisible="1" :numScroll="1" circular :autoplayInterval="5000">
@@ -139,7 +139,7 @@
       </div>
     </div>
 
-    <h2 style="text-align: left;margin-left: 20px;margin-top: 100px;margin-bottom: 20px;">医院介绍</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-top: 100px;margin-bottom: 20px;">医院介绍</h2>
     <div class="introduction-container">
       <h3 style="text-align: left;">医院概况</h3>
       <p style="font-size: 16px;text-align: left;margin-top: 20px;margin-bottom: 50px;">
@@ -165,7 +165,7 @@
       <img alt="user header" src="../Pic/医院介绍.jpg" style="width: 100%;" />
       <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;text-align: center;">以心相伴，关怀健康</h1>
     </div>
-    <h2 style="text-align: left;margin-left: 20px;margin-top: 30px;">友情链接</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-top: 30px;">友情链接</h2>
     <div class="linkContainer">
       <div class="hospital">
         <img alt="user header" src="../Pic/医院图标.png" style="width: 25px;height:25px" />
@@ -241,8 +241,8 @@ export default {
   },
 
   methods:{
-    goToTestPage(){
-      this.$router.push({name:'TestPage'})
+    goToPatientSpace() {
+    this.$router.push('/patientSpace')
     },
     goToDelete() {
     this.$router.push('/login')
@@ -250,14 +250,11 @@ export default {
     goToLogin() {
     this.$router.push('/login')
     },
-    goToCheckDoctorInfo(){
-      this.$router.push('/checkDoctorInfo')
-    },
     goToMessage() {
     this.$router.push('/message')
     },
-    goToPatientSpace() {
-    this.$router.push('/patientSpace')
+    goToCheckDoctorInfo(){
+      this.$router.push('/checkDoctorInfo')
     },
     goToAddAppointment(){
       this.$router.push('/addAppointment')
@@ -431,8 +428,9 @@ body {
     position: relative;
 }
 .textContainer{
-  width:100%;
+  width:90%;
   margin-top: 50px;
+  margin-left: 50px;
   padding-top: 10px;
   padding-bottom: 20px;
   position: relative;
@@ -442,22 +440,17 @@ body {
   border-bottom: none;
 }
 
-.demo-bottom-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
 .carouselImage {
   position: relative;
   width: 100%;
   margin-bottom: 50px;
 }
 .news-container{
-  width:100%;
+  width:90%;
   height: 500px;
   position: relative;
   padding-top: 100px;
+  margin-left: 50px;
 }
 .carouselNewsImage{
     width: 500px;
@@ -476,7 +469,7 @@ body {
       top:0;
       text-align: left;
       border: 1px solid #e0e0e0;
-      width: 900px;
+      width: 850px;
       height: 500px;
       padding-left: 20px;
       padding-bottom: 10px;
@@ -487,7 +480,7 @@ body {
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; 
+    gap: 10px; 
     margin-bottom: 100px;
   }
   
@@ -497,11 +490,12 @@ body {
     /*border: 0.5px solid rgb(38, 21, 226); */
 }
 .introduction-container{
-    width: 100%;
+    width: 93%;
     box-shadow: #2c3e50;
     background-color:beige;
     margin-bottom: 100px;
     margin-top: 10px;
+    margin-left: 50px;
     padding-top: 30px;
     padding-left: 40px;
     padding-bottom: 50px;

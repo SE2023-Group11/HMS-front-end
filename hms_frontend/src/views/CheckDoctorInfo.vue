@@ -10,10 +10,10 @@
         <h1 class="header_user_word">登录/注册</h1>
         <div id="triangle-down"></div>
         <div id="header_list" ref="headerList">
-          <div class="header_list_item">个人主页</div>
-          <div class="header_list_item">消息通知</div>
-          <div class="header_list_item">账号注销</div>
-          <div class="header_list_item">退出登录</div>
+            <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
+            <div class="header_list_item" @click="goToMessage">消息通知</div>
+            <div class="header_list_item" @click="goToDelete">账号注销</div>
+            <div class="header_list_item" @click="goToLogin">退出登录</div>
         </div>
       </div>
     </div>
@@ -469,6 +469,18 @@
           };
     },
     methods:{
+        goToPatientSpace() {
+        this.$router.push('/patientSpace')
+        },
+        goToDelete() {
+        this.$router.push('/login')
+        },
+        goToLogin() {
+        this.$router.push('/login')
+        },
+        goToMessage() {
+        this.$router.push('/message')
+        },
         showList() {
             var list = this.$refs.headerList;
             list.style.display = "block";
@@ -657,7 +669,7 @@
       width: 932px;
       height: 400px;
       padding-left: 20px;
-      background-color:rgb(83, 143, 234);
+      background-color:rgb(33, 164, 208);
   }
   .banner>.wrap{
       position: relative;
