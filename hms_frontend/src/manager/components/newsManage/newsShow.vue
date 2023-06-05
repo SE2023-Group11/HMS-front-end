@@ -45,11 +45,12 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import ConfirmDialog from 'primevue/confirmdialog';
 import Toast from 'primevue/toast';
+import axios from 'axios';
 
 let visible = ref(false)
 let introText = ref("")
 let itemsToBeDeleted = ref([])
-
+let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 let files = []
 
 function getFiles(event)
@@ -92,6 +93,24 @@ const confirm2 = () => {
             header: '删除新闻',
             acceptClass: 'p-button-danger',
             accept: () => {
+                console.log(itemsToBeDeleted.value)
+                let array_ = itemsToBeDeleted.value
+                let ret = []
+                for(let i=0; i<array_.length; i++)
+                {
+                    ret.push(array_[i].id)
+                }
+                console.log(ret)
+                axios({
+                    method: 'delete',
+                    url: 'http://121.199.161.134:8080/deleteNews',
+                    params: {
+                        token: token,
+                        id: ret
+                    }
+                }).then((res)=>{
+                    console.log(res)
+                })
                 toast.add({ severity: 'info', summary: '删除新闻', detail: '已删除全部选中新闻！', life: 3000 });
             }
         });
