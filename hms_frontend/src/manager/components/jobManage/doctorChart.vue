@@ -10,10 +10,10 @@
                         <td style="width: 30%;">电话：{{ item.doctorPhone }}</td>
                         <td style="width: 30%;">科室：{{ item.doctorSection }}</td>
                         <td style="width: 30%;">
-                            <Button label="排班" @click="boolArray[index].value=true" />
+                            <Button label="排班" @click="func3(index)" />
                             <Dialog v-model:visible="boolArray[index].value" modal header="医生排班" style="width: 70%; ">
-                                <h2 style="text-align: center; margin: 5px;">{{ item.roomName }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }}</h2>
-                                <ManageJob :doctorID=item.doctorID />
+                                <h2 style="text-align: center; margin: 5px;">您现在在为 {{ item.doctorName }} 排班</h2>
+                                <ManageJob :doctorID=item.doctorId />
                                 <br/>
                                 <br/>
                                 <br/>
@@ -56,10 +56,14 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import ManageJob from './manageJob.vue';
 import { defineProps } from 'vue';
+import axios from 'axios';
 
 let roomName = ref("")
 let boolArray = [ref(false), ref(false), ref(false)]
 let props = defineProps({doctors: Array})
+let workInfo = ref({})
+
+let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 
 emitter.on("roomName", (res)=>{
     roomName.value = res.value
@@ -81,5 +85,23 @@ watchEffect(()=>{
     console.log(boolArray)
 })
 
+function func3(index)
+{
+    boolArray[index].value=true
+    console.log(doctors.value[index].doctorId)
+    emitter.emit("doctorID", doctors.value[index].doctorId)
+    // axios({
+    //     method: 'post',
+    //     url: 'http://121.199.161.134:8080/getJob',
+    //     params: {
+    //         token: token,
+    //         doctorID: doctors.value[index].doctorId
+    //     }
+    // }).then((res)=>{
+    //     workInfo.value = res.data.data
+    //     emitter.emit("workInfo", workInfo)
+    //     console.log(workInfo)
+    // })
+}
 
 </script>
