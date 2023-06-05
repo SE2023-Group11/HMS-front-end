@@ -6,8 +6,8 @@
                     <template #title>{{ item.infoType==1?string1:string2 }}</template>
                     <template #content>
                         <div  style="display: flex; justify-content: center;">
-                            <table>
-                                <tr style="text-align: center;">
+                            <table style="text-align: center;">
+                                <tr>
                                     <td style="width: 120px;">发起人：</td>
                                     <td style="width: 300px;">{{ item.name }}</td>
                                 </tr>
@@ -22,6 +22,7 @@
                             </table>
                         </div>                        
                         <div class="card flex justify-content-center" style="margin-top: 20px;">
+                            <ConfirmDialog></ConfirmDialog>
                             <Button @click="getDetailInfo(item)">详细信息</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <Button @click="acceptNotif(item.infoId)">同意</Button>&nbsp;&nbsp;&nbsp;
                             <Button @click="declineNotif(item.infoId)">拒绝</Button>
@@ -65,13 +66,18 @@
 import Card from 'primevue/card'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
-import { onMounted, ref } from 'vue'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import axios from 'axios'
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
 let string1 = "医生注册申请"
 let string2 = "医生信息修改申请"
 let array = ref([])
 let visibleList = []
 let detailInfo = ref({})
+const confirm = useConfirm()
+const toast = useToast();
 let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 onMounted(()=>{
     axios({
@@ -86,12 +92,15 @@ onMounted(()=>{
         console.log(array)
 
         let i = 0
+        visibleList = []
         for(i=0; i<array.value.length; i++)
         {
             visibleList.push(ref(false))
         }
     })    
 })
+
+
 function getDetailInfo(item)
 {
     visibleList[array.value.indexOf(item)].value = true
@@ -107,7 +116,7 @@ function getDetailInfo(item)
         detailInfo.value = res.data.data
     })
 }
-function acceptNotif(id)
+function _acceptNotif(id)
 {
     axios({
         method: 'post',
@@ -118,9 +127,22 @@ function acceptNotif(id)
         }
     }).then((res)=>{
         console.log(res)
+        location.reload()
     })
 }
-function declineNotif(id)
+
+const acceptNotif = (id) => {
+    confirm.require({
+        message: '确定要同意该请求吗？',
+        header: '同意请求',
+        accept: (id) => {
+            toast.add({ severity: 'info', summary: '已确认', detail: '你已接受该申请', life: 3000 });
+            _acceptNotif(id)
+        }
+    })
+}
+
+function _declineNotif(id)
 {
     axios({
         method: 'post',
@@ -131,8 +153,21 @@ function declineNotif(id)
         }
     }).then((res)=>{
         console.log(res)
+        location.reload()
     })
 }
+
+const declineNotif = (id) => {
+    confirm.require({
+        message: '确定要拒绝该请求吗？',
+        header: '拒绝请求',
+        accept: (id) => {
+            toast.add({ severity: 'info', summary: '已确认', detail: '你已拒绝该申请', life: 3000 });
+            _declineNotif(id)
+        }
+    })
+}
+
 /*function generateList(res)
 {
     let i = 0

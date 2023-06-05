@@ -50,7 +50,7 @@
 
 <script setup>
 import emitter from './bus';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, watch } from 'vue';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -66,7 +66,11 @@ emitter.on("roomName", (res)=>{
     console.log(roomName.value)
 })
 
-let doctors = ref(props.doctors)
+let doctors = ref([])
+emitter.on("doctorsInfo", (res)=>{
+    doctors.value = res.value
+    console.log(doctors.value)
+})
 
 watchEffect(()=>{
     let i = 0

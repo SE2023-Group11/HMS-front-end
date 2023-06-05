@@ -1,17 +1,17 @@
 <template>
     <div style="margin-top: 20px;">
-        <div style="width: 20%; position: absolute; left: 2%;">
+        <div style="width: 20%; position: absolute; left: 12%;">
             <div class="card flex justify-content-center">
-                <Listbox v-model="firstRoom" :options="firstRooms" optionLabel="name" class="w-full md:w-14rem" />
+                <Listbox v-model="firstRoom" :options="firstRooms" optionLabel="name" class="w-full md:w-14rem" @change="func1"/>
             </div>
         </div>
-        <div style="width: 30%; position: absolute; left: 22%;" v-show="showSecond">
+        <div style="width: 30%; position: absolute; left: 21%;" v-show="showSecond">
             <div class="card flex justify-content-center">
-                <Listbox v-model="secondRoom" :options="secondRooms" optionLabel="name" class="w-full md:w-14rem" />
+                <Listbox v-model="secondRoom" :options="secondRooms" optionLabel="name" class="w-full md:w-14rem" @change="func2" style="z-index: 1;"/>
             </div>
         </div>
-        <div style="position: absolute; left: 24%;" v-show="showDoctors">
-            <DoctorChart :doctors="doctors"/> 
+        <div style="position: absolute; left: 30%;" v-show="showDoctors">
+            <DoctorChart :doctors="doctors" style="z-index: 0;"/> 
         </div>
     </div>
     
@@ -33,7 +33,38 @@ let doctors = ref([])
 let showSecond = ref(false)
 let showDoctors = ref(false)
 
-watchEffect(()=>{
+function func1(){
+    axios({
+        method: 'post',
+        url: 'http://121.199.161.134:8080/getSecondRoomsByFID',
+        params: {
+            id: firstRoom.value.id
+        }
+    }).then((res)=>{
+        console.log(res)
+        secondRooms.value = res.data.data
+    })
+    showSecond.value = true
+}
+
+function func2(){
+    showDoctors.value = true
+    emitter.emit("roomName", secondRoom)
+    showSecond.value = false
+    axios({
+        method: 'get',
+        url: 'http://121.199.161.134:8080/getDoctorsByRoom',
+        params: {
+            roomName: secondRoom.value.name
+        }
+    }).then((res)=>{
+        console.log(res)
+        doctors.value = res.data.data
+        emitter.emit("doctorsInfo", doctors)
+    })
+}
+
+/*watchEffect(()=>{
     if(firstRoom.value.name==undefined)
     {
         showSecond.value = false
@@ -68,7 +99,7 @@ watchEffect(()=>{
             doctors.value = res.data.data
         })
     }
-})
+})*/
 
 onMounted(()=>{
     axios({
