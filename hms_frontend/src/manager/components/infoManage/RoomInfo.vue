@@ -2,7 +2,11 @@
     <div style="display:flex; justify-content:center; align-items:center;">
         <div class="card">
             <Card style="width: 50em">
-                <template #title> {{ props.name }} </template>
+                <template #title>
+                    <div  style="text-align: center;">
+                        {{ props.name }} 
+                    </div>
+                </template>
                 <template #content>
                     <table>
                         <tr>
@@ -17,14 +21,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><Button @click="sendChange" >提交</Button></td>
+                            <td colspan="2" style="text-align: center;"><Button @click="sendChange" >提交</Button></td>
                         </tr>
                     </table>
                 </template>
             </Card>
         </div>
     </div>
-    <Dialog v-model:visible="visible" modal header="提示" :style="{ width: '50vw' }">
+    <Dialog v-model:visible="visible" modal header="提示" :style="{ width: '30vw' }">
         {{ notice }}
     </Dialog>
     

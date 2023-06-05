@@ -9,7 +9,7 @@
                 <label for="doctor" class="ml-2">&nbsp;医生</label>
             </div>
         </div>
-        <br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <InputText type="text" v-model="name" class="p-inputtext-sm"/>&nbsp;
         <Button @click="getInfo" class="p-button-sm">查询</Button>
     </div>
