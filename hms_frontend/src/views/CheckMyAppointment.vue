@@ -1,5 +1,6 @@
 <template>
     <div class="background"></div>
+    {{ this.token }}
     <div class="container" id="container">
       <div class="header">
         <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img" />
@@ -112,7 +113,6 @@
   
   <script>
   import axios from 'axios';
-  
   export default {
       name:'CheckMyAppointment',
       data() {
@@ -121,6 +121,8 @@
                 filters: {
                     global: { value: "" }
                 },
+                token: sessionStorage.getItem('token'),
+                role : sessionStorage.getItem("role"),
           }
       },
       methods: {
@@ -131,7 +133,7 @@
           deleteAppointment(orderId) {
               axios.delete(`http://121.199.161.134:8080/deleteAppointment`,{
                   params:{
-                      token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
+                      token:this.token,
                       orderId:orderId
                   }
               })
@@ -152,8 +154,8 @@
           getPatientAppointment(){
               axios.get('http://121.199.161.134:8080/getPatientAppointment',{
                   params:{
-                      token: "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
-                  }
+                    token:this.token
+                }
               })
               .then(response => {
                   this.appointments = response.data.data;

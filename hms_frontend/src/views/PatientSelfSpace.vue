@@ -10,14 +10,14 @@
                       <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
                       <h1 class="header_tag">HMS医院门诊预约系统</h1>
                       <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
-                          <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img"/>
+                          <img v-bind:src="picture" alt="" class="header_user_img"/>
                           <h1 class="header_user_word">登录/注册</h1>
                           <div id="triangle-down"></div>
                           <div id="header_list">
-                              <div class="header_list_item">个人主页</div>
-                              <div class="header_list_item">消息通知</div>
-                              <div class="header_list_item">账号注销</div>
-                              <div class="header_list_item">退出登录</div>
+                              <div @click="jumpspace" class="header_list_item">个人主页</div>
+                              <div @click="jumpmessage" class="header_list_item">消息通知</div>
+                              <div @click="zhuxiao" class="header_list_item">账号注销</div>
+                              <div @click="outlogin" class="header_list_item">退出登录</div>
                           </div>
                       </div>
                   </div>
@@ -44,14 +44,15 @@
       </div>
       <div class="leftpart">
           <div class="avatar">
-              <img src="../../public/person.png" v-if="!imageUrl" />
+              <img v-bind:src="picture" v-if="!imageUrl" />
               <img :src="imageUrl" v-if="imageUrl">
           </div>
           <div class="bt_changePic">
-              <label for="file-input" class="custom-file-upload">
+              <!-- <label for="file-input" class="custom-file-upload">
                   <i class="fa fa-cloud-upload"></i> 点击更换头像
-              </label>
-              <input id="file-input" type="file" @click="changePic" style="display:none;">
+              </label> -->
+              <!-- <input id="file-input" type="file" @click="changePic" style="display:none;"> -->
+              <input type="file" class="uploadFile" @change="getFile($event)">
           </div>
       </div>
       <div class="pp">
@@ -212,12 +213,52 @@ const router = useRouter()
 const id = ref('');
 const token = sessionStorage.getItem('token');
 const role = sessionStorage.getItem("role");
+const picture = ref('https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png');
 onMounted(() => {
     getinfo();
     gethistory();
+    gettu();
     console.log(sessionStorage.getItem("role"));
     console.log(sessionStorage.getItem("token"));
 })
+function gettu(){
+    console.log("dasdasdasdasssssssssssssss");
+    if(sessionStorage.getItem('role') == 'patient'){
+        axios.get('http://121.199.161.134:8080/getPatientImg',{
+        params: {
+            // token: token.value, 
+            token:token
+        }
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data.data)
+            picture.value=response.data.data
+            console.log('eeeeeeeeeeeee');
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+    }
+    else{
+        axios.get('http://121.199.161.134:8080/getDoctorImg',{
+        params: {
+            // token: token.value, 
+            token:token
+        }
+    })
+        .then(response => {
+            // 成功获取数据后的处理逻辑
+            console.log(response.data.data)
+            picture.value=response.data.data
+        })
+        .catch(error => {
+            // 处理错误的逻辑
+            console.error(error)
+        })
+    }
+}
 function handleTabChange(e) {
     const str = sessionStorage.getItem('role')
     console.log(str);
@@ -457,9 +498,46 @@ const imageUrl = ref('');
 const formData = new FormData();
 //判断传输的结果是否成功
 const judpic = ref(0);
-function changePic(event) {
+const ss =ref('');
+const ff = ref();
+function toback(){
+    console.log(ss.value+"dasdasdasdas");
+    if(role == 'patient'){
+        axios.post('http://121.199.161.134:8080/patientChangeImg', null, {
+            params: {
+                token:token,
+                url:ss.value
+            }
+        }).then(response => {
+           console.log(response);
+           picture.value=ss.value;
+        }).catch(error => {
+            console.error('Upload failed: ', error);
+            judpic.value = -1;
+        });
+    }
+    else{
+        axios.post('http://121.199.161.134:8080/doctorChangeImg', null, {
+            params: {
+                token:token,
+                url:ss.value
+            }
+        }).then(response => {
+           console.log(response);
+           picture.value=ss.value;
+        }).catch(error => {
+            console.error('Upload failed: ', error);
+            judpic.value = -1;
+        });
+    }
+}
+function getFile(event) {
     const file = event.target.files[0];
+    
+    console.log('bbbbbbbbbbb');
+    
     if (file) {
+        console.log('ttttttttttttttt');
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -467,18 +545,27 @@ function changePic(event) {
         };
         reader.readAsDataURL(file);
     }
+    console.log(file);
+    // const formData = new FormData();
+    // formData.append("name",token);
+    // formData.append("file",file);
+    
     //将上传的文件存到数据库
-    if (file?.file) {
-        const blob = new Blob([file], { type: file.type });
-        formData.append('file', blob, { filename: 'image.jpg' });
-        axios.post('http://121.199.161.134:8080/savePic', formData, {
-            params: {
-                pid: pid.value,
-                image: formData.values,
+    if (file) {
+        axios.post('https://pz.al/api/upload', {image:file}, {
+            params:{
+
+            },
+            headers:{
+                "Content-Type":"multipart/form-data"
             }
         }).then(response => {
-            console.log('Upload successful!');
-            judpic.value = 1;
+            console.log(response.data.data.url);
+            if(response.data.code==200){
+                ss.value = response.data.data.url;
+                console.log(ss.value);
+                toback();
+            }
         }).catch(error => {
             console.error('Upload failed: ', error);
             judpic.value = -1;
@@ -499,6 +586,52 @@ function unShowList(){
     console.log("out");
     list.style.display = "none";
 };
+function outlogin(){
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    // window.location.href = '/login';
+    router.push('/login');
+};
+function zhuxiao(){
+    if(sessionStorage.getItem('role') == 'doctor'){
+        console.log('rrrrrrrrrrrrrrrrr');
+        axios.post('http://121.199.161.134:8080/doctorDelete',null,{
+        params:{
+            token: token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            outlogin();
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+    else{
+        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
+        params:{
+            token: token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            outlogin();
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+}
+function jumpmessage(){
+    console.log('4444444444');
+    // window.location.href = '/message';
+    router.push('/message');
+}
+function jumpspace(){
+    if(sessionStorage.getItem('role') == 'patient') router.push('/patientspace');
+    else router.push('/doctorspace');
+}
 </script>
     
 <style scoped>

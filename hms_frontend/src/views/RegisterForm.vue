@@ -236,12 +236,13 @@ function registerbt() {
             .then(response => {
                 const jud =response.data.code;
                 console.log(typeof(jud));
+                console.log(response.data);
                 if(jud == 1){
-                    jugreg.value = 1;
+                    judreg.value = 1;
                     window.location.href="/login";
                 }
                 else{
-                    jugreg.value = -1;
+                    judreg.value = -1;
                     console.log('登录失败');                    
                 }
             })
