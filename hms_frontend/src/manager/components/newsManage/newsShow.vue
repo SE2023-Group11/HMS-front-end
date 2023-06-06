@@ -39,9 +39,10 @@
     <div>
         <Button @click="confirm2()" label="删除新闻" style="position: absolute; margin: 20px; left: 25%;"></Button>
     </div>
-    <div style="position: absolute; top: 220px; align-items: center; height: fit-content; max-height: 500px; overflow: auto;">
+    <div style="position: relative; top: 90px;">
         <newsListShow @select-items="getSelectedItems"/>
     </div>
+    
 </template>
 
 <script setup>
@@ -63,9 +64,6 @@ let itemsToBeDeleted = ref([])
 let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 let files = []
 let imageUrl = ref("")
-let date = ref()
-
-
 const confirm = useConfirm();
 const toast = useToast();
 
@@ -107,8 +105,7 @@ function upload()
         },
         data: {
             img: imageUrl.value,
-            body: introText.value,
-            date: date.value
+            body: introText.value
         }
     }).then((res)=>{
         console.log(res)

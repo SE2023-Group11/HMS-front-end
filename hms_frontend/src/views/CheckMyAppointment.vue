@@ -1,28 +1,42 @@
 <template>
     <div class="container" id="container">
-      <div class="header">
-        <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img" />
-        <h1 class="header_tag">HMS医院门诊预约系统</h1>
-        <div class="header_user" @mouseenter="showList" @mouseleave="unShowList">
-          <!-- 显示头像 -->
-          <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img" />
-          <!-- 未登录时显示登录/注册 -->
-          <!-- 登录后显示用户名 -->
-          <h1 class="header_user_word">登录/注册</h1>
-          <div id="triangle-down"></div>
-  
-          <div id="header_list" ref="headerList">
+        <div class="header">
+      <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img" />
+      <h1 class="header_tag" style="font-family:Arial, Helvetica, sans-serif;font-size: 20px;">HMS医院门诊预约系统</h1>
+      <div class="header_user" @mouseenter="showList" @mouseleave="unShowList">
+        <!-- 显示头像 -->
+        <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img" />
+        <!-- 未登录时显示登录/注册 -->
+        <!-- 登录后显示用户名 -->
+        <h1 class="header_user_word">
+          <div v-if="login === false">
+            <router-link :to="'/login'" style="text-decoration: none;color:gray;">登录/注册</router-link>
+          </div>
+          <div v-else style="font-size: 18px;">
+            {{ this.patientName }}
+          </div>
+        </h1>
+        <div id="triangle-down"></div>
+        <div id="header_list" ref="headerList">
+          <div v-if="login===true">
             <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
             <div class="header_list_item" @click="goToMessage">消息通知</div>
             <div class="header_list_item" @click="goToDelete">账号注销</div>
             <div class="header_list_item" @click="goToLogin">退出登录</div>
           </div>
+          <div v-else>
+            <div class="header_list_item" @click="alertLogin">个人主页</div>
+            <div class="header_list_item" @click="alertLogin">消息通知</div>
+            <div class="header_list_item" @click="alertLogin">账号注销</div>
+            <div class="header_list_item" @click="alertLogin">退出登录</div>
+          </div>
+          
         </div>
       </div>
-  
+    </div>
       <div class="main">
         <div class="globalMenu">
-            <span class="pi-map-marker"></span>
+            <img alt="user header" src="../Pic/导航图标.png" style="width: 20px;height:30px;" />
             &nbsp;
             <router-link :to="'/PatientRoot'" style="text-decoration: none;color:gray;">首页</router-link>
             &nbsp;>&nbsp;
@@ -67,6 +81,7 @@
                             <div v-if="data.data.orderStatus === 3">
                                 <Button icon="pi pi-times" label="取消预约" severity="warning" size="small" v-tooltip="'点击取消该预约'" @click="deleteAppointment(data.data.orderId)" />
                             </div>
+                            
                             <div v-else>
                                 <Button icon="pi pi-times" label="无法取消" severity="danger" size="small" v-tooltip="'无法取消该预约'" disabled/>
                             </div>
@@ -79,7 +94,7 @@
             
         <div class="tips">
             <Tag value="医生手动确认后就诊即完成" severity="success"></Tag>
-            <Tag value="请及时完成您的就诊" severity="warning"></Tag>
+            <Tag value="必须在约定时间一天前取消预约" severity="warning"></Tag>
             <Tag value="每月失约两次以上会被限制" severity="danger"></Tag>
         </div> 
             
@@ -124,6 +139,10 @@
                 filters: {
                     global: { value: "" }
                 },
+                token: sessionStorage.getItem('token'),
+                role: sessionStorage.getItem('role'),
+                login: false,
+                patientName: null
           }
       },
       methods: {
@@ -131,10 +150,27 @@
             this.$router.push('/patientSpace')
         },
         goToDelete() {
+            if (confirm("您确定吗？")) {
+        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
+        params:{
+            token: this.token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            sessionStorage.removeItem('role');
+            sessionStorage.removeItem('token');
             this.$router.push('/login')
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
         },
         goToLogin() {
-            this.$router.push('/login')
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('token');
+        this.$router.push('/login')
         },
         goToMessage() {
             this.$router.push('/message')
@@ -146,12 +182,11 @@
           deleteAppointment(orderId) {
               axios.delete(`http://121.199.161.134:8080/deleteAppointment`,{
                   params:{
-                      token:"eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0",
+                      token:this.token,
                       orderId:orderId
                   }
               })
               .then(response => {
-                  console.log(response);
                   if(response.data.code == 0)
                   {
                       alert(response.data.msg+"，取消失败");
@@ -167,7 +202,7 @@
           getPatientAppointment(){
               axios.get('http://121.199.161.134:8080/getPatientAppointment',{
                   params:{
-                      token: "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVQYXRpZW50Iiwibm93TG9nZ2VkSW5JZCI6IlAwMDAwMDAwMDAwMCIsImlhdCI6MTY4NDc0NTUxOCwiZXhwIjoxNjg2NTQ1NTE4fQ.5dh7XJTkDsaVpHrsTBw4YGs8lnKdY1GRnNCgbJZLtC0"
+                      token: this.token
                   }
               })
               .then(response => {
@@ -199,6 +234,27 @@
                 return "";
             }
         },
+        judgeLogin(){
+            if(this.token === null)
+            {
+                return false;
+            }   
+            else 
+                return true;
+        },
+        getPatientInfo(){
+            axios.get('http://121.199.161.134:8080/getPatientInformation',{
+                params:{
+                token:this.token
+                }
+            })
+            .then(response => {
+                this.patientName = response.data.data.patientName;
+            })
+            .catch(error => {
+                console.log(error);
+            })  
+        },
           showList() {
             var list = this.$refs.headerList;
             list.style.display = "block";
@@ -209,7 +265,13 @@
           },
       },
       mounted() {
-            this.getPatientAppointment();
+        this.login = this.judgeLogin();
+        if(this.login === false){
+            alert("请先登录");
+            this.$router.go(-1);
+        }
+        this.getPatientInfo();
+        this.getPatientAppointment();
       }
   }
   
@@ -384,7 +446,7 @@
     position: relative;
     width:300px;
     height: 40px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
     margin-left: 10px;
     text-align: left;
 }

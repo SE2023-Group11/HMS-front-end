@@ -108,7 +108,7 @@ const emailError = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(0);
+const countdown = ref(20);
 let timer = null;
 const department = ref('');
 const type = ref();
@@ -149,7 +149,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 2;
+            countdown.value = 60;
             sendingVerifyCode.value = false;
         }
     }, 1000);
@@ -236,12 +236,13 @@ function registerbt() {
             .then(response => {
                 const jud =response.data.code;
                 console.log(typeof(jud));
+                console.log(response.data);
                 if(jud == 1){
-                    jugreg.value = 1;
+                    judreg.value = 1;
                     window.location.href="/login";
                 }
                 else{
-                    jugreg.value = -1;
+                    judreg.value = -1;
                     console.log('登录失败');                    
                 }
             })

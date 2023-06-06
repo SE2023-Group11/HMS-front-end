@@ -7,18 +7,34 @@
         <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img" />
         <!-- 未登录时显示登录/注册 -->
         <!-- 登录后显示用户名 -->
-        <h1 class="header_user_word">登录/注册</h1>
+        <h1 class="header_user_word">
+          <div v-if="login === false">
+            <router-link :to="'/login'" style="text-decoration: none;color:gray;">登录/注册</router-link>
+          </div>
+          <div v-else style="font-size: 18px;">
+            {{ this.patientName }}
+          </div>
+        </h1>
         <div id="triangle-down"></div>
         <div id="header_list" ref="headerList">
-          <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
-          <div class="header_list_item" @click="goToMessage">消息通知</div>
-          <div class="header_list_item" @click="goToDelete">账号注销</div>
-          <div class="header_list_item" @click="goToLogin">退出登录</div>
+          <div v-if="login===true">
+            <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
+            <div class="header_list_item" @click="goToMessage">消息通知</div>
+            <div class="header_list_item" @click="goToDelete">账号注销</div>
+            <div class="header_list_item" @click="goToLogin">退出登录</div>
+          </div>
+          <div v-else>
+            <div class="header_list_item" @click="alertLogin">个人主页</div>
+            <div class="header_list_item" @click="alertLogin">消息通知</div>
+            <div class="header_list_item" @click="alertLogin">账号注销</div>
+            <div class="header_list_item" @click="alertLogin">退出登录</div>
+          </div>
+          
         </div>
       </div>
     </div>
     <div class="globalMenu">
-            <span class="pi-map-marker"></span>
+            <img alt="user header" src="../Pic/导航图标.png" style="width: 20px;height:30px;" />
             &nbsp;
             <router-link :to="'/PatientRoot'" style="text-decoration: none;color:gray;">首页</router-link>
             &nbsp;>&nbsp;
@@ -30,7 +46,6 @@
                 <InputText v-model="searchSectionName" placeholder="搜索科室名" @keyup.enter="searchSection"/>
             </span>
     </div>
-    
     <div class="banner">
       <div class="wrap">
         <div class="selectDate">
@@ -50,7 +65,7 @@
             </div>
         </div>
         <div class="introduction">
-            <h3 style="margin-top: 20px;margin-bottom: 20px;">注意事项：</h3>
+            <h3 style="margin-top: 40px;margin-bottom: 20px;">注意事项：</h3>
             <p style="margin-bottom: 10px;">
                 1.提前预约：为了确保您能及时就诊，请尽量提前预约，特别是在繁忙的时间段或热门科室。
             </p>
@@ -413,7 +428,6 @@
                     <template #title>姓名：{{ doctor.doctorName }}</template>
                     <template #content>
                         <div v-if="hoveredDoctor === doctor" style="display: flex;">
-                                    
                                     <div class="morning"  style="width: 50%;">
                                         <h5 style="text-align: center;margin-bottom: 10px;">上午：</h5>
                                         <div v-for="(time,index) in morningTimes" :key="index">
@@ -440,7 +454,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+ 
                         </div>
                         <div v-else>
                             <p>职称：{{ doctor.doctorTitle }}</p>
@@ -451,7 +465,7 @@
                     </template>
                     <template #footer>
                         <div v-if="hoveredDoctor != doctor">
-                            <Button icon="pi pi-search" label="查看预约信息" severity="Primary" size="small" @click="hoveredDoctor=doctor" style="left:25%"/>
+                            <Button icon="pi pi-search" label="查看预约信息" severity="Primary" size="small" @click="hoveredDoctor=doctor;getDoctorSchedule(doctor.doctorId,this.selectedDate)" style="left:25%"/>
                         </div>
                     </template>
                 </Card>
@@ -462,10 +476,6 @@
         </div>
     <div>
 </div>
-
-
-        
-
 
 <div class="footer">
       <div class="footer_box">
@@ -529,6 +539,10 @@ export default {
                 '16:30-17:00',
             ],
             searchSectionName: null,
+            token: sessionStorage.getItem('token'),
+            role: sessionStorage.getItem('role'),
+            login: false,
+            patientName: null,
         };
     },
     methods: {
@@ -552,6 +566,14 @@ export default {
             var list = this.$refs.headerList;
             list.style.display = "none";
         },
+        judgeLogin(){
+            if(this.token === null)
+            {
+                return false;
+            }   
+            else 
+                return true;
+        },
         getSectionInfo(){
             axios.get('http://121.199.161.134:8080/getRoomName')
             .then(response => {
@@ -565,10 +587,8 @@ export default {
         getDoctorsByRoomDate() {
             axios.get('http://121.199.161.134:8080/getDoctorsBySchedule', {
             params: {
-                //date: this.selectedDate,
-                roomName: this.selectedSectionName,
-                date: "2023-05-01"
-                
+                date: this.selectedDate,
+                roomName: this.selectedSectionName,  
             }
             })
             .then(response => {
@@ -686,13 +706,31 @@ export default {
                 alert("未查询到对应科室信息");
             }
         },
+        getPatientInfo(){
+            axios.get('http://121.199.161.134:8080/getPatientInformation',{
+                params:{
+                token:this.token
+                }
+            })
+            .then(response => {
+                this.patientName = response.data.data.patientName;
+            })
+            .catch(error => {
+                console.log(error);
+            })  
+        },
     },
     mounted() {
         this.selectedDate = this.formatDate("Today");
+        this.login = this.judgeLogin();
+        if(this.login === false){
+            alert("请先登录");
+            this.$router.go(-1);
+        }
+        this.getPatientInfo();
         this.getSectionInfo();
         this.getSectionByName();
         this.getDoctorsByRoomDate();
-        this.getDoctorSchedule("D00000000000","2023-05-01");
     },
 }
 </script>

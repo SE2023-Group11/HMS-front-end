@@ -7,19 +7,35 @@
         <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img" />
         <!-- 未登录时显示登录/注册 -->
         <!-- 登录后显示用户名 -->
-        <h1 class="header_user_word">登录/注册</h1>
+        <h1 class="header_user_word">
+          <div v-if="login === false">
+            <router-link :to="'/login'" style="text-decoration: none;color:gray;">登录/注册</router-link>
+          </div>
+          <div v-else style="font-size: 18px;">
+            {{ this.patientName }}
+          </div>
+        </h1>
         <div id="triangle-down"></div>
         <div id="header_list" ref="headerList">
+          <div v-if="login===true">
             <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
             <div class="header_list_item" @click="goToMessage">消息通知</div>
             <div class="header_list_item" @click="goToDelete">账号注销</div>
             <div class="header_list_item" @click="goToLogin">退出登录</div>
+          </div>
+          <div v-else>
+            <div class="header_list_item" @click="alertLogin">个人主页</div>
+            <div class="header_list_item" @click="alertLogin">消息通知</div>
+            <div class="header_list_item" @click="alertLogin">账号注销</div>
+            <div class="header_list_item" @click="alertLogin">退出登录</div>
+          </div>
+          
         </div>
       </div>
     </div>
     
     <div class="globalMenu">
-            <span class="pi-map-marker"></span>
+            <img alt="user header" src="../Pic/导航图标.png" style="width: 20px;height:30px;" />
             &nbsp;
             <router-link :to="'/PatientRoot'" style="text-decoration: none;color:gray;">首页</router-link>
             &nbsp;>&nbsp;
@@ -466,6 +482,10 @@
               hoveredDoctor: null,
               sections:[],
               searchSectionName:null,
+              login: false,
+              patientName: null,
+              token: sessionStorage.getItem('token'),
+              role: sessionStorage.getItem('role'),
           };
     },
     methods:{
@@ -473,9 +493,26 @@
         this.$router.push('/patientSpace')
         },
         goToDelete() {
-        this.$router.push('/login')
+            if (confirm("您确定吗？")) {
+        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
+        params:{
+            token: this.token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            sessionStorage.removeItem('role');
+            sessionStorage.removeItem('token');
+            this.$router.push('/login')
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
         },
         goToLogin() {
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('token');
         this.$router.push('/login')
         },
         goToMessage() {
@@ -547,15 +584,41 @@
               if (section) {
                   return section.sectionFirname + '-' + section.sectionSecname;
               } else {
-                  console.log('cannot find Id');
                   return '';
               }
-          }
+          },
+          getPatientInfo(){
+                axios.get('http://121.199.161.134:8080/getPatientInformation',{
+                    params:{
+                        token:this.token
+                    }
+                })
+                .then(response => {
+                    this.patientName = response.data.data.patientName;
+                })
+                .catch(error => {
+                    console.log(error);
+                })  
+            },
+            judgeLogin(){
+                if(this.token === null)
+                {
+                    return false;
+                }   
+                else 
+                    return true;
+            },
+
     },
     mounted(){
-            this.getSectionInfo();
-            this.getSectionByName();
-            this.getDoctorsByRoom(this.selectedSectionName);
+        this.login = this.judgeLogin();
+        if(this.login===true){
+            this.getPatientInfo();
+        
+        }
+        this.getSectionInfo();
+        this.getSectionByName();
+        this.getDoctorsByRoom(this.selectedSectionName);
     }
   }
   </script>
@@ -654,7 +717,7 @@
       width: 234px;
       height: 400px;
       padding: 10px 0;
-      background-color: rgba(105,101,101,0.6);
+      background-color: rgb(129, 165, 219);
       position: absolute;
       left: 20px;
       top: 0;
@@ -669,7 +732,7 @@
       width: 932px;
       height: 400px;
       padding-left: 20px;
-      background-color:rgb(33, 164, 208);
+      background-color:#d0e6ff;
   }
   .banner>.wrap{
       position: relative;
@@ -687,17 +750,21 @@
   .slide>ul>li>a{
       color: #fff;
       text-decoration: none;
+      cursor: pointer;
   }
   .slide i{
       float: right;
       padding-right: 20px;
   }
   .slide>ul>li:hover{
-      background-color:blue;
+      background-color:rgb(30, 91, 212);
   }
   .slide>ul{
       list-style-type: none;
   
+  }
+  .slide-list>ul>li>a{
+    cursor: pointer;
   }
   .slide-list{
       height:400px;

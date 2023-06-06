@@ -7,7 +7,7 @@ import PatientSpace from "../views/PatientSelfSpace.vue";
 import Message from "../views/SendMessage.vue";
 import ForgetPwd from "../views/ForgetPwd.vue";
 import DoctorRoot from "../views/DoctorRoot.vue";
-import D_PatientInfo from "../views/D_PatientInfo.vue";
+import DPInfo from "../views/DPInfo.vue";
 import AddAppointment from "../views/AddAppointment.vue";
 import CheckDoctorInfo from "../views/CheckDoctorInfo.vue";
 import CheckMyAppointment from "../views/CheckMyAppointment.vue";
@@ -21,18 +21,21 @@ import managerEnter from '../manager/ManagerEnter'
 import DefaultView from '../manager/DefaultView'
 const routes = [
     {   path:"/",
-        redirect:"/login"
+        redirect:"/patientRoot"
     },
     {
         path:"/doctorRoot",
         name:"DoctorRoot",
-        component:DoctorRoot
-    },
-    {
-        path: "/d_PatientInfo",
-        name: "D_PatientInfo",
-        component: D_PatientInfo
-    },
+        component:DoctorRoot,
+        // children:[{
+        //     path: "/d_PatientInfo",
+        //     name: "D_PatientInfo",
+        //     component: D_PatientInfo
+        // },]
+        },
+       { path: "/dPInfo",
+        name: "DPInfo",
+        component: DPInfo},
     {
         path: "/login",
         name: "Login",
