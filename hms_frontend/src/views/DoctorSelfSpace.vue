@@ -12,7 +12,7 @@
                         <h1 class="header_tag">HMS医院门诊预约系统</h1>
                         <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
                             <img v-bind:src="picture" alt="" class="header_user_img"/>
-                            <h1 class="header_user_word">登录/注册</h1>
+                            <h1 class="header_user_word">{{ namecontent }}</h1>
                             <div id="triangle-down"></div>
                             <div id="header_list">
                                 <div @click="jumpspace" class="header_list_item">个人主页</div>
