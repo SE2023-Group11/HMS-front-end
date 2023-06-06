@@ -14,7 +14,7 @@
                         <div class="header_list_item" href="/doctorSpace">个人主页</div>
                         <div class="header_list_item" href="/message">消息通知</div>
                         <div class="header_list_item" href="/login">账号注销</div>
-                        <div class="header_list_item" href="/login">退出登录</div>
+                        <div class="header_list_item" @click="goToLogin">退出登录</div>
                     </div>
                 </div>
             </div> 
@@ -70,6 +70,13 @@ import ManagerView from './ManagerView.vue';
             console.log("out");
             list.style.display = "none";
         },
+        goToLogin() {
+        if (confirm("您确定吗？")) {
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    this.$router.push('/login')
+        }
+    },
     },
     components: { ManagerView }
 }

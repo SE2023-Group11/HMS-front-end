@@ -111,8 +111,8 @@
                     <div class="newsTitle">
                       <div v-for="item in news.slice(0, 4)" :key="item.id" class="news">
                         <div class="date">
-                          <h1 style="font-size: 36px;"> {{item.date}}</h1>
-                          <div style="font-size: 16px;">{{item.date}}</div>
+                          <h1 style="font-size: 36px;"> {{item.date.substr(-5)}}</h1>
+                          <div style="font-size: 16px;">{{item.date.substr(0,4)}}</div>
                         </div>
                         <div class="title">
                           {{ item.body.slice(0,70) }}
@@ -257,7 +257,7 @@ console.log("no")
         sessionStorage.setItem('patientId',this.appointmentList.data[index].patientId);
         console.log(this.token);
 
-        window.open('http://localhost:8080/#/dPInfo', '_blank', 'width=1440px,height=960px');
+        window.open('http://121.199.161.134:8081/#/dPInfo', '_blank', 'width=1440px,height=960px');
       },
       sendMessage(index) {
         axios.post('http://121.199.161.134:8080/ChangeAppointmentStatus',null,{
