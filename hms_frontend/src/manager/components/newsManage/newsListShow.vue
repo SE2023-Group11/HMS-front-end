@@ -2,7 +2,7 @@
     <div class="card">
         <DataTable v-model:selection="selectedProduct" :value="products" dataKey="id" tableStyle="min-width: 50rem" scrollable scrollHeight="450px">
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="id" header="ID"></Column>
+            <Column field="date" header="日期"></Column>
             <Column field="body" header="内容"></Column>
             <Column field="img" header="图片链接" style="max-width: 600px;"></Column>
         </DataTable>

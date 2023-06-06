@@ -15,6 +15,15 @@
             </tr>
             <br/>
             <tr>
+                <td>日期：</td>
+                <td>
+                    <div class="card flex justify-content-center" style="width: 250px;">
+                        <Calendar v-model="date" showIcon />
+                    </div>
+                </td>
+            </tr>
+            <br/>
+            <tr>
                 <td>介绍文字：</td>
                 <td>
                     <InputText type="text" v-model="introText" style="width: 100%;"/>
@@ -45,6 +54,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import ConfirmDialog from 'primevue/confirmdialog';
 import Toast from 'primevue/toast';
+import Calendar from 'primevue/calendar';
 import axios from 'axios';
 
 let visible = ref(false)
@@ -53,6 +63,9 @@ let itemsToBeDeleted = ref([])
 let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 let files = []
 let imageUrl = ref("")
+let date = ref()
+
+
 const confirm = useConfirm();
 const toast = useToast();
 
@@ -94,7 +107,8 @@ function upload()
         },
         data: {
             img: imageUrl.value,
-            body: introText.value
+            body: introText.value,
+            date: date.value
         }
     }).then((res)=>{
         console.log(res)
