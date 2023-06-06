@@ -19,7 +19,7 @@
                             </tr>
                             <tr>
                                 <td style="vertical-align: top;">个人简介：</td>
-                                <td style="text-align: center;">{{ props.info.doctorIntroduction }}</td>
+                                <td style="text-align: center;">{{ infoNew }}</td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="text-align: center;">
@@ -71,13 +71,16 @@
 </template>
 
 <script setup>
-    import { defineProps, ref } from 'vue';
+    import { defineProps, ref, watchEffect } from 'vue';
     import axios from 'axios';
     import Card from 'primevue/card';
     import Button from 'primevue/button';
     import InputText from 'primevue/inputtext';
     import Dialog from 'primevue/dialog';
     let infoNew = ref(props.info.doctorIntroduction)
+    watchEffect(()=>{
+        infoNew.value = props.info.doctorIntroduction
+    })
     let props = defineProps({name: String, info: Object})
     let id = ref(props.info.doctorId)
     let show0 = ref(true)
