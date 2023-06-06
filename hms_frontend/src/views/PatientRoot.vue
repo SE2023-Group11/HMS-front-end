@@ -323,8 +323,8 @@ export default {
             }
         })
             .then(response => {
-                this.picture=response.data.data
-                console.log(this.picture)
+                this.picture=response.data.data;
+                console.log(this.picture);
             })
             .catch(error => {
                 // 处理错误的逻辑

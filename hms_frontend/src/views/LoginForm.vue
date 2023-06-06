@@ -39,7 +39,7 @@
         <Message z-index=9999999999999 v-if="judlog == -1" severity="error">登录失败</Message>
     </div>
 
-    <div class="xia">
+    <!-- <div class="xia">
         
         <pre>
 
@@ -51,7 +51,7 @@
         邮编：100191
         电话：82317114
         </pre>
-    </div>
+    </div> -->
 </template>
   
 <script setup>

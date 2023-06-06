@@ -81,7 +81,7 @@
                             <div v-if="data.data.orderStatus === 3">
                                 <Button icon="pi pi-times" label="取消预约" severity="warning" size="small" v-tooltip="'点击取消该预约'" @click="deleteAppointment(data.data.orderId)" />
                             </div>
-                            <div v-if="data.data.orderStatus === 1">
+                            <div v-else-if="data.data.orderStatus === 1">
                                 <Button icon="pi pi-times" label="无法取消" severity="success" size="small" v-tooltip="'点击取消该预约'" disabled @click="deleteAppointment(data.data.orderId)" />
                             </div>
                             
@@ -432,7 +432,7 @@
 .search-container {
   position: relative;
   top: 0px;
-  left: 760px;
+  left: 750px;
   margin: 10px;
 }
 .tips {

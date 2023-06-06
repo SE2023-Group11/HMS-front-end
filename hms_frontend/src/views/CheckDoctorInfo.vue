@@ -1,5 +1,6 @@
 <template>
-    <div class="header">
+    <div class="container" id="container">
+        <div class="header">
       <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img" />
       <h1 class="header_tag" style="font-family:Arial, Helvetica, sans-serif;font-size: 20px;">HMS医院门诊预约系统</h1>
       <div class="header_user" @mouseenter="showList" @mouseleave="unShowList">
@@ -32,7 +33,7 @@
           
         </div>
       </div>
-    </div>
+    </div></div>
     
     <div class="globalMenu">
             <img alt="user header" src="../Pic/导航图标.png" style="width: 20px;height:30px;" />
@@ -42,7 +43,7 @@
             <router-link :to="'/CheckDoctorInfo'" style="text-decoration: none;color:gray;">医生信息</router-link>
             &nbsp;>&nbsp;
             <router-link :to="'/CheckDoctorInfo'" style="text-decoration: none;color:gray;">{{ this.selectedSectionName }}</router-link>    
-            <span class="p-input-icon-left" style="left: 680px;">
+            <span class="p-input-icon-left" style="left: 1050px;position:fixed;">
                 <i class="pi pi-search" />
                 <InputText v-model="searchSectionName" placeholder="搜索科室名" @keyup.enter="searchSection"/>
             </span>
@@ -624,17 +625,33 @@
   </script>
   
   <style scoped>
-  .header{
-    height: 80px;
-    width: 100%;
-    padding-top: 15px;
-    margin-bottom: 10px;
-    /*background-color: whitesmoke;*/
-    /* background-color: #ECEBEB; */
-    background-color: white;
-    /*position: fixed;*/
-    z-index: 10;
-    position:relative;
+  * {
+    margin: 0;
+    padding: 0;
+}
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+.container {
+    height: 100%;
+    padding-top: 0.1px;
+    /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
+    /*background-image: url("../img/back_img3.jpg");*/
+    /*background-size: cover;*/
+}
+.header{
+  height: 80px;
+  width: 100%;
+  padding-top: 15px;
+  /*background-color: whitesmoke;*/
+  /* background-color: #ECEBEB; */
+  background-color: white;
+  /*position: fixed;*/
+  z-index: 10;
+  position:relative;
 }
 .header_img{
     /* background-color: red; */
@@ -704,6 +721,46 @@
     border-left:6px solid transparent;
     border-right:6px solid transparent;
     border-top:10px black solid;
+}
+.footer{
+    height: 220px;
+    width: 100%;
+    margin-top: 0px;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+.footer_img{
+    margin: auto;
+    width: 400px;
+}
+.footer_item{
+    width: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    line-height: 25px;
+}
+.footer_box{
+    padding-top: 10px;
+    margin-top: 20px;
+    margin: auto;
+    width: 100%;
+    height: 120px;
+}
+.footer_list_box{
+    margin: auto;
+    list-style: none;
+    width: 620px;
+    height: 100%;
+    /* float: left; */
+}
+.footer_list_box>li {
+    padding: 15px 0 10px;
+    width: 310px;
+    height: 50px;
+    color: rgba(255,255,255,0.7);
+    box-sizing: border-box;
+    float: left;
+    position: relative;
 }
   .banner{
       width:100%;
