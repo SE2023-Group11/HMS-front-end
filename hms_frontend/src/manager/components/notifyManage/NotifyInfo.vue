@@ -118,6 +118,7 @@ function getDetailInfo(item)
 }
 function _acceptNotif(id)
 {
+    console.log(id)
     axios({
         method: 'post',
         url: 'http://121.199.161.134:8080/acceptNotify',
@@ -135,7 +136,7 @@ const acceptNotif = (id) => {
     confirm.require({
         message: '确定要同意该请求吗？',
         header: '同意请求',
-        accept: (id) => {
+        accept: () => {
             toast.add({ severity: 'info', summary: '已确认', detail: '你已接受该申请', life: 3000 });
             _acceptNotif(id)
         }
@@ -161,7 +162,7 @@ const declineNotif = (id) => {
     confirm.require({
         message: '确定要拒绝该请求吗？',
         header: '拒绝请求',
-        accept: (id) => {
+        accept: () => {
             toast.add({ severity: 'info', summary: '已确认', detail: '你已拒绝该申请', life: 3000 });
             _declineNotif(id)
         }
