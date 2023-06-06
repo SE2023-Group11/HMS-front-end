@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-left: 20px; margin-top: 20px;">
+    <div style="margin-left: 20px; margin-top: 50px;">
         <div class="flex align-items-center" style="margin-bottom: 15px; margin-top: 10px;">
             <Checkbox v-model="pizza" inputId="1" name="pizza" value="1" />
             <label for="1" class="ml-2"> 星期一 </label>
