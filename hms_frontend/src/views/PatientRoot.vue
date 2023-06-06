@@ -4,16 +4,32 @@
       <h1 class="header_tag" style="font-family:Arial, Helvetica, sans-serif;font-size: 20px;">HMS医院门诊预约系统</h1>
       <div class="header_user" @mouseenter="showList" @mouseleave="unShowList">
         <!-- 显示头像 -->
-        <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img" />
+        <img v-bind:src="picture" alt="" class="header_user_img"/>
         <!-- 未登录时显示登录/注册 -->
         <!-- 登录后显示用户名 -->
-        <h1 class="header_user_word">登录/注册</h1>
+        <h1 class="header_user_word">
+          <div v-if="login === false">
+            <router-link :to="'/login'" style="text-decoration: none;color:gray;">注册/登录</router-link>
+          </div>
+          <div v-else style="font-size: 18px;">
+            {{ this.patientName }}
+          </div>
+        </h1>
         <div id="triangle-down"></div>
         <div id="header_list" ref="headerList">
-          <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
-          <div class="header_list_item" @click="goToMessage">消息通知</div>
-          <div class="header_list_item" @click="goToDelete">账号注销</div>
-          <div class="header_list_item" @click="goToLogin">退出登录</div>
+          <div v-if="login===true">
+            <div class="header_list_item" @click="goToPatientSpace">个人主页</div>
+            <div class="header_list_item" @click="goToMessage">消息通知</div>
+            <div class="header_list_item" @click="goToDelete">账号注销</div>
+            <div class="header_list_item" @click="goToLogin">退出登录</div>
+          </div>
+          <div v-else>
+            <div class="header_list_item" @click="alertLogin">个人主页</div>
+            <div class="header_list_item" @click="alertLogin">消息通知</div>
+            <div class="header_list_item" @click="alertLogin">账号注销</div>
+            <div class="header_list_item" @click="goToLogin">注册/登录</div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -21,11 +37,10 @@
     <Carousel :value="carouselItems" :numVisible="1" :numScroll="1" circular :autoplayInterval="5000">
       <template #item="slotProps">
         <div class="carousel-item">
-          <img :src="slotProps.data.image" alt="Image" style="width:100%"/>
+          <img :src="slotProps.data.image" alt="Image" style="width:100%;height:600px;"/>
         </div>
       </template>
     </Carousel>
-
   </div> 
   <div class="textContainer">
     <h2 style="text-align: left;margin-left: 20px;margin-top: 50px;margin-bottom: 20px;">功能列表</h2>
@@ -37,11 +52,11 @@
         <template #content>
             <h3 style="text-align: left;">医生信息</h3>
             <p style="font-size: 12px;text-align: left;">
-              认识我们的专家团队，了解他们的业务领域和临床经验。
+              认识我们的专家团队，了解他们的业务领域。
             </p>
         </template>
         <template #footer>
-          <p @click="goToCheckDoctorInfo" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;">查看详情</p>
+          <p @click="goToCheckDoctorInfo" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;cursor: pointer;">查看详情</p>
         </template>
       </Card>
       <Card class="buttonItem">
@@ -55,7 +70,7 @@
             </p>
         </template>
         <template #footer>
-          <p @click="goToAddAppointment" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;">查看详情</p>
+          <p @click="goToAddAppointment" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;cursor: pointer;">查看详情</p>
         </template>
       </Card>
       <Card class="buttonItem">
@@ -69,7 +84,7 @@
             </p>
         </template>
         <template #footer>
-          <p @click="goToCheckMyAppointment"  style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;">查看详情</p>
+          <p @click="goToCheckMyAppointment"  style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;cursor: pointer;">查看详情</p>
         </template>
       </Card>
       <Card class="buttonItem">
@@ -83,63 +98,45 @@
             </p>
         </template>
         <template #footer>
-          <p @click="goToPatientSpace" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;">查看详情</p>
+          <div v-if="login===true">
+            <p @click="goToPatientSpace" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;cursor: pointer;">查看详情</p>
+          </div>
+          <div v-else>
+            <p @click="alertLogin" style="text-decoration: none;color:rgb(17, 229, 229);text-align: left;cursor: pointer;">查看详情</p>
+          </div>
+          
         </template>
       </Card>
     </div>
   </div>
-    <h2 style="text-align: left;margin-left: 20px;margin-bottom: 20px;">新闻动态</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-bottom: 20px;">新闻动态</h2>
     <div class="news-container">
       <div class="carouselNewsImage">
-        <Carousel :value="newsImages" :numVisible="1" :numScroll="1" circular :autoplayInterval="5000">
+        <Carousel :value="news" :numVisible="1" :numScroll="1" circular :autoplayInterval="2000" >
           <template #item="slotProps">
             <div class="carousel-item">
-              <img :src="slotProps.data.image" alt="Image" style="width: 400px;height: 400px;margin-top: 20px;"/>
+              <img :src="slotProps.data.img" alt="Image" style="width: 400px;height: 300px;margin-top: 70px;"/>
+            </div>
+            <div style="text-align: center;">
+              {{ slotProps.data.body.slice(0,40) }}
             </div>
           </template>
         </Carousel>
       </div>
       <div class="newsTitle">
-        <div class="news">
+        <div v-for="item in news.slice(0, 4)" :key="item.id" class="news">
           <div class="date">
-            <h1 style="font-size: 36px;">01</h1>
-            <div style="font-size: 16px;">2023.06</div>
+            <h1 style="font-size: 18px;margin-top:20px;">{{item.date}} </h1>
+            <div style="font-size: 16px;"></div>
           </div>
           <div class="title">
-            庆祝六一儿童节 | 为了守护孩子的欢颜
-          </div>
-        </div>
-        <div class="news">
-          <div class="date">
-            <h1 style="font-size: 36px;">29</h1>
-            <div style="font-size: 16px;">2023.05</div>
-          </div>
-          <div class="title">
-            人民”专家团甘孜医疗公益行 守护高原脊柱健康
-          </div>
-        </div>
-        <div class="news">
-          <div class="date">
-            <h1 style="font-size: 36px;">22</h1>
-            <div style="font-size: 16px;">2023.05</div>
-          </div>
-          <div class="title">
-            掌握“7+5”，痛风诊疗不落伍
-          </div>
-        </div>
-        <div class="news">
-          <div class="date">
-            <h1 style="font-size: 36px;">12</h1>
-            <div style="font-size: 16px;">2023.05</div>
-          </div>
-          <div class="title">
-            5.12国际护士节 | 守护生命的“芳华
+            {{ item.body.slice(0,70) }}
           </div>
         </div>
       </div>
     </div>
 
-    <h2 style="text-align: left;margin-left: 20px;margin-top: 100px;margin-bottom: 20px;">医院介绍</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-top: 100px;margin-bottom: 20px;">医院介绍</h2>
     <div class="introduction-container">
       <h3 style="text-align: left;">医院概况</h3>
       <p style="font-size: 16px;text-align: left;margin-top: 20px;margin-bottom: 50px;">
@@ -163,9 +160,9 @@
         4. 授牌成为北京2022年冬奥会和冬残奥会定点医院
       </p>
       <img alt="user header" src="../Pic/医院介绍.jpg" style="width: 100%;" />
-      <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;">以心相伴，关怀健康</h1>
+      <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;text-align: center;">以心相伴，关怀健康</h1>
     </div>
-    <h2 style="text-align: left;margin-left: 20px;margin-top: 30px;">友情链接</h2>
+    <h2 style="text-align: left;margin-left: 70px;margin-top: 30px;">友情链接</h2>
     <div class="linkContainer">
       <div class="hospital">
         <img alt="user header" src="../Pic/医院图标.png" style="width: 25px;height:25px" />
@@ -180,7 +177,6 @@
         <a href="https://www.puh3.net.cn/" style="text-decoration: none;font-size: 20px;color:darkgreen;">北京大学第三医院</a>
       </div>  
     </div>  
-
     <div class="footer">
       <div class="footer_box">
         <ul class="footer_list_box">
@@ -214,24 +210,26 @@
 
 <script>
 import { useRoute,useRouter } from 'vue-router';
-
 import axios from 'axios'
+import { ref } from 'vue'
+
 
 export default {
   name: 'PatientRoot',
   data() {
     return {
+      picture: 'https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png',
       carouselItems: [
-        { image: 'https://www.pkuph.cn/Uploads/Picture/2023/05/15/s6461edd31e238.png' },
-        { image: 'https://www.pkuph.cn/Uploads/Picture/2023/05/15/s6461ee04ee5ef.png' },
-        { image: 'https://www.pkuph.cn/Uploads/Picture/2023/04/28/s644b197a0d424.png'}
-      ],
-      newsImages:[
-        {image: 'https://cdn.pixabay.com/photo/2017/09/06/20/36/doctor-2722941_640.jpg'},
-        {image: 'https://cdn.pixabay.com/photo/2013/02/09/04/19/surgery-79584_640.jpg'},
-        {image: 'https://www.bing.com/th?id=OIP.BSQ-jWvxVCdh-flFS-vMIAHaHY&w=179&h=185&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2'},
-        {image: 'https://th.bing.com/th/id/OIP.-bxXqMAlLciKCUCrPeqfLwHaFj?w=243&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'}
-      ]
+{ image: 'https://www.zssy.com.cn/sites/zssy.prod.sysucloud1.sysu.edu.cn/files/styles/crop_freeform/public/th2.jpg?itok=IW14NGBV' },
+ { image: 'https://www.zssy.com.cn/sites/zssy.prod.sysucloud1.sysu.edu.cn/files/styles/crop_freeform/public/th1.jpg?itok=p8YDJc4j' },
+{ image: 'https://www.zssy.com.cn/sites/zssy.prod.sysucloud1.sysu.edu.cn/files/styles/crop_freeform/public/th3.jpg?itok=rt9FauCR' },
+{ image: 'https://www.zssy.com.cn/sites/zssy.prod.sysucloud1.sysu.edu.cn/files/styles/crop_freeform/public/%E8%82%87%E5%BA%86%20%282%29.jpg?itok=G18SIlkv'}
+],
+      news:[],
+      token: sessionStorage.getItem('token'),
+      role: sessionStorage.getItem('role'),
+      login: this.judgeLogin(),
+      patientName: null,
     };
   },
   setup() {
@@ -241,29 +239,63 @@ export default {
   },
 
   methods:{
-    goToTestPage(){
-      this.$router.push({name:'TestPage'})
+    goToPatientSpace() {
+    this.$router.push('/patientSpace')
     },
     goToDelete() {
-    this.$router.push('/login')
+      if (confirm("您确定吗？")) {
+        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
+        params:{
+            token: this.token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
     },
     goToLogin() {
     this.$router.push('/login')
     },
-    goToCheckDoctorInfo(){
-      this.$router.push('/checkDoctorInfo')
-    },
     goToMessage() {
     this.$router.push('/message')
     },
-    goToPatientSpace() {
-    this.$router.push('/patientSpace')
+    goToCheckDoctorInfo(){
+      this.$router.push('/checkDoctorInfo')
     },
     goToAddAppointment(){
       this.$router.push('/addAppointment')
     },
     goToCheckMyAppointment(){
       this.$router.push('/checkMyAppointment')
+    },
+    judgeLogin(){
+      if(this.token === null)
+        return false;
+      else return true;
+    },
+    splitDate(dateString) {
+      const [year, month, day] = dateString.split('.');
+      return { year, month, day };
+    },
+    alertLogin(){
+      alert("请先登录");
+    },
+    getPatientInfo(){
+      axios.get('http://121.199.161.134:8080/getPatientInformation',{
+        params:{
+          token:this.token
+        }
+      })
+      .then(response => {
+          this.patientName = response.data.data.patientName;
+      })
+      .catch(error => {
+          console.log(error);
+      })  
     },
     getNews(){
       axios.post('http://121.199.161.134:8080/getAllNews')
@@ -285,8 +317,27 @@ export default {
   },
   mounted(){
     this.getNews();
+    axios.get('http://121.199.161.134:8080/getPatientImg',{
+            params: {
+                token:this.token
+            }
+        })
+            .then(response => {
+                this.picture=response.data.data
+                console.log(this.picture)
+            })
+            .catch(error => {
+                // 处理错误的逻辑
+                console.error(error)
+            })
+    this.login = this.judgeLogin();
+    if(this.login===true){
+      this.getPatientInfo();
+    }
   }
 }
+
+
 </script>
 
 <style scoped>
@@ -311,10 +362,12 @@ body {
 .header{
     height: 80px;
     width: 100%;
+    padding-top: 15px;
+    margin-bottom: 10px;
     /*background-color: whitesmoke;*/
     /* background-color: #ECEBEB; */
-    /*border-bottom: rgba(0, 0, 0, 0.3) solid 1px;*/
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    border: none;
+    background-color: white;
     /*position: fixed;*/
     z-index: 10;
     position:relative;
@@ -429,8 +482,9 @@ body {
     position: relative;
 }
 .textContainer{
-  width:100%;
+  width:90%;
   margin-top: 50px;
+  margin-left: 50px;
   padding-top: 10px;
   padding-bottom: 20px;
   position: relative;
@@ -440,22 +494,17 @@ body {
   border-bottom: none;
 }
 
-.demo-bottom-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
 .carouselImage {
   position: relative;
   width: 100%;
   margin-bottom: 50px;
 }
 .news-container{
-  width:100%;
+  width:90%;
   height: 500px;
   position: relative;
   padding-top: 100px;
+  margin-left: 50px;
 }
 .carouselNewsImage{
     width: 500px;
@@ -474,18 +523,18 @@ body {
       top:0;
       text-align: left;
       border: 1px solid #e0e0e0;
-      width: 900px;
+      width: 850px;
       height: 500px;
       padding-left: 20px;
       padding-bottom: 10px;
-      background-color:rgba(78, 113, 229, 0.929);
+      background-color:rgba(78, 113, 229, 0);
       box-shadow: 0 8px 16px rgba(0,0,0,0.18);
 
 }
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; 
+    gap: 10px; 
     margin-bottom: 100px;
   }
   
@@ -495,11 +544,12 @@ body {
     /*border: 0.5px solid rgb(38, 21, 226); */
 }
 .introduction-container{
-    width: 100%;
+    width: 93%;
     box-shadow: #2c3e50;
     background-color:beige;
     margin-bottom: 100px;
     margin-top: 10px;
+    margin-left: 50px;
     padding-top: 30px;
     padding-left: 40px;
     padding-bottom: 50px;
@@ -524,7 +574,7 @@ body {
   width: 100%;
   position: relative;
   height:20%;
-  background-color: aquamarine;
+  background-color: rgba(150, 223, 199, 0.435);
   margin-bottom: 20px;
   margin-top: 20px;
   box-shadow: #2c3e50;
@@ -534,11 +584,9 @@ body {
   position: absolute;
   width:100px;
   height:100%;
-  padding-top:20px;
+  padding-top:15px;
   padding-left: 40px;
   text-align: center;
-
-
 }
 .title{
   position: absolute;

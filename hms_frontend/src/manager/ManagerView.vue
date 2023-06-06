@@ -1,7 +1,9 @@
 <template>
     <div class="card">
         <TabMenu :model="items" />
-        <router-view />
+        <div class="scroll">
+            <router-view />
+        </div>
     </div>
 </template>
 
@@ -27,3 +29,10 @@ const items = ref([
     }
 ]);
 </script>
+
+<style>
+.scroll {
+    height: 540px;
+    overflow: auto;
+}
+</style>

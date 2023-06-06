@@ -9,15 +9,15 @@
                   <div class="header">
                       <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
                       <h1 class="header_tag">HMS医院门诊预约系统</h1>
-                      <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
-                          <img v-bind:src="picture" alt="" class="header_user_img"/>
-                          <h1 class="header_user_word">{{ namecontent }}</h1>
+                      <div class="header_user" >
+                        <img v-bind:src="picture" alt="" class="header_user_img"/>
+                        <h1 class="header_user_word">{{namecontent}}</h1>
                           <div id="triangle-down"></div>
                           <div id="header_list">
-                              <div @click="jumpspace" class="header_list_item">个人主页</div>
-                              <div @click="jumpmessage" class="header_list_item">消息通知</div>
-                              <div @click="zhuxiao" class="header_list_item">账号注销</div>
-                              <div @click="outlogin" class="header_list_item">退出登录</div>
+                              <div class="header_list_item">个人主页</div>
+                              <div class="header_list_item">消息通知</div>
+                              <div class="header_list_item">账号注销</div>
+                              <div class="header_list_item">退出登录</div>
                           </div>
                       </div>
                   </div>
@@ -32,27 +32,18 @@
       <div class="card">
           <TabView :activeIndex="activeTabIndex" @tab-change="handleTabChange">
               <TabPanel header="个人空间">
-  
-              </TabPanel>
-              <TabPanel header="消息通知">
-  
-              </TabPanel>
-              <TabPanel header="返回主页">
-  
               </TabPanel>
           </TabView>
       </div>
       <div class="leftpart">
           <div class="avatar">
-              <img v-bind:src="picture" v-if="!imageUrl" />
-              <img :src="imageUrl" v-if="imageUrl">
-          </div>
+            <img v-bind:src="picture" alt="" />
+        </div>
           <div class="bt_changePic">
-              <!-- <label for="file-input" class="custom-file-upload">
-                  <i class="fa fa-cloud-upload"></i> 点击更换头像
-              </label> -->
-              <!-- <input id="file-input" type="file" @click="changePic" style="display:none;"> -->
-              <input type="file" class="uploadFile" @change="getFile($event)">
+              <label for="file-input" class="custom-file-upload">
+                  <i class="fa fa-cloud-upload"></i> 
+              </label>
+              <input id="file-input" type="file" @click="changePic" style="display:none;">
           </div>
       </div>
       <div class="pp">
@@ -65,7 +56,7 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">姓名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!nameediting" @click="namestartEditing">{{ namecontent }}</div>
+                                  <div v-if="!nameediting" >{{ namecontent }}</div>
                                   <InputText v-if="nameediting" type="text" v-model="nametempContent" @blur="namestopEditing"
                                       @keyup.enter="namestopEditing" />
                               </div>
@@ -74,7 +65,7 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">年龄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!ageediting" @click="agestartEditing">{{ agecontent }}</div>
+                                  <div v-if="!ageediting" >{{ agecontent }}</div>
                                   <InputText v-if="ageediting" type="text" v-model="agetempContent" @blur="agestopEditing"
                                       @keyup.enter="agestopEditing" />
                               </div>
@@ -83,7 +74,7 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">性别&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!sexediting" @click="sexstartEditing">{{ sexcontent }}</div>
+                                  <div v-if="!sexediting" >{{ sexcontent }}</div>
                                   <InputText v-if="sexediting" type="text" v-model="sextempContent" @blur="sexstopEditing"
                                       @keyup.enter="sexstopEditing" />
                               </div>
@@ -92,7 +83,7 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">出生日期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!birediting" @click="birstartEditing">{{ bircontent }}</div>
+                                  <div v-if="!birediting" >{{ bircontent }}</div>
                                   <InputText v-if="birediting" type="text" v-model="birtempContent" @blur="birstopEditing"
                                       @keyup.enter="birstopEditing" />
                               </div>
@@ -101,7 +92,7 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!emailediting" @click="emailstartEditing">{{ emailcontent }}</div>
+                                  <div v-if="!emailediting" >{{ emailcontent }}</div>
                                   <InputText v-if="emailediting" type="text" v-model="emailtempContent"
                                       @blur="emailstopEditing" @keyup.enter="emailstopEditing" />
                               </div>
@@ -110,23 +101,15 @@
                           <div class="edit-item" style="word-break: break-all;">
                               <div style="float:left">手机号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                               <div style="float:left">
-                                  <div v-if="!phoneediting" @click="phonestartEditing">{{ phonecontent }}</div>
+                                  <div v-if="!phoneediting" >{{ phonecontent }}</div>
                                   <InputText v-if="phoneediting" type="text" v-model="phonetempContent"
                                       @blur="phonestopEditing" @keyup.enter="phonestopEditing" />
                               </div>
                           </div>
                           <!-- // 身份证号 -->
-                          <div class="edit-item" style="word-break: break-all;">
-                              <div style="float:left">身份证号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                              <div style="float:left">
-                                  <div v-if="!idCardediting" @click="idCardstartEditing">{{ idCardcontent }}</div>
-                                  <InputText v-if="idCardediting" type="text" v-model="idCardtempContent"
-                                      @blur="idCardstopEditing" @keyup.enter="idCardstopEditing" />
-                              </div>
-                          </div>
-                          <div class="save_button">
-                              <Button label="保存" @click="save" />
-                          </div>
+                      
+                        
+                         
                       </div>
   
                   </template>
@@ -143,7 +126,7 @@
                   <Textarea v-if="historyediting" v-model="historytempContent" rows="20" cols="40" />
               </div>
               <br>
-              <Button :label='bthis' @click="edithistory" class="edithistory" />
+           
           </div>
       </div>
               </div>
@@ -190,7 +173,6 @@
         <Message v-if="judhis == 1" severity="success">编辑简历成功</Message>
         <Message v-if="judhis == -1" severity="error">编辑简历失败</Message>
     </div>
-    <!-- <Button :label="保存" class="test" @click="fff" /> -->
 
     </template>
     
@@ -210,55 +192,13 @@ import { useRouter } from 'vue-router'
 const activeTabIndex = ref(0)
 const router = useRouter()
 //进行数据传输的时候用的变量
-const id = ref('');
 const token = sessionStorage.getItem('token');
-const role = sessionStorage.getItem("role");
-const picture = ref('https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png');
+const patientId = sessionStorage.getItem('patientId');
+const picture = ref('value');
 onMounted(() => {
-    getinfo();
-    gethistory();
-    gettu();
-    console.log(sessionStorage.getItem("role"));
-    console.log(sessionStorage.getItem("token"));
+    getInfo();
+ 
 })
-function gettu(){
-    console.log("dasdasdasdasssssssssssssss");
-    if(sessionStorage.getItem('role') == 'patient'){
-        axios.get('http://121.199.161.134:8080/getPatientImg',{
-        params: {
-            // token: token.value, 
-            token:token
-        }
-    })
-        .then(response => {
-            // 成功获取数据后的处理逻辑
-            console.log(response.data.data)
-            picture.value=response.data.data
-            console.log('eeeeeeeeeeeee');
-        })
-        .catch(error => {
-            // 处理错误的逻辑
-            console.error(error)
-        })
-    }
-    else{
-        axios.get('http://121.199.161.134:8080/getDoctorImg',{
-        params: {
-            // token: token.value, 
-            token:token
-        }
-    })
-        .then(response => {
-            // 成功获取数据后的处理逻辑
-            console.log(response.data.data)
-            picture.value=response.data.data
-        })
-        .catch(error => {
-            // 处理错误的逻辑
-            console.error(error)
-        })
-    }
-}
 function handleTabChange(e) {
     const str = sessionStorage.getItem('role')
     console.log(str);
@@ -294,11 +234,7 @@ const pid = ref('21371101');
 const nameediting = ref(false)
 const namecontent = ref('')
 const nametempContent = ref('')
-function namestartEditing() {
-    nameediting.value = true
-    nametempContent.value = namecontent.value
-    judmess.value = 0
-}
+
 function namestopEditing() {
     nameediting.value = false
     namecontent.value = nametempContent.value
@@ -307,11 +243,7 @@ function namestopEditing() {
 const ageediting = ref(false)
 const agecontent = ref('')
 const agetempContent = ref('')
-function agestartEditing() {
-    ageediting.value = true
-    agetempContent.value = agecontent.value
-    judmess.value = 0
-}
+
 function agestopEditing() {
     ageediting.value = false
     agecontent.value = agetempContent.value
@@ -320,11 +252,7 @@ function agestopEditing() {
 const sexediting = ref(false)
 const sexcontent = ref('')
 const sextempContent = ref('')
-function sexstartEditing() {
-    sexediting.value = true
-    sextempContent.value = sexcontent.value
-    judmess.value = 0
-}
+
 function sexstopEditing() {
     sexediting.value = false
     sexcontent.value = sextempContent.value
@@ -333,11 +261,7 @@ function sexstopEditing() {
 const birediting = ref(false)
 const bircontent = ref('')
 const birtempContent = ref('')
-function birstartEditing() {
-    birediting.value = true
-    birtempContent.value = bircontent.value
-    judmess.value = 0
-}
+
 function birstopEditing() {
     birediting.value = false
     bircontent.value = birtempContent.value
@@ -347,11 +271,6 @@ function birstopEditing() {
 const emailediting = ref(false)
 const emailcontent = ref('')
 const emailtempContent = ref('')
-function emailstartEditing() {
-    emailediting.value = true
-    emailtempContent.value = emailcontent.value
-    judmess.value = 0
-}
 function emailstopEditing() {
     emailediting.value = false
     emailcontent.value = emailtempContent.value
@@ -360,77 +279,39 @@ function emailstopEditing() {
 const phoneediting = ref(false)
 const phonecontent = ref('')
 const phonetempContent = ref('')
-function phonestartEditing() {
-    phoneediting.value = true
-    phonetempContent.value = phonecontent.value
-    judmess.value = 0
-}
 function phonestopEditing() {
     phoneediting.value = false
     phonecontent.value = phonetempContent.value
 }
 // 身份证号
-const idCardediting = ref(false)
 const idCardcontent = ref('')
-const idCardtempContent = ref('')
-function idCardstartEditing() {
-    idCardediting.value = true
-    idCardtempContent.value = idCardcontent.value
-    judmess.value = 0
-}
-function idCardstopEditing() {
-    idCardediting.value = false
-    idCardcontent.value = idCardtempContent.value
-}
+
+
 
 //这些是对于病史的框的代码，点击按钮可以进行修改内容
 const historyediting = ref(false)
 const historycontent = ref('主要症状：\n症状开始时间：症状发展过程：\n症状是否有周期性变化：\n症状是否有加重或缓解：\n相关检查结果：\n既往疾病史：\n家族病史：\n药物过敏史：\n目前正在服用的药物：\n诊断结果：\n医生建议的治疗方案：\n手术史（如果有）：\n治疗效果如何：\n是否需要随访：\n')
 const historytempContent = ref('')
-const bthis = ref('编辑病史')
 //判断传输的结果
 const judhis = ref(0);
-function edithistory() {
-    if (bthis.value == '编辑病史') {
-        historyediting.value = true;
-        historytempContent.value = historycontent.value;
-        bthis.value = '保存病史';
-
-    }
-    else {
-        //这里首先要实现一个数据库对于病史的更新，向后端传输数据
-        axios.post("http://121.199.161.134:8080/savehistory",null, {
-            params:{
-                // token: token.value,
-                token:token,
-                phistory: historytempContent.value,
-            }
-        }).then(res => {
-            console.log(res);
-            judhis.value = 1;
-        }).catch(error => {
-            console.error(error)
-            judhis.value = -1;
-        })
-
-        historyediting.value = false;
-        historycontent.value = historytempContent.value;
-        bthis.value = '编辑病史';
-    }
-
-}
-
 // 在初始的时候对于当前的用户的个人信息进行获取，并且展示在面板上
-function getinfo() {
-    axios.get('http://121.199.161.134:8080/getPatientInformation',{
-        params: {
-            // token: token.value, 
-            token:token
+
+
+function getInfo() {
+    axios({
+          method: 'post',
+          url: 'http://121.199.161.134:8080/DoctorGetPatientInfo',
+          params: {
+            token: token,
+            patientId: patientId, 
         }
-    })
+        })
         .then(response => {
             // 成功获取数据后的处理逻辑
-            console.log(response.data)
+            console.log(token);
+            console.log(patientId);
+            console.log(response.data);
+            console.log(token);
             const data = response.data.data;    
             namecontent.value = data.patientName;
             sexcontent.value = data.patientSex==true?'男':'女';
@@ -439,23 +320,7 @@ function getinfo() {
             emailcontent.value = data.patientMail;
             idCardcontent.value = data.patientNumber;
             phonecontent.value = data.patientPhone;
-        })
-        .catch(error => {
-            // 处理错误的逻辑
-            console.error(error)
-        })
-}
-function gethistory() {
-    axios.get('http://121.199.161.134:8080/getHistory',{
-        params: {
-            // token: token.value, 
-            token:token
-        }
-    })
-        .then(response => {
-            // 成功获取数据后的处理逻辑
-            console.log(response.data.data)
-            historycontent.value=response.data.data
+            picture.value=data.patientImg;
         })
         .catch(error => {
             // 处理错误的逻辑
@@ -474,23 +339,6 @@ function setpatient() {
 }
 //进行保存按钮的方法的编写,同时返回结果
 const judmess = ref(0);
-function save() {
-    setpatient();
-    axios.post('http://121.199.161.134:8080/changePatient',patient, {
-        params:{
-            // token: token.value,
-            token:token
-        }
-    })
-        .then(response => {
-            console.log(response.data)
-            judmess.value = 1;
-        })
-        .catch(error => {
-            console.error(error)
-            judmess.value = -1;
-        })
-}
 
 //实现对于图片的更换和保存
 const imageUrl = ref('');
@@ -498,46 +346,9 @@ const imageUrl = ref('');
 const formData = new FormData();
 //判断传输的结果是否成功
 const judpic = ref(0);
-const ss =ref('');
-const ff = ref();
-function toback(){
-    console.log(ss.value+"dasdasdasdas");
-    if(role == 'patient'){
-        axios.post('http://121.199.161.134:8080/patientChangeImg', null, {
-            params: {
-                token:token,
-                url:ss.value
-            }
-        }).then(response => {
-           console.log(response);
-           picture.value=ss.value;
-        }).catch(error => {
-            console.error('Upload failed: ', error);
-            judpic.value = -1;
-        });
-    }
-    else{
-        axios.post('http://121.199.161.134:8080/doctorChangeImg', null, {
-            params: {
-                token:token,
-                url:ss.value
-            }
-        }).then(response => {
-           console.log(response);
-           picture.value=ss.value;
-        }).catch(error => {
-            console.error('Upload failed: ', error);
-            judpic.value = -1;
-        });
-    }
-}
-function getFile(event) {
+function changePic(event) {
     const file = event.target.files[0];
-    
-    console.log('bbbbbbbbbbb');
-    
     if (file) {
-        console.log('ttttttttttttttt');
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -545,27 +356,18 @@ function getFile(event) {
         };
         reader.readAsDataURL(file);
     }
-    console.log(file);
-    // const formData = new FormData();
-    // formData.append("name",token);
-    // formData.append("file",file);
-    
     //将上传的文件存到数据库
-    if (file) {
-        axios.post('https://pz.al/api/upload', {image:file}, {
-            params:{
-
-            },
-            headers:{
-                "Content-Type":"multipart/form-data"
+    if (file?.file) {
+        const blob = new Blob([file], { type: file.type });
+        formData.append('file', blob, { filename: 'image.jpg' });
+        axios.post('http://121.199.161.134:8080/savePic', formData, {
+            params: {
+                pid: pid.value,
+                image: formData.values,
             }
         }).then(response => {
-            console.log(response.data.data.url);
-            if(response.data.code==200){
-                ss.value = response.data.data.url;
-                console.log(ss.value);
-                toback();
-            }
+            console.log('Upload successful!');
+            judpic.value = 1;
         }).catch(error => {
             console.error('Upload failed: ', error);
             judpic.value = -1;
@@ -575,64 +377,8 @@ function getFile(event) {
         console.error('文件不存在')
     }
 }
+
 //统一的函数
-function showList(){
-        var list = document.getElementById("header_list");
-        console.log("in");
-        list.style.display = "block";
-    }
-function unShowList(){
-    var list = document.getElementById("header_list");
-    console.log("out");
-    list.style.display = "none";
-}
-function outlogin(){
-    sessionStorage.removeItem('role');
-    sessionStorage.removeItem('token');
-    // window.location.href = '/login';
-    router.push('/login');
-}
-function zhuxiao(){
-    if (confirm("您确定吗？")) {
-    if(sessionStorage.getItem('role') == 'doctor'){
-        console.log('rrrrrrrrrrrrrrrrr');
-        axios.post('http://121.199.161.134:8080/doctorDelete',null,{
-        params:{
-            token: token
-        }
-    })
-        .then(response => {
-            console.log(response.data)
-            outlogin();
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }
-    else{
-        axios.post('http://121.199.161.134:8080/zhuxiaoPatient',null,{
-        params:{
-            token: token
-        }
-    })
-        .then(response => {
-            console.log(response.data)
-            outlogin();
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }
-}}
-function jumpmessage(){
-    console.log('4444444444');
-    // window.location.href = '/message';
-    router.push('/message');
-}
-function jumpspace(){
-    if(sessionStorage.getItem('role') == 'patient') router.push('/patientspace');
-    else router.push('/doctorspace');
-}
 </script>
     
 <style scoped>
@@ -682,7 +428,7 @@ background-color: #ffffff;
 
 .message {
 position: absolute;
-bottom: 180px;
+bottom: 270px;
 right: 200px;
 font-size: 20px;
 }

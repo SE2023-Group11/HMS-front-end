@@ -5,7 +5,7 @@
             <div class="container" id="container">
               <div class="header">
                 <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
-                <h1 class="header_tag">HMS医院门诊预约系统</h1>
+                <h1 class="header_tag">HMS医院门诊预约系统——后台管理</h1>
                 <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
                     <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img"/>
                     <h1 class="header_user_word">登录/注册</h1>
@@ -74,7 +74,7 @@ import ManagerView from './ManagerView.vue';
     components: { ManagerView }
 }
     </script>
-    <style>
+    <style scoped>
     * {
         margin: 0;
         padding: 0;
@@ -184,7 +184,7 @@ import ManagerView from './ManagerView.vue';
         margin-right: 15%;
         margin-top: 70px;
         width: 70%;
-        min-height: 600px;
+        height: 580px;
         background-color: rgb(255, 255, 255);
     }
     .footer{

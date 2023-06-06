@@ -1,20 +1,20 @@
 <template>
   <div>
   <div class='body'>
-  
           <div class="container" id="container">
             <div class="header">
               <img src="https://f.pz.al/pzal/2023/05/19/d218206d1e4dd.png" alt="" class="header_img"/>
               <h1 class="header_tag">HMS医院门诊预约系统</h1>
               <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
-                  <img src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png" alt="" class="header_user_img"/>
-                  <h1 class="header_user_word">登录/注册</h1>
+                <img v-bind:src="picture" alt="" class="header_user_img"/>
+                <h1 class="header_user_word">{{ this.doctorName }}</h1>
+               
                   <div id="triangle-down"></div>
                   <div id="header_list">
-                      <div class="header_list_item" href="/doctorSpace">个人主页</div>
-                      <div class="header_list_item" href="/message">消息通知</div>
-                      <div class="header_list_item" @click="goToAbout">账号注销</div>
-                      <div class="header_list_item" href="/login">退出登录</div>
+                    <div class="header_list_item" @click="goToDoctorSpace">个人主页</div>
+                    <div class="header_list_item" @click="goToMessage">消息通知</div>
+                    <div class="header_list_item" @click="goToDelete">账号注销</div>
+                    <div class="header_list_item" @click="goToLogin">退出登录</div>
                   </div>
               </div>
           </div> 
@@ -41,7 +41,7 @@
                       <tbody ref="listWrapper">    
                         <tr style="border: 0.1px solid rgb(0, 105, 128);
                         border-radius: 10px;" v-for="(appointment, index) in appointmentList.data" :key="index">
-                          <td align="center">{{ appointment.patientId }}</td>
+                          <td align="center">{{ appointment.patientName }}</td>
                           <td align="center">{{ appointment.time_start.substr(-8)+"-"+appointment.time_end.substr(-8) }}</td>
                           <td align="center">
                             <div class="patient-label" @click="navigateToPatient(index)">
@@ -49,7 +49,7 @@
                             </div>  
                             </td>
                           <td align="center" style=" flex-direction: column">
-                            <button  class="blueBtn"  v-if="appointment.status ===FALSE" @click="openNewWindow">待完成</button>
+                            <button  class="blueBtn"  v-if="appointment.status ===FALSE" @click="openNewWindow(index)">待完成</button>
                             <button  class="greenBtn" v-else>已完成</button>
                           </td>
                         </tr>
@@ -72,10 +72,10 @@
                       </thead>
                       <tbody>
                         <tr v-for="(row, rowIndex) in schedule.data" :key="rowIndex">
-                          <td v-if="rowIndex===0" height="20px">8:00-8:30</td>
-                          <td v-if="rowIndex===1" height="20px">8:30-9:00</td>
-                          <td v-if="rowIndex===2" height="20px">9:00-9:30</td>
-                          <td v-if="rowIndex===3" height="20px">9:30-10:00</td>
+                          <td v-if="rowIndex===0" height="20px">08:00-08:30</td>
+                          <td v-if="rowIndex===1" height="20px">08:30-09:00</td>
+                          <td v-if="rowIndex===2" height="20px">09:00-09:30</td>
+                          <td v-if="rowIndex===3" height="20px">09:30-10:00</td>
                           <td v-if="rowIndex===4" height="20px">10:00-10:30</td>
                           <td v-if="rowIndex===5" height="20px">10:30-11:00</td>
                           <td v-if="rowIndex===6" height="20px">11:00-11:30</td>
@@ -93,6 +93,32 @@
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                  <!-- <h2 style="text-align: left;padding-bottom:50px">新闻动态</h2> -->
+                  <div v-if="showingAppointmentList" class="news-container">
+                    <div class="carouselNewsImage">
+                      <Carousel :value="news" :numVisible="1" :numScroll="1" circular :autoplayInterval="2000" >
+                        <template #item="slotProps">
+                          <div class="carousel-item">
+                            <img :src="slotProps.data.img" alt="Image" style="width:400px;height: 350px;margin-top: 70px;"/>
+                          </div>
+                          <div style="text-align: center;">
+                            {{ slotProps.data.body.slice(0,20) }}
+                          </div>
+                        </template>
+                      </Carousel>
+                    </div>
+                    <div class="newsTitle">
+                      <div v-for="item in news.slice(0, 4)" :key="item.id" class="news">
+                        <div class="date">
+                          <h1 style="font-size: 36px;"> {{item.date}}</h1>
+                          <div style="font-size: 16px;">{{item.date}}</div>
+                        </div>
+                        <div class="title">
+                          {{ item.body.slice(0,70) }}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   </div>
   </div>
@@ -132,28 +158,17 @@
   import { Listbox } from 'primevue/listbox';
   import { useRoute, useRouter } from 'vue-router';
   import Vue from 'vue';
-  import ClickAgain from './ClickAgain.vue';
-  
-  const token = sessionStorage.getItem('token');
+ 
+       
+
   export default {
     name:'DoctorRoot',
-    component:{
-      ClickAgain
-    },
-    setup() {
-      const message = ref('false');
-  
-      const updateMessage = (newMessage) => {
-        message.value = newMessage;
-      };
-  
-      return {
-        message,
-        updateMessage
-      };
-    },
     data() {
       return {
+        token:sessionStorage.getItem('token'),
+        picture: 'https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png',
+        news:[],
+        doctorName:null, 
         showingAppointmentList: true,
         showingSchedule: false,
         appointmentList: [
@@ -175,17 +190,37 @@
          }
       };
     },
-    props: {
-      labelText: {
-        type: String,
-        default: '患者信息',
-      },
-    },
     methods: {
       goToDelete() {
-
-      this.$router.push('/login')
+        
+        if (confirm("您确定吗？")) {
+          axios.post('http://121.199.161.134:8080/doctorDelete',null,{
+        params:{
+            token: this.token
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+            sessionStorage.removeItem('role');
+        sessionStorage.removeItem('token');
+            this.$router.push('/login')
+        })
+        .catch(error => {
+            console.error(error)
+        })
+  } },
+    goToDoctorSpace() {
+    this.$router.push('/doctorSpace')
     },
+    goToLogin() {
+    sessionStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    this.$router.push('/login')
+    },
+    goToMessage() {
+    this.$router.push('/message')
+    },
+    
      showList(){
          var list = document.getElementById("header_list");
          console.log("in");
@@ -196,8 +231,13 @@
           console.log("out");
           list.style.display = "none";
       },
-      openNewWindow() {
-        window.open('/clickAgain', '_blank', 'width=300,height=200');
+      openNewWindow(index) {
+        if (confirm("您确定吗？")) {
+this.appointmentList.data[index].status=true;
+this.sendMessage(index);
+} else {
+console.log("no")
+}
       },
       showAppointmentList() {
         this.showingAppointmentList = true;
@@ -214,14 +254,16 @@
         this.appointmentList[index].status =true;
       },
       navigateToPatient(index) {
-        sessionStorage.setItem('patientId',this.appointmentList[index].patientId);
-        window.open('/space', '_blank', 'width=1440px,height=960px');
+        sessionStorage.setItem('patientId',this.appointmentList.data[index].patientId);
+        console.log(this.token);
+
+        window.open('http://localhost:8080/#/dPInfo', '_blank', 'width=1440px,height=960px');
       },
-      sendMessage() {
+      sendMessage(index) {
         axios.post('http://121.199.161.134:8080/ChangeAppointmentStatus',null,{
           params: {
-            token:token.value,
-  
+token:this.token,
+orderId:this.appointmentList.data[index].orderId,
           }})
         .then(response => {
           console.log(response.data);
@@ -233,7 +275,7 @@
       getPatientName(index,id){
         axios.post('http://121.199.161.134:8080/getPatientName',null,{
           params: {
-           token: token,
+            token:this.token,
             patientId:id
           }})
         .then(response => {
@@ -245,23 +287,60 @@
       },
     },
     mounted() {
+        axios.post('http://121.199.161.134:8080/getAllNews')
+            .then(response => {
+                this.news = response.data.data;
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        axios.get('http://121.199.161.134:8080/getDoctorImg',{
+            params: {
+                token:this.token
+            }
+        })
+            .then(response => {
+                this.picture=response.data.data
+                console.log(this.picture)
+            })
+            .catch(error => {
+                // 处理错误的逻辑
+                console.log("ass")
+                console.error(error)
+            })
+      axios.get('http://121.199.161.134:8080/getDoctorInformation', {
+            params: {
+                token:this.token
+            }
+        })
+            .then(response => {
+                // 成功获取数据后的处理逻辑
+                console.log(response.data)
+                const info = response.data.data;
+                this.doctorName = info.doctorName;
+                console.log(this.doctorName)
+            })
+            .catch(error => {
+                // 处理错误的逻辑
+                console.error(error)
+            })
       axios.post('http://121.199.161.134:8080/getAppointmentList',null,{
           params: {
-            token:token,
+            token:this.token,
+
           }})
         .then(response => {
           this.appointmentList = response.data;
-          console.log("yes");
+       
         })
         .catch(error => {
           console.log(error);
-        });
+        }),
       axios.post('http://121.199.161.134:8080/getSchedule',null,{
           params: {
-            token: token,       
+           token:this.token,
            }})
         .then(response => {
-          console.log(response);
         for(let i=0;i<13;i++){
   this.schedule.data[i][0]=response.data.data.mon1[i*2+1];
         }
@@ -290,6 +369,9 @@
         });
     },
   };
+  
+  
+  
   </script>
   <style scoped>
   * {
@@ -300,7 +382,7 @@
       height: 100%;
   }
   .container {
-      height: 100%;
+
       width: 100%;
       /*background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);*/
       /*background-image: url("../img/back_img3.jpg");*/
@@ -407,7 +489,7 @@
   .footer{
       height: 220px;
       width: 100%;
-      margin-top: 20px;
+      margin-top: 160px;
       background-color: rgba(0, 0, 0, 0.85);
   }
   .footer_img{
@@ -422,8 +504,8 @@
       line-height: 25px;
   }
   .footer_box{
-      padding-top: 10px;
-      margin-top: 20px;
+
+      margin-top: 80px;
       margin: auto;
       width: 100%;
       height: 120px;
@@ -435,6 +517,43 @@
       height: 100%;
       /* float: left; */
   }
+  .news-container{
+    width:100%;
+    height: 500px;
+    position: relative;
+    margin-top: 100px;
+   display: flex; /* 将容器设置为flexbox布局 */
+  flex-direction: row; /* 设置主轴方向为水平方向 */
+ 
+  }
+  .carouselNewsImage{
+      width: 50%;
+      height: 500px;
+      position: relative;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+  
+  }
+  .newsTitle{
+    position: relative;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+    width: 60%;
+    height: 500px;
+    background-color:rgba(78, 113, 229, 0);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+
+}
+.news{
+  width: 100%;
+  position: relative;
+  height:20%;
+  background-color: rgba(150, 223, 199, 0.435);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  box-shadow: #2c3e50;
+
+}
   .footer_list_box>li {
       padding: 15px 0 10px;
       width: 310px;
@@ -498,6 +617,7 @@
       .red {
         background-color: #0048fd4b;
         color: #ffffff;
+        
       }
       
       .orange {
@@ -508,7 +628,7 @@
         border: 1px solid rgb(0, 98, 128);
       border-radius: 10px;
         position: relative; /* 相对定位，为表头设置绝对定位 */
-        top:50px; /* 设置最大高度 */
+        margin-top:50px; /* 设置最大高度 */
         overflow-y: auto; /* 允许垂直滚动 */
         z-index: 100;
       }
@@ -517,7 +637,7 @@
       border-radius: 10px;
       display: flex;
         position: relative; /* 相对定位，为表头设置绝对定位 */
-        top:50px;
+        margin-top:50px;
         max-height: 400px; /* 设置最大高度 */
         overflow-y: auto; /* 允许垂直滚动 */
         z-index: 100;
@@ -528,12 +648,26 @@
        text-align:center;
       }
       .blueBtn{
-        border-radius: 10px;
         background-color: #02afff8f;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        width:80px;
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
       }
       .greenBtn{
-        border-radius: 10px;
         background-color: #02ff0a4e;
+          color: #fff;
+        border: none;
+        width:80px;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        cursor: pointer;
+        margin-bottom: 10px;
       }
       table {
         width: 100%; /* 将表格的宽度设置为 100% */

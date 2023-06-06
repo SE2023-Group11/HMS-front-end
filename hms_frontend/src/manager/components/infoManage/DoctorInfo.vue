@@ -7,22 +7,22 @@
                         <table>
                             <tr>
                                 <td style="width:120px">医生姓名：</td>
-                                <td style="width:650px">{{ props.info.doctorName }}</td>
+                                <td style="width:650px; text-align: center;">{{ props.info.doctorName }}</td>
                             </tr>
                             <tr>
                                 <td>所属科室：</td>
-                                <td>{{ props.info.doctorSection }}</td>
+                                <td style="text-align: center;">{{ props.info.doctorSection }}</td>
                             </tr>
                             <tr>
                                 <td>医生职称：</td>
-                                <td>{{ props.info.doctorTitle }}</td>
+                                <td style="text-align: center;">{{ props.info.doctorTitle }}</td>
                             </tr>
                             <tr>
                                 <td style="vertical-align: top;">个人简介：</td>
                                 <td style="text-align: center;">{{ props.info.doctorIntroduction }}</td>
                             </tr>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="2" style="text-align: center;">
                                     <Button @click="exchangeBack">修改</Button>&nbsp;
                                     <Button disabled="true">提交</Button>
                                 </td>
@@ -38,22 +38,22 @@
                         <table>
                             <tr>
                                 <td style="width:120px">医生姓名：</td>
-                                <td>{{ props.info.doctorName }}</td>
+                                <td style="text-align: center;">{{ props.info.doctorName }}</td>
                             </tr>
                             <tr>
                                 <td>所属科室：</td>
-                                <td>{{ props.info.doctorSection }}</td>
+                                <td style="text-align: center;">{{ props.info.doctorSection }}</td>
                             </tr>
                             <tr>
                                 <td>医生职称：</td>
-                                <td>{{ props.info.doctorTitle }}</td>
+                                <td style="text-align: center;">{{ props.info.doctorTitle }}</td>
                             </tr>
                             <tr>
                                 <td>个人简介：</td>
                                 <td><InputText type="text" v-model="infoNew" style="width: 650px; word-break:break-all;" /></td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="align-self: center;">
+                                <td colspan="2" style="text-align: center;">
                                     <Button disabled="true">修改</Button>&nbsp;
                                     <Button @click="submitChange">提交</Button>
                                 </td>

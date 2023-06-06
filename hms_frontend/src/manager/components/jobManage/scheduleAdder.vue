@@ -1,6 +1,6 @@
 <template>
-    <div class="card flex flex-wrap justify-content-center gap-3">
-        <div class="flex align-items-center" style="margin-bottom: 15px; margin-top: 30px;">
+    <div style="margin-left: 20px; margin-top: 20px;">
+        <div class="flex align-items-center" style="margin-bottom: 15px; margin-top: 10px;">
             <Checkbox v-model="pizza" inputId="1" name="pizza" value="1" />
             <label for="1" class="ml-2"> 星期一 </label>
         </div>
@@ -41,9 +41,9 @@
     <div>
         <Toast />
         <ConfirmDialog></ConfirmDialog>
-        <div class="card flex flex-wrap gap-2 justify-content-center">
-            <Button @click="confirm1()" label="提交"></Button><br/>
-            <Button @click="confirm2()" label="清空" style="margin-top: 5px;"></Button>
+        <div class="card flex flex-wrap gap-2 justify-content-center" style="margin-top: 50px;">
+            <Button @click="confirm1()" label="提交"></Button>
+            <Button @click="confirm2()" label="清空"></Button>
         </div>
     </div>
 </template>
@@ -58,6 +58,7 @@ import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import axios from "axios";
 import { defineProps } from "vue";
+import emitter from "./bus";
 
 const pizza = ref();
 const halfDay = ref();
@@ -65,7 +66,15 @@ const halfDay = ref();
 const confirm = useConfirm();
 const toast = useToast();
 
+let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
+
 let props = defineProps({doctorID: String})
+
+let doctorID = ref(props.doctorID)
+
+emitter.on("doctorID", (res)=>{
+    doctorID.value = res
+})
 
 const confirm1 = () => {
     confirm.require({
@@ -73,11 +82,17 @@ const confirm1 = () => {
         header: '提交确认',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
+            console.log(doctorID)
+            console.log(pizza.value)
+            console.log(halfDay.value)
             axios({
                 method: 'post',
                 url: 'http://121.199.161.134:8080/submitJob',
                 params: {
-                    doctorID: props.doctorID,
+                    token: token
+                },
+                data: {
+                    doctorID: doctorID.value,
                     weekDay: pizza.value,
                     halfDay: halfDay.value
                 }
@@ -98,7 +113,8 @@ const confirm2 = () => {
                 method: 'post',
                 url: 'http://121.199.161.134:8080/clearJob',
                 params: {
-                    doctorID: props.doctorID
+                    doctorID: props.doctorID,
+                    token: token
                 }
             });
             toast.add({ severity: 'info', summary: '提交成功', detail: '已将排班信息清空！', life: 3000 });

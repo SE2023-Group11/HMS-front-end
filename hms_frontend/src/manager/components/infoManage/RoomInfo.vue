@@ -2,35 +2,39 @@
     <div style="display:flex; justify-content:center; align-items:center;">
         <div class="card">
             <Card style="width: 50em">
-                <template #title> {{ props.name }} </template>
+                <template #title>
+                    <div  style="text-align: center;">
+                        {{ props.name }} 
+                    </div>
+                </template>
                 <template #content>
                     <table>
                         <tr>
                             <td style="width: 120px; vertical-align: top;">科室介绍：</td>
-                            <td style="text-align: left;">{{ props.info }}</td>
+                            <td style="text-align: left;">{{ showContent }}</td>
                         </tr>
                         <tr>
                             <td style="vertical-align: middle;">修改内容：</td>
                             <td style="vertical-align: bottom;">
                                 <br/>
-                                <InputText type="text" v-model="newInfo" placeholder="请输入修改后信息" style="width:100%; word-break:break-all;"/><br/><br/>
+                                <InputText type="text" v-model="newInfo" placeholder="请输入修改后信息" style="width:640px; word-break:break-all;"/><br/><br/>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2"><Button @click="sendChange" >提交</Button></td>
+                            <td colspan="2" style="text-align: center;"><Button @click="sendChange" >提交</Button></td>
                         </tr>
                     </table>
                 </template>
             </Card>
         </div>
     </div>
-    <Dialog v-model:visible="visible" modal header="提示" :style="{ width: '50vw' }">
+    <Dialog v-model:visible="visible" modal header="提示" :style="{ width: '30vw' }">
         {{ notice }}
     </Dialog>
     
 </template>
 <script setup>
-import {ref} from 'vue'
+import {ref, watchEffect} from 'vue'
 import { defineProps } from 'vue';
 import axios from 'axios';
 
@@ -40,6 +44,10 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 
 let props = defineProps({name: String, info: String})
+let showContent = ref(props.info)
+watchEffect(()=>{
+    showContent.value = props.info
+})
 let newInfo = ref('')
 let visible = ref(false)
 let notice = ref("")
@@ -60,6 +68,25 @@ function sendChange() {
         notice.value = "信息修改成功！"
         visible.value = true
         newInfo.value = ""
+        axios({
+            method: 'post',
+            url: 'http://121.199.161.134:8080/getRoomInfo',
+            params:{
+                roomName:props.name
+            }
+        }).then((s)=>{
+            console.log(s)
+            if(s.data.code==0)
+            {
+                window.alert("请求错误，原因为"+s.data.msg)
+            }
+            else
+            {
+                showContent.value = s.data.data
+            }
+        }).catch((err)=>{
+            window.alert("请求错误，原因为"+err)
+        })
     }).catch((err)=>{
         notice.value = "信息修改失败！失败原因："+err.value
         visible.value = true
