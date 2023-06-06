@@ -31,6 +31,7 @@ let secondRooms = ref([])
 let doctors = ref([])
 
 let beforeFirst = ref({})
+let beforeSecond = ref({})
 
 let showSecond = ref(false)
 let showDoctors = ref(false)
@@ -64,16 +65,26 @@ function func2(){
     showDoctors.value = true
     emitter.emit("roomName", secondRoom)
     showSecond.value = false
+    let name = ref("")
+    if(secondRoom.value==undefined)
+    {
+        name = beforeSecond.value.name
+    }
+    else
+    {
+        name = secondRoom.value.name
+    }
     axios({
         method: 'get',
         url: 'http://121.199.161.134:8080/getDoctorsByRoom',
         params: {
-            roomName: secondRoom.value.name
+            roomName: name
         }
     }).then((res)=>{
         console.log(res)
         doctors.value = res.data.data
         emitter.emit("doctorsInfo", doctors)
+        beforeSecond.value = secondRoom.value
     })
 }
 
