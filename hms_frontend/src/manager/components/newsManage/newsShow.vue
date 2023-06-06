@@ -1,4 +1,5 @@
 <template>
+    <Toast />
     <Button label="添加新闻" @click="visible=true" style="position: absolute; margin: 20px; left: 15%;" />
     <Dialog v-model:visible="visible" header="添加新闻" style="width:60%; position: absolute;">
         <table style="left: 5%; position: relative;">
@@ -7,7 +8,7 @@
                 <td style="width: 60%;">
                     <div>
                         <div>
-                            <input @click="getFiles($event)" name="files" type="file" /><br />
+                            <input @change="getFiles($event)" name="files" type="file" /><br />
                         </div>
                     </div>
                 </td>
@@ -29,10 +30,9 @@
     <div>
         <Button @click="confirm2()" label="删除新闻" style="position: absolute; margin: 20px; left: 25%;"></Button>
     </div>
-    <div style="position: relative; top: 90px; height: fit-content; max-height: 500px; overflow: auto;">
+    <div style="position: absolute; top: 220px; align-items: center; height: fit-content; max-height: 500px; overflow: auto;">
         <newsListShow @select-items="getSelectedItems"/>
     </div>
-    
 </template>
 
 <script setup>
@@ -52,23 +52,55 @@ let introText = ref("")
 let itemsToBeDeleted = ref([])
 let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
 let files = []
+let imageUrl = ref("")
+const confirm = useConfirm();
+const toast = useToast();
 
-function getFiles(event)
-{
-    let files_t = event.target.files
-    console.log(files_t)
-    for(var i=0; i<files_t.length; i++)
-    {
-        files.push(files_t[i])
+function getFiles(event) {
+    const file = event.target.files[0];
+    
+    console.log('bbbbbbbbbbb');
+    console.log(file);
+    // const formData = new FormData();
+    // formData.append("name",token);
+    // formData.append("file",file);
+    
+    //将上传的文件存到数据库
+    if (file) {
+        axios.post('https://pz.al/api/upload', {image:file}, {
+            params:{
+
+            },
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        }).then(response => {
+            console.log(response.data.data.url);
+            imageUrl.value = response.data.data.url
+        })
+    }
+    else {
+        console.error('文件不存在')
     }
 }
 
 function upload()
 {
-    let formData = new FormData();
-    formData.append('files', files[0])
-    console.log(formData)
-    console.log(introText)
+    axios({
+        method: 'post',
+        url: 'http://121.199.161.134:8080/addNews',
+        params: {
+            token: token
+        },
+        data: {
+            img: imageUrl.value,
+            body: introText.value
+        }
+    }).then((res)=>{
+        console.log(res)
+        toast.add({ severity: 'info', summary: '添加新闻', detail: '已将新闻上传至列表！', life: 3000 });
+    })
+    window.location.reload()
 }
 
 function getSelectedItems(params)
@@ -76,9 +108,6 @@ function getSelectedItems(params)
     console.log(params)
     itemsToBeDeleted = params
 }
-
-const confirm = useConfirm();
-const toast = useToast();
 
 const confirm2 = () => {
     console.log(itemsToBeDeleted)
@@ -113,6 +142,7 @@ const confirm2 = () => {
                 }).then((res)=>{
                     console.log(res)
                 })
+                window.location.reload()
                 toast.add({ severity: 'info', summary: '删除新闻', detail: '已删除全部选中新闻！', life: 3000 });
             }
         });

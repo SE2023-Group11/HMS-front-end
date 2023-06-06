@@ -4,9 +4,9 @@
         <div class="flex flex-wrap gap-1">
             <div class="flex align-items-center">
                 <RadioButton v-model="notifyType" inputId="room" value="科室" />
-                <label for="room" class="ml-2">&nbsp;科室</label>&nbsp;&nbsp;
+                <label for="room" class="ml-2">科室</label>&nbsp;&nbsp;&nbsp;&nbsp;
                 <RadioButton v-model="notifyType" inputId="doctor" value="医生" />
-                <label for="doctor" class="ml-2">&nbsp;医生</label>
+                <label for="doctor" class="ml-2">医生</label>
             </div>
         </div>
         &nbsp;&nbsp;&nbsp;&nbsp;
