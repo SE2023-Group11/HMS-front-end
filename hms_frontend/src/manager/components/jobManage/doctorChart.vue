@@ -1,6 +1,6 @@
 <template>
     <h1 style="text-align: left;">{{ roomName.name }}</h1>
-    <div class="card" style="width: 120%; ">
+    <div class="card" style="width: 100%; ">
         <h2 style="text-align: center; margin-top: 150px; margin-left: 90px;" v-show="notice_show">{{ notice }}</h2>
         <Card v-for="(item, index) in doctors" :key="index" style="margin: 10px;">
             <template #title><div style="text-align: left; margin: 10px;"> {{ item.doctorName }} </div></template>

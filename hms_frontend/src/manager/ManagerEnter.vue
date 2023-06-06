@@ -184,7 +184,7 @@ import ManagerView from './ManagerView.vue';
         margin-right: 15%;
         margin-top: 70px;
         width: 70%;
-        min-height: 600px;
+        height: 580px;
         background-color: rgb(255, 255, 255);
     }
     .footer{

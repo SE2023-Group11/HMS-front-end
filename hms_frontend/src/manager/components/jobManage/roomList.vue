@@ -5,12 +5,12 @@
                 <Listbox v-model="firstRoom" :options="firstRooms" optionLabel="name" class="w-full md:w-14rem" @change="func1"/>
             </div>
         </div>
-        <div style="width: 30%; position: absolute; left: 21%;" v-show="showSecond">
+        <div style="width:fit-content; height: fit-content; max-height: 500px; position: absolute; left: 29%; overflow: auto;" v-show="showSecond">
             <div class="card flex justify-content-center">
                 <Listbox v-model="secondRoom" :options="secondRooms" optionLabel="name" class="w-full md:w-14rem" @change="func2" style="z-index: 1;"/>
             </div>
         </div>
-        <div style="position: absolute; left: 30%; height: 400px;" v-show="showDoctors">
+        <div style="position: absolute; left: 30%; height: fit-content; max-height: 500px; overflow: auto;" v-show="showDoctors">
             <DoctorChart :doctors="doctors" style="z-index: 0;"/> 
         </div>
     </div>

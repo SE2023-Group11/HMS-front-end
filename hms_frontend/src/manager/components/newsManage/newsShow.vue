@@ -29,7 +29,7 @@
     <div>
         <Button @click="confirm2()" label="删除新闻" style="position: absolute; margin: 20px; left: 25%;"></Button>
     </div>
-    <div style="position: relative; top: 90px;">
+    <div style="position: relative; top: 90px; height: fit-content; max-height: 500px; overflow: auto;">
         <newsListShow @select-items="getSelectedItems"/>
     </div>
     
