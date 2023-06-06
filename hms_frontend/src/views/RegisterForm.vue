@@ -108,7 +108,7 @@ const emailError = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(0);
+const countdown = ref(60);
 let timer = null;
 const department = ref('');
 const type = ref();
@@ -149,7 +149,7 @@ const sendVerifyCode = () => {
             sendtoback();
             clearInterval(timer);
             timer = null;
-            countdown.value = 2;
+            countdown.value = 60;
             sendingVerifyCode.value = false;
         }
     }, 1000);
