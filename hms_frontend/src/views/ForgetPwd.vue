@@ -12,7 +12,7 @@
     </div>
 
     <div class="register">
-        <Button onclick="location.href='/login'" label="返回登录" />
+        <Button @click="fanhui" label="返回登录" />
         <h1>忘记密码</h1>
         <form @submit.prevent="submitForm">
 
@@ -67,7 +67,9 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Password from 'primevue/password';
 import Message from 'primevue/message';
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const options = ref(['我是患者', '我是医生']);
 const is_patient = ref('off');
 const email = ref('');
@@ -81,6 +83,9 @@ const countdown = ref(20);
 let timer = null;
 const name = ref('尊敬的用户');
 const type = ref(2);
+function fanhui(){
+    router.push('/login');
+}
 function sendtoback() {
     if (is_patient.value == '我是医生') type.value = 2;
     else type.value = 4;
@@ -148,7 +153,8 @@ function registerbt() {
                 console.log(typeof(jud));
                 if(jud == 1){
                     judchange.value = 1;
-                    window.location.href="/login";
+                    // window.location.href="/login";
+                    router.push('/login');
                 }
                 else{
                     judchange.value = -1;
@@ -174,7 +180,8 @@ function registerbt() {
                 console.log(typeof(jud));
                 if(jud == 1){
                     judchange.value = 1;
-                    window.location.href="/login";
+                    // window.location.href="/login";
+                    router.push('/login');
                 }
                 else{
                     judchange.value = -1;

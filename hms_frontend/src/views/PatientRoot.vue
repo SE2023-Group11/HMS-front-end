@@ -4,7 +4,8 @@
       <h1 class="header_tag" style="font-family:Arial, Helvetica, sans-serif;font-size: 20px;">HMS医院门诊预约系统</h1>
       <div class="header_user" @mouseenter="showList" @mouseleave="unShowList">
         <!-- 显示头像 -->
-        <img v-bind:src="picture" alt="" class="header_user_img"/>
+        <img v-if="login===true" :src="picture" alt="" class="header_user_img"/>
+        <img v-else src="https://f.pz.al/pzal/2023/05/03/5e6420e7ffe6f.png"  class="header_user_img"/>
         <!-- 未登录时显示登录/注册 -->
         <!-- 登录后显示用户名 -->
         <h1 class="header_user_word">

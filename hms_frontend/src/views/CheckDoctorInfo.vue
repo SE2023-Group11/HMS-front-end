@@ -43,7 +43,7 @@
             <router-link :to="'/CheckDoctorInfo'" style="text-decoration: none;color:gray;">医生信息</router-link>
             &nbsp;>&nbsp;
             <router-link :to="'/CheckDoctorInfo'" style="text-decoration: none;color:gray;">{{ this.selectedSectionName }}</router-link>    
-            <span class="p-input-icon-left" style="left: 1050px;position:fixed;">
+            <span class="p-input-icon-left" style="margin-left: 660px;position:absolute">
                 <i class="pi pi-search" />
                 <InputText v-model="searchSectionName" placeholder="搜索科室名" @keyup.enter="searchSection"/>
             </span>

@@ -12,7 +12,7 @@
                         <h1 class="header_tag">HMS医院门诊预约系统</h1>
                         <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
                             <img v-bind:src="picture" alt="" class="header_user_img"/>
-                            <h1 class="header_user_word">{{ namecontent }}</h1>
+                            <h1 class="header_user_word">登录/注册</h1>
                             <div id="triangle-down"></div>
                             <div id="header_list">
                                 <div @click="jumpspace" class="header_list_item">个人主页</div>
@@ -73,7 +73,7 @@
                             </div>
                             <!-- 诊室 -->
                             <div class="edit-item" style="word-break: break-all;">
-                                <div style="float:left">所在诊室&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div style="float:left">所在科室号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                                 <div style="float:left">
                                     <div v-if="!deptediting" @click="deptstartEditing">{{ deptcontent }}</div>
                                     <InputText v-if="deptediting" type="text" v-model="depttempContent" @blur="deptstopEditing"
@@ -542,7 +542,6 @@
         router.push('/login');
     };
     function zhuxiao(){
-        if (confirm("您确定吗？")) {
         if(sessionStorage.getItem('role') == 'doctor'){
             console.log('rrrrrrrrrrrrrrrrr');
             axios.post('http://121.199.161.134:8080/doctorDelete',null,{
@@ -572,7 +571,7 @@
                 console.error(error)
             })
         }
-    }}
+    }
     function jumpmessage(){
         console.log('4444444444');
         // window.location.href = '/message';

@@ -98,7 +98,7 @@
         <div class="tips">
             <Tag value="医生手动确认后就诊即完成" severity="success"></Tag>
             <Tag value="必须在约定时间一天前取消预约" severity="warning"></Tag>
-            <Tag value="每月失约两次以上会被限制" severity="danger"></Tag>
+            <Tag value="请不要无故失约" severity="danger"></Tag>
         </div> 
             
       </div>

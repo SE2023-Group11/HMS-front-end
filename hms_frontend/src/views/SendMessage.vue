@@ -13,7 +13,7 @@
                         <h1 class="header_tag">HMS医院门诊预约系统</h1>
                         <div class="header_user" @mouseenter="showList()" @mouseleave="unShowList()">
                             <img v-bind:src="picture" alt="" class="header_user_img"/>
-                            <h1 class="header_user_word">{{ namecontent }}</h1>
+                            <h1 class="header_user_word">登录/注册</h1>
                             <div id="triangle-down"></div>
                             <div id="header_list">
                                 <div @click="jumpspace" class="header_list_item">个人主页</div>
@@ -194,7 +194,7 @@
     
     const str = ref('');
     function loadNotifications() {
-        if (role.value == 'doctor') str.value = 'http://121.199.161.134:8080/getDoctorMessage'
+        if (role == 'doctor') str.value = 'http://121.199.161.134:8080/getDoctorMessage'
         else str.value = 'http://121.199.161.134:8080/getPatientMessage'
         axios.post(str.value,null,{
             params:{
@@ -352,7 +352,6 @@
         router.push('/login');
     };
     function zhuxiao(){
-        if (confirm("您确定吗？")) {
         if(sessionStorage.getItem('role') == 'doctor'){
             console.log('rrrrrrrrrrrrrrrrr');
             axios.post('http://121.199.161.134:8080/doctorDelete',null,{
@@ -382,7 +381,7 @@
                 console.error(error)
             })
         }
-    }}
+    }
     function jumpmessage(){
         console.log('4444444444');
         // window.location.href = '/message';

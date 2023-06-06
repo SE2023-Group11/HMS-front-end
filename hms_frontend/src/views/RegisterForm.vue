@@ -18,7 +18,9 @@
         <img src="../Pic/patient.jpg" v-if="!imageUrl" />
     </div>  -->
     <div class="register">
-        <Button onclick="location.href='/login'" label="返回登录" />
+        <!-- <Button onclick="location.href='/login'" label="返回登录" /> -->
+        
+        <Button @click="fanhui" label="返回登录" />
         <h1>用户注册</h1>
         <form @submit.prevent="submitForm">
             <div>
@@ -84,7 +86,9 @@ import Button from 'primevue/button';
 import Password from 'primevue/password';
 import Dropdown from 'primevue/dropdown';
 import Message from 'primevue/message';
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const alldepartment = ref([
     { name: '内科', code: 'NY' },
     { name: '外科', code: 'RM' },
@@ -113,6 +117,9 @@ let timer = null;
 const department = ref('');
 const type = ref();
 const judreg = ref(0);
+function fanhui(){
+    router.push('/login');
+}
 //把邮箱给后端，后端发送验证码
 function sendtoback() {
     if (is_patient.value === '我是患者') {
@@ -211,7 +218,8 @@ function registerbt() {
                 console.log(typeof(jud));
                 if(jud == 1){
                     judreg.value = 1;
-                    window.location.href="/login";
+                    // window.location.href="/login";
+                    router.push('/login');
                 }
                 else{
                     judreg.value = -1;
@@ -239,7 +247,8 @@ function registerbt() {
                 console.log(response.data);
                 if(jud == 1){
                     judreg.value = 1;
-                    window.location.href="/login";
+                    // window.location.href="/login";
+                    router.push('/login');
                 }
                 else{
                     judreg.value = -1;
@@ -261,7 +270,7 @@ function registerbt() {
     top: 150px;
     left: 35%;
     right:35%;
-    height: 790px;
+    height: 850px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
