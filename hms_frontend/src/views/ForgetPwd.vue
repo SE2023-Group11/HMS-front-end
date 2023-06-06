@@ -77,7 +77,7 @@ const verifyCode = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(60);
+const countdown = ref(20);
 let timer = null;
 const name = ref('尊敬的用户');
 const type = ref(2);
