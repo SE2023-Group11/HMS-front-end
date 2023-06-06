@@ -6,9 +6,9 @@
             <template #content>
                 <table style="align-self: center; align-items: center; text-align: center;">
                     <tr>
+                        <td style="width: 30%;">职称：{{ item.doctorTitle }}</td>
                         <td style="width: 30%;">身份证号：{{ item.doctorNumber }}</td>
                         <td style="width: 30%;">电话：{{ item.doctorPhone }}</td>
-                        <td style="width: 30%;">科室：{{ item.doctorSection }}</td>
                         <td style="width: 30%;">
                             <Button label="排班" @click="func3(index)" />
                             <Dialog v-model:visible="boolArray[index].value" modal header="医生排班" style="width: 70%; ">

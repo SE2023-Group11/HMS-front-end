@@ -10,7 +10,7 @@
                 <Listbox v-model="secondRoom" :options="secondRooms" optionLabel="name" class="w-full md:w-14rem" @change="func2" style="z-index: 1;"/>
             </div>
         </div>
-        <div style="position: absolute; left: 30%;" v-show="showDoctors">
+        <div style="position: absolute; left: 30%; height: 400px;" v-show="showDoctors">
             <DoctorChart :doctors="doctors" style="z-index: 0;"/> 
         </div>
     </div>
@@ -30,19 +30,32 @@ let firstRooms = ref([])
 let secondRooms = ref([])
 let doctors = ref([])
 
+let beforeFirst = ref({})
+
 let showSecond = ref(false)
 let showDoctors = ref(false)
 
 function func1(){
+    console.log(firstRoom)
+    let id = ""
+    if(firstRoom.value==undefined)
+    {
+        id = beforeFirst.value.id
+    }
+    else
+    {
+        id = firstRoom.value.id
+    }
     axios({
         method: 'post',
         url: 'http://121.199.161.134:8080/getSecondRoomsByFID',
         params: {
-            id: firstRoom.value.id
+            id: id
         }
     }).then((res)=>{
         console.log(res)
         secondRooms.value = res.data.data
+        beforeFirst.value = firstRoom.value
     })
     showSecond.value = true
 }

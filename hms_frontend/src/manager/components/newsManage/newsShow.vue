@@ -105,7 +105,9 @@ const confirm2 = () => {
                     method: 'delete',
                     url: 'http://121.199.161.134:8080/deleteNews',
                     params: {
-                        token: token,
+                        token: token
+                    },
+                    data: {
                         id: ret
                     }
                 }).then((res)=>{
