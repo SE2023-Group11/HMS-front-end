@@ -424,7 +424,7 @@
             <div class="cardContainer">
                 <Card v-for="doctor in availableDoctors" :key="doctor.doctorId" class="cardItem">
                     <template #header>
-                        <img :src="doctor.doctorImg" alt="user header" style="width: 350px;"/>
+                        <img :src="doctor.doctorImg" alt="user header" style="width: 350px;height: 450px;"/>
                     </template>
                     <template #title>姓名：{{ doctor.doctorName }}</template>
                     <template #content>
@@ -963,6 +963,7 @@ body {
   .slide>ul>li>a{
       color: #fff;
       text-decoration: none;
+      cursor: pointer;
   }
   .slide i{
       float: right;

@@ -112,7 +112,7 @@ const emailError = ref('');
 const passwordError = ref('');
 
 const sendingVerifyCode = ref(false);
-const countdown = ref(20);
+const countdown = ref(5);
 let timer = null;
 const department = ref('');
 const type = ref();
