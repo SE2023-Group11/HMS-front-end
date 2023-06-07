@@ -113,7 +113,7 @@
     <h2 style="text-align: left;margin-left: 70px;margin-bottom: 20px;">新闻动态</h2>
     <div class="news-container">
       <div class="carouselNewsImage">
-        <Carousel :value="news" :numVisible="1" :numScroll="1" circular :autoplayInterval="2000" >
+        <Carousel :value="news.slice(-4)" :numVisible="1" :numScroll="1" circular :autoplayInterval="2000" >
           <template #item="slotProps">
             <div class="carousel-item">
               <img :src="slotProps.data.img" alt="Image" style="width: 400px;height: 300px;margin-top: 70px;"/>
@@ -127,7 +127,7 @@
       <div class="newsTitle">
         <div v-for="item in news.slice(-4)" :key="item.id" class="news">
           <div class="date">
-            <h1 style="font-size: 18px;margin-top:20px;">{{item.date}} </h1>
+            <h1 style="font-size: 18px;margin-top:15px;">{{item.date}} </h1>
             <div style="font-size: 16px;"></div>
           </div>
           <div class="title">
