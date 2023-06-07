@@ -40,7 +40,7 @@
 
     <div class="main">
       <div class="globalMenu">
-            <img alt="user header" src="../Pic/导航图标.png" style="width: 20px;height:30px;" />
+            <img alt="user header" src="../Pic/navigation.png" style="width: 20px;height:30px;" />
             &nbsp;
             <router-link :to="'/PatientRoot'" style="text-decoration: none;color:gray;">首页</router-link>
             &nbsp;>&nbsp;

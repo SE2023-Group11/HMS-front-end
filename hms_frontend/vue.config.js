@@ -17,5 +17,10 @@ chainWebpack: config => {
     .test(/\.html$/)
     .use("html-loader")
     .loader("html-loader");
+    config.plugin('html').tap(args => {
+      args[0].title = '你要更改的标题名称';
+      return args;
+  })
 }
+
 

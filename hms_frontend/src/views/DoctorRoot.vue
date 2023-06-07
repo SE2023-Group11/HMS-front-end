@@ -257,7 +257,7 @@ console.log("no")
         sessionStorage.setItem('patientId',this.appointmentList.data[index].patientId);
         console.log(this.token);
 
-        window.open('http://121.199.161.134:8081/#/dPInfo', '_blank', 'width=1440px,height=960px');
+        window.open('http://121.199.161.134:8081/#/dPInfo', '_blank', 'width=' + screen.width + ',height=' + screen.height);
       },
       sendMessage(index) {
         axios.post('http://121.199.161.134:8080/ChangeAppointmentStatus',null,{
