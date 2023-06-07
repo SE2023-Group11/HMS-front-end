@@ -66,6 +66,7 @@ let files = []
 let imageUrl = ref("")
 const confirm = useConfirm();
 const toast = useToast();
+let date = ref()
 
 function getFiles(event) {
     const file = event.target.files[0];
@@ -105,7 +106,8 @@ function upload()
         },
         data: {
             img: imageUrl.value,
-            body: introText.value
+            body: introText.value,
+            date: date.value
         }
     }).then((res)=>{
         console.log(res)
