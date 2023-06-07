@@ -84,7 +84,7 @@
     let props = defineProps({name: String, info: Object})
     let id = ref(props.info.doctorId)
     let show0 = ref(true)
-    let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
+    let token = sessionStorage.getItem("token")
     let visible = ref(false)
     let notice = ref("")
 

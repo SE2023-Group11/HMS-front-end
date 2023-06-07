@@ -45,7 +45,7 @@ import axios from 'axios';
 import emitter from './bus';
 let workInfo = ref({})
 let props = defineProps({doctorID: String})
-let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
+let token = sessionStorage.getItem("token")
 let clrs = reactive(Array.from(Array(7), () => new Array(13)))
 let newClrs = reactive(Array.from(Array(13), () => new Array(7)))
 

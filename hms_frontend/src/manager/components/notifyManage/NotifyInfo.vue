@@ -78,7 +78,7 @@ let visibleList = []
 let detailInfo = ref({})
 const confirm = useConfirm()
 const toast = useToast();
-let token = "eyJhbGciOiJIUzI1NiJ9.eyJub3dMb2dnZWRJblR5cGUiOiJub3dMb2dnZWRJblR5cGVBZG1pbiIsIm5vd0xvZ2dlZEluSWQiOiIxIiwiaWF0IjoxNjg0NzQ2OTQxLCJleHAiOjE2ODY1NDY5NDF9.npgDMKJW-7zrsoAlBmdtuWbQNqzhi_0bBzjXieLqKu8"
+let token = sessionStorage.getItem("token")
 onMounted(()=>{
     axios({
         method: 'get',
