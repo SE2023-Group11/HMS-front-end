@@ -48,7 +48,7 @@
     <div class="buttons">
       <Card class="buttonItem">
         <template #header>
-          <img alt="user header" src="../Pic/医生介绍.png" style="width: 330px;height:190px" />
+          <img alt="user header" src="../Pic/doctorIntro.png" style="width: 330px;height:190px" />
         </template>
         <template #content>
             <h3 style="text-align: left;">医生信息</h3>
@@ -62,7 +62,7 @@
       </Card>
       <Card class="buttonItem">
         <template #header>
-          <img alt="user header" src="../Pic/预约挂号.png" style="width: 330px;height:190px" />
+          <img alt="user header" src="../Pic/appointment.png" style="width: 330px;height:190px" />
         </template>
         <template #content>
             <h3 style="text-align: left;">预约挂号</h3>
@@ -76,7 +76,7 @@
       </Card>
       <Card class="buttonItem">
         <template #header>
-          <img alt="user header" src="../Pic/我的预约.png" style="width: 335px;height:190px" />
+          <img alt="user header" src="../Pic/myAppointment.png" style="width: 335px;height:190px" />
         </template>
         <template #content>
             <h3 style="text-align: left;">我的预约</h3>
@@ -90,7 +90,7 @@
       </Card>
       <Card class="buttonItem">
         <template #header>
-          <img alt="user header" src="../Pic/个人主页.png" style="width: 330px;height:190px" />
+          <img alt="user header" src="../Pic/myspace.png" style="width: 330px;height:190px" />
         </template>
         <template #content>
             <h3 style="text-align: left;">个人主页</h3>
@@ -125,7 +125,7 @@
         </Carousel>
       </div>
       <div class="newsTitle">
-        <div v-for="item in news.slice(0, 4)" :key="item.id" class="news">
+        <div v-for="item in news.slice(-4)" :key="item.id" class="news">
           <div class="date">
             <h1 style="font-size: 18px;margin-top:20px;">{{item.date}} </h1>
             <div style="font-size: 16px;"></div>
@@ -160,21 +160,21 @@
       <p style="font-size: 16px;text-align: left;margin-top: 20px;margin-bottom: 50px;">
         4. 授牌成为北京2022年冬奥会和冬残奥会定点医院
       </p>
-      <img alt="user header" src="../Pic/医院介绍.jpg" style="width: 100%;" />
+      <img alt="user header" src="../Pic/hospitalIntro.jpg" style="width: 100%;" />
       <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: crimson;font-size: 50px;text-align: center;">以心相伴，关怀健康</h1>
     </div>
     <h2 style="text-align: left;margin-left: 70px;margin-top: 30px;">友情链接</h2>
     <div class="linkContainer">
       <div class="hospital">
-        <img alt="user header" src="../Pic/医院图标.png" style="width: 25px;height:25px" />
+        <img alt="user header" src="../Pic/hospitalIcon.png" style="width: 25px;height:25px" />
         <a href="https://www.pumch.cn/learning.html" style="text-decoration: none;font-size: 20px;color:darkgreen;">北京协和医院</a>
       </div>
       <div class="hospital">
-        <img alt="user header" src="../Pic/医院图标.png" style="width: 25px;height:25px" />
+        <img alt="user header" src="../Pic/hospitalIcon.png" style="width: 25px;height:25px" />
         <a href="https://www.pkuph.cn/" style="text-decoration: none;font-size: 20px;color:darkgreen;">北京大学人民医院</a>
       </div>
       <div class="hospital">
-        <img alt="user header" src="../Pic/医院图标.png" style="width: 25px;height:25px" />
+        <img alt="user header" src="../Pic/hospitalIcon.png" style="width: 25px;height:25px" />
         <a href="https://www.puh3.net.cn/" style="text-decoration: none;font-size: 20px;color:darkgreen;">北京大学第三医院</a>
       </div>  
     </div>  
